@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+{% block titulo %}Luppy | Inicio{% endblock %}
+{% load static %}
+
+{% block inicio %}
+<link rel="stylesheet" href="{% static 'css/general.css' %}">
+<link rel="stylesheet" href="{% static 'css/inicioVet.css' %}">
+
+<div class="container mt-4">
+
+    <!-- HERO -->
+    <div class="border bg-light p-5 rounded text-center mb-4 shadow" id="hero">
+        <h1 class="fw-bold">Bienvenido a Luppy</h1>
+        <p class="lead">Cuidamos a tu mascota como parte de tu familia</p>
+        <a href="#" class="btn btn-primary btn-lg">Agendar cita</a>
+    </div>
+
+    <!-- SERVICIOS -->
+    <div class="row" id="servicio">
+        <div class="col-md-4 mb-3">
+            <div class="card glass-card h-100 text-center">
+                <div class="card-body">
+                    <h5 class="card-title">Veterinaria</h5>
+                    <p class="card-text">Cuidado profesional para la salud de tu mascota.</p>
+                    <ul class="list-unstyled">
+                        <li>Veterinaria general</li>
+                        <li>Vacunación</li>
+                    </ul>
+                    <a href="#" class="btn btn-outline-primary">Agendar consulta</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-3">
+            <div class="card glass-card h-100 text-center">
+                <div class="card-body">
+                    <h5 class="card-title">Grooming</h5>
+                    <p class="card-text">Estética y limpieza profunda para perros y gatos.</p>
+                    <ul class="list-unstyled">
+                        <li>Baño y corte</li>
+                        <li>Limpieza de oídos</li>
+                    </ul>
+                    <a href="#" class="btn btn-outline-primary">Reservar</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-3">
+            <div class="card glass-card h-100 text-center">
+                <div class="card-body">
+                    <h5 class="card-title">Historial clínico</h5>
+                    <p class="card-text">Consulta y administra el historial médico de tu mascota.</p>
+                    <ul class="list-unstyled">
+                        <li>Pruebas diagnósticas</li>
+                        <li>Seguimiento</li>
+                    </ul>
+                    <a href="#" class="btn btn-outline-primary">Ver historial</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- COMENTARIOS + MAPA -->
+    <div class="row mt-5 border p-4 rounded shadow bg-white" id="comentarios-mapa">
+
+        <!-- IZQUIERDA: COMENTARIOS -->
+        <div class="col-md-6">
+            <h4 class="mb-3">Comentarios</h4>
+
+            <div id="mj" class="border p-3 mb-2 rounded shadow-sm">
+                <p><strong>Juan:</strong> Excelente servicio 👍</p>
+            </div>
+
+            <div id="mj" class="border p-3 mb-2 rounded shadow-sm">
+                <p><strong>María:</strong> Muy recomendado</p>
+            </div>
+
+            <div id="mj" class="border p-3 mb-2 rounded shadow-sm">
+                <p><strong>Carlos:</strong> Buena atención y rápida</p>
+            </div>
+        </div>
+
+        <!-- DERECHA: MAPA -->
+        <div class="col-md-6">
+            <h4 class="mb-3">Nuestra Ubicación</h4>
+
+            <div id="mj" class="ratio ratio-16x9 rounded overflow-hidden shadow-sm">
+                <iframe 
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1988.686563768575!2d-74.09415146497643!3d4.5266283429622245!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e3fa2426ecda831%3A0x699806ea79e934e7!2sLupi%20Y%20Sus%20Mascotas!5e0!3m2!1ses!2sco!4v1774833035257!5m2!1ses!2sco"
+                    style="border:0;" 
+                    allowfullscreen="" 
+                    loading="lazy">
+                </iframe>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

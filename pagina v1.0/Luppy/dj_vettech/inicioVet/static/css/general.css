@@ -1,0 +1,117 @@
+body {
+    background-color: #f8fafc;
+    color: #1f2937;
+}
+.navbar {
+    position: relative; 
+    z-index: 1050 !important; 
+    backdrop-filter: blur(10px);
+    background: linear-gradient(90deg, #0ea5e9, #22c55e) !important;
+}
+@media (min-width: 992px) {
+    .custom-hover-dropdown:hover .dropdown-menu {
+        display: block;
+        margin-top: 0;
+    }
+    
+    .dropdown-menu {
+        z-index: 1100 !important;
+        animation: fadeIn 0.4s;
+    }
+}
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+a {
+    color: inherit;
+    text-decoration: none;
+}
+a:hover {
+    color: #16a34a;
+    text-decoration: underline;
+}
+.video-container {
+    position: relative;
+    width: 100%;
+    height: 420px;
+    overflow: hidden;
+    z-index: 1;
+}
+.video-container::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.4), rgba(0,0,0,0.6));
+}
+.video-container video {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    min-width: 100%;
+    min-height: 100%;
+    object-fit: cover;
+}
+.hero-content {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    z-index: 2;
+    color: #fff;
+}
+.hero-logo {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.95);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 15px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+}
+.hero-logo img {
+    width: 70%;
+}
+.hero-text {
+    font-size: 1.4rem;
+    font-weight: 500;
+}
+.map-container {
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+}
+.card-custom {
+    border-radius: 20px;
+    padding: 20px;
+    background: #ffffff;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}
+.card {
+    background: #ffffff;
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    transition: all 0.25s ease;
+}
+.card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+}
+.footer-tech {
+    background: linear-gradient(90deg, #0ea5e9, #22c55e);
+    color: #e5e7eb;
+    font-size: 14px;
+}
+.footer-tech a {
+    color: #e5e7eb;
+}
+.footer-tech a:hover {
+    color: #ffffff;
+}

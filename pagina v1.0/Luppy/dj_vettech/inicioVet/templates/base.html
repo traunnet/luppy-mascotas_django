@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% load static %}
+    <title>{% block titulo %}{% endblock %}</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/general.css' %}">
+
+</head>
+
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+    <div class="container">
+        <a class="navbar-brand fw-semibold" href="{% url 'inicio' %}">Luppy & Sus Mascotas</a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse justify-content-end" id="navbarResponsive">
+            <ul class="navbar-nav align-items-center">
+                <li class="nav-item">
+                    <a class="nav-link active" href="{% url 'inicio' %}">Inicio</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'inicioServ' %}">Servicios</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Contacto</a>
+                </li>
+
+                {% if user.is_authenticated %}
+                    <li class="nav-item dropdown custom-hover-dropdown">
+                        <a class="nav-link d-flex align-items-center" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-person-circle me-2" viewBox="0 0 16 16">
+                                <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
+                                <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
+                            </svg>
+                            <span class="me-2">{{ user.nombre|capfirst }}</span>
+                            <span class="badge rounded-circle bg-success p-1" style="width: 10px; height: 10px;" title="Conectado">
+                                <span class="visually-hidden">Activo</span>
+                            </span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="#">Mi Perfil</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <form action="{% url 'auth_app:logout' %}" method="POST" class="px-3">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-danger btn-sm w-100">Cerrar Sesión</button>
+                                </form>
+                            </li>
+                        </ul>
+                    </li>
+                {% else %}
+                    <li class="nav-item dropdown custom-hover-dropdown">
+                        <button class="btn btn-outline-light dropdown-toggle ms-lg-3" type="button" data-bs-toggle="dropdown">
+                            Mi Cuenta
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="{% url 'auth_app:login' %}">Iniciar Sesión</a></li>
+                            <li><a class="dropdown-item" href="{% url 'auth_app:registro' %}">Registrarse</a></li>
+                        </ul>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="video-container mb-4 shadow">
+    <video autoplay loop muted playsinline>
+        <source src="{% static 'videos/fondo.mp4' %}" type="video/mp4">
+    </video>
+
+    <div class="hero-content">
+        <div class="hero-logo">
+            <img src="{% static 'img/logo.png' %}" alt="logo">
+        </div>
+        <div class="hero-text">
+            Tu lugar de confianza para el cuidado de tus mascotas.
+        </div>
+    </div>
+</div>
+
+<main class="container my-5">
+    {% block inicio %}{% endblock %}
+</main>
+
+<footer class="footer-tech text-center py-3">
+    <div>
+        <a href="#">Política de Privacidad</a> |
+        <a href="#">Aviso Legal</a> |
+        <a href="#">Cookies</a>
+    </div>
+    <div class="mt-2">
+        &copy; Luppy & Sus Mascotas 2026
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

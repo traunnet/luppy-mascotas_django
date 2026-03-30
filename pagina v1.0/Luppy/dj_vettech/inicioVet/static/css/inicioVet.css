@@ -1,0 +1,14 @@
+#hero {
+    background: linear-gradient(to top right, #ccffff 0%, #ccccff 100%);
+}
+
+#servicio .card {
+    background: linear-gradient(to bottom, #ccffff 0%, #ccccff 100%);
+}
+#mj{
+    background: #fff;
+}
+
+#comentarios-mapa {
+    background: linear-gradient(to top right, #ccffff 0%, #ccccff 100%);
+}
