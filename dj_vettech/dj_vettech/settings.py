@@ -88,10 +88,10 @@ DATABASES = {
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'dj_vettech',
+        'NAME': 'ferrocarril',
         'USER': 'root',
-        'PASSWORD': '',  # En Laragon normalmente sigue vacío
-        'HOST': '127.0.0.1',
+        'PASSWORD': 'ZLohYgGHThjvFwcQNhVjVtJBViGPoGtq',
+        'HOST': 'mysql.railway.internal',
         'PORT': '3306',
         'OPTIONS': {
             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
