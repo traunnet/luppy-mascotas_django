@@ -13,7 +13,7 @@ SECRET_KEY = 'django-insecure-yn$gpsr4ldf(3_!e+6%d=50&9vllypc9!qugj2bzr3h_1exl@m
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['luppy-mascotasdjango-production.up.railway.app']
 
 
 # Application definition
