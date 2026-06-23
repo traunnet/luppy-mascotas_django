@@ -1,0 +1,119 @@
+{% extends 'veterinarioApp/base.html' %}
+{% load static %}
+
+{% block title %}Nuevo Historial · Luppy{% endblock %}
+{% block nav_historial %}active{% endblock %}
+
+{% block estilos %}
+<link rel="stylesheet" href="{% static 'css/formularios_luppy.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="form-card mx-auto" style="max-width: 850px;">
+        <div class="form-header">
+            <div class="form-icon-box" style="background:#ede9fe; color:#7c3aed">
+                <i class="fas fa-plus-circle"></i>
+            </div>
+            <div>
+                <h2 class="h4 mb-1 fw-bold" style="color: var(--carbon);">Registrar Historial Clínico</h2>
+                <p class="text-muted mb-0 small">Ingresa los detalles médicos de la consulta actual.</p>
+            </div>
+        </div>
+
+        <div class="form-body">
+            <form method="post">
+                {% csrf_token %}
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="field-label"><i class="fas fa-paw text-verde"></i> Mascota</label>
+                        {{ form.id_mascota }}
+                    </div>
+                    <div class="col-md-6">
+                        <label class="field-label"><i class="fas fa-calendar-check text-verde"></i> Cita Vinculada</label>
+                        {{ form.id_cita }}
+                    </div>
+                    <div class="col-md-6">
+                        <label class="field-label"><i class="fas fa-calendar text-verde"></i> Fecha</label>
+                        {{ form.fecha }}
+                    </div>
+                    <div class="col-md-6">
+                        <label class="field-label"><i class="fas fa-stethoscope text-verde"></i> Servicio</label>
+                        {{ form.id_servicio }}
+                    </div>
+                    <div class="col-12">
+                        <label class="field-label"><i class="fas fa-notes-medical text-verde"></i> Motivo de Consulta</label>
+                        {{ form.motivo_consulta }}
+                    </div>
+                    <div class="col-12">
+                        <label class="field-label"><i class="fas fa-microscope text-verde"></i> Diagnóstico</label>
+                        {{ form.diagnostico }}
+                    </div>
+                    <div class="col-12">
+                        <label class="field-label"><i class="fas fa-pills text-verde"></i> Tratamiento</label>
+                        {{ form.tratamiento }}
+                    </div>
+                    <div class="col-md-6">
+                        <label class="field-label"><i class="fas fa-capsules text-verde"></i> Medicación</label>
+                        {{ form.medicacion }}
+                    </div>
+                    <div class="col-md-6">
+                        <label class="field-label"><i class="fas fa-clock text-verde"></i> Frecuencia</label>
+                        {{ form.frecuencia }}
+                    </div>
+                    <div class="col-12">
+                        <label class="field-label"><i class="fas fa-info-circle text-verde"></i> Estado del Paciente</label>
+                        {{ form.estado }}
+                    </div>
+                </div>
+
+                <div class="form-actions mt-4">
+                    <a href="{% url 'vet_app:historial_clinico' %}" class="btn btn-light- px-4">Volver</a>
+                    <button type="submit" class="btn btn-verde px-4">
+                        <i class="fas fa-save me-2"></i>Guardar Historial
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const mascotaSelect = document.getElementById('id_id_mascota');
+    const citaSelect = document.getElementById('id_id_cita');
+    const servicioSelect = document.getElementById('id_id_servicio');
+    if (mascotaSelect) {
+        mascotaSelect.addEventListener('change', function () {
+            this.form.submit();
+        });
+    }
+    if (citaSelect && servicioSelect) {
+        citaSelect.addEventListener('change', function () {
+            const mapaString = this.getAttribute('data-servicios');
+            
+            if (mapaString) {
+                const mapaServicios = JSON.parse(mapaString);
+                const citaIdStr = this.value;
+                const servicioId = mapaServicios[citaIdStr];
+                if (servicioId) {
+                    servicioSelect.value = servicioId; 
+                    servicioSelect.style.pointerEvents = 'none'; 
+                    servicioSelect.style.backgroundColor = '#e9ecef'; 
+                } else {
+                    servicioSelect.value = '';
+                    servicioSelect.style.pointerEvents = 'auto';
+                    servicioSelect.style.backgroundColor = '';
+                }
+            }
+        });
+        if (citaSelect.value) {
+            citaSelect.dispatchEvent(new Event('change'));
+        }
+    }
+});
+</script>
+{% endblock %}
+
+{% endblock %}

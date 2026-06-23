@@ -1,0 +1,118 @@
+{% extends 'veterinarioApp/base.html' %}
+{% load static %}
+
+{% block title %}Dashboard · Luppy{% endblock %}
+{% block nav_dashboard %}active{% endblock %}
+
+{% block estilos %}
+<link rel="stylesheet" href="{% static 'css/dashboard_vet.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="welcome-banner mb-4">
+    <div class="welcome-text">
+        <p class="welcome-label">Buenos días,</p>
+        <h2 class="welcome-name">
+            Dr. {{ request.user.nombre|default:"Veterinario" }} 
+            <i class="fas fa-hand-sparkles text-mint ms-1"></i>
+        </h2>
+        <p class="welcome-sub">Aquí tienes el resumen de hoy.</p>
+    </div>
+    <div class="welcome-date">
+        <i class="fas fa-calendar-alt text-mint me-2"></i>
+        <span id="today-date"></span>
+    </div>
+</div>
+
+<div class="row g-3 mb-4">
+    <div class="col-6 col-xl-3">
+        <div class="stat-card">
+            <div class="stat-icon" style="background:#e0f2fe;color:#0284c7">
+                <i class="fas fa-calendar-check"></i>
+            </div>
+            <div class="stat-body">
+                <div class="stat-value">{{ citas_hoy|default:"0" }}</div>
+                <div class="stat-label">Citas hoy</div>
+            </div>
+            <div class="stat-trend up"><i class="fas fa-arrow-up"></i></div>
+        </div>
+    </div>
+
+    <div class="col-6 col-xl-3">
+        <div class="stat-card">
+            <div class="stat-icon" style="background:#dcfce7;color:#16a34a">
+                <i class="fas fa-paw"></i>
+            </div>
+            <div class="stat-body">
+                <div class="stat-value">{{ total_mascotas|default:"0" }}</div>
+                <div class="stat-label">Pacientes</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-6 col-xl-3">
+        <div class="stat-card">
+            <div class="stat-icon" style="background:#fef9c3;color:#ca8a04">
+                <i class="fas fa-clock"></i>
+            </div>
+            <div class="stat-body">
+                <div class="stat-value">{{ citas_pendientes|default:"0" }}</div>
+                <div class="stat-label">Pendientes</div>
+            </div>
+            <div class="stat-trend warn"><i class="fas fa-minus"></i></div>
+        </div>
+    </div>
+
+    <div class="col-6 col-xl-3">
+        <div class="stat-card">
+            <div class="stat-icon" style="background:#ede9fe;color:#7c3aed">
+                <i class="fas fa-dollar-sign"></i>
+            </div>
+            <div class="stat-body">
+                <div class="stat-value">{{ ventas_hoy|default:"0" }}</div>
+                <div class="stat-label">Ventas hoy</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-3">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header d-flex align-items-center gap-2">
+                <i class="fas fa-bolt text-verde"></i> Acciones Rápidas
+            </div>
+            <div class="card-body">
+                <div class="quick-actions">
+                    <a href="{% url 'vet_app:crear_cita' %}" class="quick-action-btn">
+                        <div class="qa-icon" style="background:#e0f2fe;color:#0284c7"><i class="fas fa-calendar-plus"></i></div>
+                        <span>Nueva Cita</span>
+                    </a>
+                    <a href="{% url 'vet_app:crear_historial' %}" class="quick-action-btn">
+                        <div class="qa-icon" style="background:#dcfce7;color:#16a34a"><i class="fas fa-file-medical"></i></div>
+                        <span>Nuevo Historial</span>
+                    </a>
+                    <a href="{% url 'vet_app:agenda_citas' %}" class="quick-action-btn">
+                        <div class="qa-icon" style="background:#fef9c3;color:#ca8a04"><i class="fas fa-calendar-day"></i></div>
+                        <span>Ver Agenda</span>
+                    </a>
+                    <a href="{% url 'vet_app:historial_clinico' %}" class="quick-action-btn">
+                        <div class="qa-icon" style="background:#ede9fe;color:#7c3aed"><i class="fas fa-book-medical"></i></div>
+                        <span>Historiales</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const d = new Date();
+        const opciones = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        document.getElementById('today-date').textContent = d.toLocaleDateString('es-CO', opciones);
+    });
+</script>
+{% endblock %}

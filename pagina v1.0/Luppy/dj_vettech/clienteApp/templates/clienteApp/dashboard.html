@@ -1,0 +1,114 @@
+{% extends 'clienteApp/base_cliente.html' %}
+{% load static %}
+
+{% block title %}Dashboard - Luppy & Sus Mascotas{% endblock %}
+
+{% block estilos %}
+<link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+{% endblock %}
+
+{% block hero %}
+<div class="video-container shadow">
+    <video autoplay loop muted playsinline>
+        <source src="{% static 'videos/fondo.mp4' %}" type="video/mp4">
+    </video>
+    <div class="hero-content">
+        <div class="hero-logo">
+            <img src="{% static 'img/logo.png' %}" alt="Luppy Logo" style="height: 80px;">
+        </div>
+        <div class="hero-text">Tu lugar de confianza para el cuidado de tus mascotas.</div>
+    </div>
+</div>
+{% endblock %}
+
+{% block contenido %}
+<div class="dashboard-bg">
+    <div class="container">
+        
+        <div class="text-center mb-5 texto-bienvenida">
+            <h1 class="display-5">Bienvenido, {{ user.nombre|capfirst }}</h1>
+            <p class="lead text-muted">Gestiona la salud de tus mejores amigos desde un solo lugar.</p>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-3">
+                <div class="dashboard-card p-4 text-center">
+                    <i class="fas fa-paw icono-grande"></i>
+                    <h5 class="fw-bold">Mis Mascotas</h5>
+                    <p class="text-muted small mb-4">
+                        {% if mascotas %}
+                            {{ mascotas.count }} mascota{{ mascotas.count|pluralize }} registrada{{ mascotas.count|pluralize }}
+                        {% else %}
+                            Aún no tienes mascotas registradas
+                        {% endif %}
+                    </p>
+                    <a href="{% url 'lista_mascotas' %}" class="btn-verde w-100">Ver Detalles</a>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-3">
+                <div class="dashboard-card p-4 text-center">
+                    <i class="fas fa-calendar-alt icono-grande"></i>
+                    <h5 class="fw-bold">Mis Citas</h5>
+                    <p class="text-muted small mb-4">
+                        {% if citas_proximas %}
+                            Tienes {{ citas_proximas.count }} pendiente{{ citas_proximas.count|pluralize }}
+                        {% else %}
+                            No hay citas pendientes
+                        {% endif %}
+                    </p>
+                    <a href="{% url 'lista_citas' %}" class="btn-verde w-100">Agendar Cita</a>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-3">
+                <div class="dashboard-card p-4 text-center">
+                    <i class="fas fa-shopping-bag icono-grande"></i>
+                    <h5 class="fw-bold">Tienda</h5>
+                    <p class="text-muted small mb-4">Productos y accesorios Luppy</p>
+                    <a href="{% url 'lista_productos' %}" class="btn-verde w-100">Ver Catálogo</a>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-3">
+                <div class="dashboard-card p-4 text-center">
+                    <i class="fas fa-user-circle icono-grande"></i>
+                    <h5 class="fw-bold">Mi Cuenta</h5>
+                    <p class="text-muted small mb-4">Gestiona tus datos de contacto</p>
+                    <a href="{% url 'perfil_cliente' %}" class="btn-verde w-100">Editar Perfil</a>
+                </div>
+            </div>
+        </div>
+
+        {% if citas_proximas %}
+        <div class="card-citas-proximas mt-5">
+            <h5 class="fw-bold mb-4">
+                <i class="fas fa-clock me-2" style="color: var(--verde-claro);"></i> Próximas citas agendadas
+            </h5>
+            {% for cita in citas_proximas %}
+            <div class="cita-item">
+                <div class="lp-avatar" style="width: 40px; height: 40px;">🐾</div>
+                <div class="flex-grow-1">
+                    <span class="fw-bold d-block">{{ cita.id_mascota.nombre }}</span>
+                    <span class="text-muted small">{{ cita.id_servicio.tipo }}</span>
+                </div>
+                <div class="text-end me-3">
+                    <span class="d-block fw-medium">{{ cita.fecha_cita|date:"d M, Y" }}</span>
+                    <span class="text-muted small">{{ cita.hora_cita }}</span>
+                </div>
+                <span class="badge-programada">{{ cita.estado_cita }}</span>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.querySelectorAll('.dashboard-card').forEach((card, i) => {
+        card.style.animationDelay = `${i * 0.1}s`;
+    });
+</script>
+{% endblock %}

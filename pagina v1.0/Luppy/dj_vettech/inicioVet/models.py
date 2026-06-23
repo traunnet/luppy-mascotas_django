@@ -6,11 +6,14 @@ class TipoServicio(models.Model):
     precio = models.DecimalField(max_digits=10, decimal_places=2)
     duracion = models.TimeField()
     imagen = models.ImageField(upload_to='servicios/', blank=True, null=True)
+    creado_el = models.DateTimeField(auto_now_add=True)
+    actualizado_el = models.DateTimeField(auto_now=True)
 
     class Meta:
         verbose_name = 'Tipo de Servicio'
         verbose_name_plural = 'Tipos de Servicios'
         db_table = 'tipo_servicio'
+        ordering = ['-actualizado_el']
 
     def __str__(self):
         return self.tipo

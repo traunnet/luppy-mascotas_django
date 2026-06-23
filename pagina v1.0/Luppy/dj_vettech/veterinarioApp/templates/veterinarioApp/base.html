@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static %}
+    <title>{% block title %}VetPanel · Luppy{% endblock %}</title>
+    <link rel="icon" type="image/x-icon" href="{% static 'ico/image.ico' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/veterinario_base.css' %}">
+
+    {% block estilos %}{% endblock %}
+</head>
+<body>
+
+<button class="vet-toggle" id="vetToggle"><i class="fas fa-bars"></i></button>
+<div class="vet-overlay" id="vetOverlay"></div>
+
+<aside class="vet-sidebar" id="vetSidebar">
+    <a href="{% url 'vet_app:dashboard' %}" class="vet-brand">
+        <div class="vet-brand-icon"><i class="fas fa-stethoscope"></i></div>
+        <div>
+            <span class="vet-brand-text">VetPanel</span>
+            <span class="vet-brand-sub">Luppy · Clínica</span>
+        </div>
+    </a>
+
+    <nav class="vet-nav">
+        <span class="vet-section-label">Principal</span>
+        <a href="{% url 'vet_app:dashboard' %}" class="vet-link {% block nav_dashboard %}{% endblock %}">
+            <span class="vet-link-icon"><i class="fas fa-chart-pie"></i></span> Dashboard
+        </a>
+        <a href="{% url 'vet_app:gestion_citas' %}" class="vet-link {% block nav_gestion %}{% endblock %}">
+            <span class="vet-link-icon"><i class="fas fa-clipboard-list"></i></span> Gestión de Citas
+        </a>
+        <a href="{% url 'vet_app:historial_clinico' %}" class="vet-link {% block nav_historial %}{% endblock %}">
+            <span class="vet-link-icon"><i class="fas fa-book-medical"></i></span> Historial Clínico
+        </a>
+        <a href="{% url 'vet_app:lista_inventario' %}" class="vet-link {% block nav_inventario %}{% endblock %}">
+            <span class="vet-link-icon"><i class="fas fa-boxes"></i></span> Inventario
+        </a>
+        <a href="{% url 'vet_app:ventas' %}" class="vet-link {% block nav_ventas %}{% endblock %}">
+            <span class="vet-link-icon"><i class="fas fa-boxes"></i></span> Ventas
+        </a>
+        <a href="{% url 'vet_app:reportes' %}" class="vet-link {% block nav_reportes %}{% endblock %}">
+            <span class="vet-link-icon"><i class="fas fa-boxes"></i></span> Reportes
+        </a>
+    </nav>
+
+    <div class="vet-sidebar-footer">
+        <div class="vet-user-info">
+            <div class="vet-avatar-lg">
+                {% if request.user.nombre %}{{ request.user.nombre|first|upper }}{% else %}V{% endif %}
+            </div>
+            <div>
+                <div class="vet-user-name">{{ request.user.nombre }} {{ request.user.apellido }}</div>
+                <div class="vet-user-role">Veterinario</div>
+            </div>
+        </div>
+        <a href="{% url 'vet_app:perfil' %}" class="vet-link {% block nav_perfil %}{% endblock %}">
+            <span class="vet-link-icon"><i class="fas fa-user-md"></i></span> Mi Perfil
+        </a>
+        <a href="{% url 'auth_app:logout' %}" class="vet-link danger">
+            <span class="vet-link-icon"><i class="fas fa-sign-out-alt"></i></span> Cerrar Sesión
+        </a>
+    </div>
+</aside>
+
+<header class="vet-topbar">
+    <h1 class="vet-topbar-title">{% block page_title %}Dashboard{% endblock %}</h1>
+    <div class="vet-topbar-right">
+        <a href="{% url 'vet_app:perfil' %}" class="vet-topbar-btn" title="Perfil"><i class="fas fa-user"></i></a>
+        <div class="vet-avatar-sm">
+            {% if request.user.nombre %}{{ request.user.nombre|first|upper }}{% else %}V{% endif %}
+        </div>
+    </div>
+</header>
+
+<main class="vet-main">
+    {% for msg in messages %}
+    <div class="alert alert-{{ msg.tags }} alert-dismissible fade show mb-3" role="alert">
+        {{ msg }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    {% endfor %}
+
+    {% block content %}{% endblock %}
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    const toggle = document.getElementById('vetToggle');
+    const sidebar = document.getElementById('vetSidebar');
+    const overlay = document.getElementById('vetOverlay');
+    toggle.addEventListener('click', () => {
+        sidebar.classList.toggle('open');
+        overlay.classList.toggle('open');
+    });
+    overlay.addEventListener('click', () => {
+        sidebar.classList.remove('open');
+        overlay.classList.remove('open');
+    });
+</script>
+{% block scripts %}{% endblock %}
+</body>
+</html>

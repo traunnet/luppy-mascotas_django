@@ -5,104 +5,254 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     {% load static %}
     <title>{% block titulo %}{% endblock %}</title>
-
+    <link rel="icon" type="image/x-icon" href="{% static 'ico/image.ico' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/general.css' %}">
-
+    <link rel="stylesheet" href="{% static 'css/inicioVet.css' %}">
+    {% block estilos %}{% endblock %}
 </head>
 
 <body>
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
-    <div class="container">
-        <a class="navbar-brand fw-semibold" href="{% url 'inicio' %}">Luppy & Sus Mascotas</a>
+<!-- ═══ NAVBAR ══════════════════════════════════════════════════════════ -->
+<nav class="lp-navbar" id="lpNavbar">
+    <div class="lp-navbar-inner">
 
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+        <!-- Logo -->
+        <a href="{% url 'inicio' %}" class="lp-brand">
+            <div class="lp-brand-icon">🐾</div>
+            <div>
+                <span class="lp-brand-text">Luppy</span>
+                <span class="lp-brand-sub">& Sus Mascotas</span>
+            </div>
+        </a>
 
-        <div class="collapse navbar-collapse justify-content-end" id="navbarResponsive">
-            <ul class="navbar-nav align-items-center">
-                <li class="nav-item">
-                    <a class="nav-link active" href="{% url 'inicio' %}">Inicio</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'inicioServ' %}">Servicios</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Contacto</a>
-                </li>
+        <!-- Links de navegación -->
+        <ul class="lp-nav-links" style="display:flex;">
+            <li class="nav-link-item">
+                <a href="{% url 'inicio' %}" class="{% block nav_inicio %}{% endblock %}">Inicio</a>
+            </li>
+            <li class="nav-link-item">
+                <a href="{% url 'inicioServ' %}" class="{% block nav_serv %}{% endblock %}">Servicios</a>
+            </li>
+            <li class="nav-link-item">
+                <a href="{% url 'inicioProd' %}" class="{% block nav_prod %}{% endblock %}">productos</a>
+            </li>
+        </ul>
 
-                {% if user.is_authenticated %}
-                    <li class="nav-item dropdown custom-hover-dropdown">
-                        <a class="nav-link d-flex align-items-center" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-person-circle me-2" viewBox="0 0 16 16">
-                                <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
-                                <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
-                            </svg>
-                            <span class="me-2">{{ user.nombre|capfirst }}</span>
-                            <span class="badge rounded-circle bg-success p-1" style="width: 10px; height: 10px;" title="Conectado">
-                                <span class="visually-hidden">Activo</span>
-                            </span>
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" href="#">Mi Perfil</a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li>
-                                <form action="{% url 'auth_app:logout' %}" method="POST" class="px-3">
-                                    {% csrf_token %}
-                                    <button type="submit" class="btn btn-danger btn-sm w-100">Cerrar Sesión</button>
-                                </form>
-                            </li>
-                        </ul>
-                    </li>
-                {% else %}
-                    <li class="nav-item dropdown custom-hover-dropdown">
-                        <button class="btn btn-outline-light dropdown-toggle ms-lg-3" type="button" data-bs-toggle="dropdown">
-                            Mi Cuenta
-                        </button>
-                        <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" href="{% url 'auth_app:login' %}">Iniciar Sesión</a></li>
-                            <li><a class="dropdown-item" href="{% url 'auth_app:registro' %}">Registrarse</a></li>
-                        </ul>
-                    </li>
-                {% endif %}
-            </ul>
+        <!-- Área usuario -->
+        <div class="lp-user-area" style="display:flex; align-items:center; gap:12px;">
+            {% if user.is_authenticated %}
+                <div class="lp-user-menu">
+                    <div class="lp-user-trigger">
+                        <div class="lp-avatar">{{ user.nombre|first|upper }}</div>
+                        <span>{{ user.nombre|capfirst }}</span>
+                        <div class="lp-status-dot"></div>
+                    </div>
+                    <div class="lp-dropdown">
+                        <a href="#">👤 &nbsp;Mi Perfil</a>
+                        <a href="#">📅 &nbsp;Mis Citas</a>
+                        <a href="#">🐾 &nbsp;Mis Mascotas</a>
+                        <hr>
+                        <form action="{% url 'auth_app:logout' %}" method="POST">
+                            {% csrf_token %}
+                            <button type="submit" class="btn-logout">
+                                🚪 &nbsp;Cerrar Sesión
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            {% else %}
+                <a href="{% url 'auth_app:login' %}" style="color:rgba(255,255,255,0.7); text-decoration:none; font-size:0.88rem; padding:8px 14px; border-radius:8px; transition:all 0.2s;" onmouseover="this.style.color='#fff'; this.style.background='rgba(255,255,255,0.08)'" onmouseout="this.style.color='rgba(255,255,255,0.7)'; this.style.background='transparent'">
+                    Iniciar sesión
+                </a>
+                <a href="{% url 'auth_app:registro' %}" class="btn-cuenta">
+                    Registrarse →
+                </a>
+            {% endif %}
         </div>
+
+        <!-- Hamburger móvil -->
+        <button class="lp-hamburger" id="lpHamburger" aria-label="Menú">
+            <span></span><span></span><span></span>
+        </button>
+    </div>
+
+    <!-- Menú móvil desplegable -->
+    <div class="lp-mobile-menu" id="lpMobileMenu">
+        <a href="{% url 'inicio' %}">&nbsp;Inicio</a>
+        <a href="{% url 'inicioServ' %}">&nbsp;Servicios</a>
+        <a href="#">&nbsp;Contacto</a>
+        {% if user.is_authenticated %}
+            <a href="#">&nbsp;Mi Perfil</a>
+            <a href="#">&nbsp;Mis Citas</a>
+            <form action="{% url 'auth_app:logout' %}" method="POST" style="padding-top:8px;">
+                {% csrf_token %}
+                <button type="submit" style="width:100%; background:rgba(248,113,113,0.1); color:#f87171; border:1px solid rgba(248,113,113,0.2); border-radius:10px; padding:12px; font-family:'DM Sans',sans-serif; font-size:0.9rem; cursor:pointer;">
+                    🚪 &nbsp;Cerrar Sesión
+                </button>
+            </form>
+        {% else %}
+            <a href="{% url 'auth_app:login' %}">&nbsp;Iniciar Sesión</a>
+            <a href="{% url 'auth_app:registro' %}" style="color: #74c69d !important;">&nbsp;Registrarse</a>
+        {% endif %}
     </div>
 </nav>
 
-<div class="video-container mb-4 shadow">
+
+<!-- ═══ VIDEO HERO ═══════════════════════════════════════════════════════ -->
+<div class="lp-video-hero">
     <video autoplay loop muted playsinline>
         <source src="{% static 'videos/fondo.mp4' %}" type="video/mp4">
     </video>
 
-    <div class="hero-content">
-        <div class="hero-logo">
-            <img src="{% static 'img/logo.png' %}" alt="logo">
+    <div class="lp-video-content">
+        <div class="lp-video-left">
+            <div class="lp-video-tagline">
+                🐾 Veterinaria de confianza · Bogotá
+            </div>
+            <h1 class="lp-video-title">
+                Luppy &amp; Sus<br><em>Mascotas</em>
+            </h1>
+            <p class="lp-video-sub">
+                Tu lugar de confianza para el cuidado integral de tus compañeros de vida.
+            </p>
         </div>
-        <div class="hero-text">
-            Tu lugar de confianza para el cuidado de tus mascotas.
+
+        <div class="lp-video-right">
+            <div class="lp-video-pill">
+                <span style="color:#4ade80;">●</span> Abierto hoy
+            </div>
+            <div class="lp-video-pill">
+                📅 &nbsp;Citas disponibles
+            </div>
+            <div class="lp-video-pill">
+                ⭐ 4.9 / 5 &nbsp;· 200+ reseñas
+            </div>
         </div>
+    </div>
+
+    <div class="lp-scroll-hint">
+        <svg width="16" height="10" viewBox="0 0 16 10" fill="none">
+            <path d="M1 1L8 8L15 1" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        Scroll
     </div>
 </div>
 
-<main class="container my-5">
+
+<!-- ═══ CONTENIDO PRINCIPAL ══════════════════════════════════════════════ -->
+<main class="lp-main">
     {% block inicio %}{% endblock %}
 </main>
 
-<footer class="footer-tech text-center py-3">
-    <div>
-        <a href="#">Política de Privacidad</a> |
-        <a href="#">Aviso Legal</a> |
-        <a href="#">Cookies</a>
+
+<!-- ═══ FOOTER ════════════════════════════════════════════════════════════ -->
+<footer class="lp-footer">
+    <div class="lp-footer-body">
+
+        <!-- Columna marca -->
+        <div class="lp-footer-brand">
+            <a href="{% url 'inicio' %}" class="lp-brand" style="text-decoration:none;">
+                <div class="lp-brand-icon" style="width:36px;height:36px;font-size:1rem;">🐾</div>
+                <div>
+                    <span class="lp-brand-text">Luppy</span>
+                    <span class="lp-brand-sub">& Sus Mascotas</span>
+                </div>
+            </a>
+            <p>
+                Veterinaria integral en Bogotá. Cuidamos a tu mascota con amor, experiencia y tecnología de punta.
+            </p>
+        </div>
+
+        <!-- Columna servicios -->
+        <div class="lp-footer-col">
+            <h6>Servicios</h6>
+            <a href="{% url 'inicioServ' %}">Veterinaria General</a>
+            <a href="{% url 'inicioServ' %}">Vacunación</a>
+            <a href="{% url 'inicioServ' %}">Grooming & Estética</a>
+            <a href="{% url 'inicioServ' %}">Historial Clínico</a>
+            <a href="{% url 'inicioServ' %}">Laboratorio</a>
+        </div>
+
+        <!-- Columna mi cuenta -->
+        <div class="lp-footer-col">
+            <h6>Mi Cuenta</h6>
+            <a href="{% url 'auth_app:login' %}">Iniciar Sesión</a>
+            <a href="{% url 'auth_app:registro' %}">Registrarse</a>
+            <a href="{% url 'auth_app:login' %}">Mi Perfil</a>
+            <a href="{% url 'auth_app:login' %}">Mis Citas</a>
+            <a href="{% url 'auth_app:login' %}">Mis Mascotas</a>
+        </div>
+
+        <!-- Columna contacto -->
+        <div class="lp-footer-col">
+            <h6>Contacto</h6>
+            <div class="lp-footer-contact-item">
+                <span>📍</span>
+                <span>Bogotá, Colombia</span>
+            </div>
+            <div class="lp-footer-contact-item">
+                <span>🕐</span>
+                <span>Lun – Sáb: 8am – 7pm<br>Dom: 9am – 3pm</span>
+            </div>
+            <div class="lp-footer-contact-item">
+                <span>📞</span>
+                <span>+57 300 123 4567</span>
+            </div>
+            <div class="lp-footer-contact-item">
+                <span>✉️</span>
+                <span>holaluppy@gmail.com</span>
+            </div>
+        </div>
     </div>
-    <div class="mt-2">
-        &copy; Luppy & Sus Mascotas 2026
+
+    <div class="lp-footer-bottom">
+        <span class="lp-footer-bottom-copy">
+            © 2026 Luppy & Sus Mascotas · Todos los derechos reservados
+        </span>
+        <div class="lp-footer-bottom-links">
+            <a href="#">Privacidad</a>
+            <a href="#">Términos</a>
+            <a href="#">Cookies</a>
+        </div>
     </div>
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    /* ── Navbar scroll effect ─────────────────────────────────── */
+    const navbar = document.getElementById('lpNavbar');
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 60) {
+            navbar.classList.add('scrolled');
+        } else {
+            navbar.classList.remove('scrolled');
+        }
+    }, { passive: true });
+
+    /* ── Hamburger toggle ─────────────────────────────────────── */
+    const hamburger = document.getElementById('lpHamburger');
+    const mobileMenu = document.getElementById('lpMobileMenu');
+    let menuOpen = false;
+
+    hamburger.addEventListener('click', () => {
+        menuOpen = !menuOpen;
+        mobileMenu.style.display = menuOpen ? 'block' : 'none';
+        const spans = hamburger.querySelectorAll('span');
+        if (menuOpen) {
+            spans[0].style.transform = 'rotate(45deg) translate(5px, 5px)';
+            spans[1].style.opacity = '0';
+            spans[2].style.transform = 'rotate(-45deg) translate(5px, -5px)';
+        } else {
+            spans.forEach(s => { s.style.transform = ''; s.style.opacity = ''; });
+        }
+    });
+</script>
 
 </body>
 </html>

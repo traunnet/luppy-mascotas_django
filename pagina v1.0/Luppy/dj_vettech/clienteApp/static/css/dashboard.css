@@ -1,0 +1,114 @@
+.dashboard-bg {
+    background-color: var(--crema);
+    min-height: 100vh;
+    padding: 40px 0;
+}
+
+.dashboard-card {
+    background: var(--blanco);
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    animation: fadeInUp 0.6s ease-out both;
+}
+
+.dashboard-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+    border-color: var(--verde-claro);
+}
+
+.icono-grande {
+    font-size: 2.5rem;
+    color: var(--verde);
+    margin-bottom: 16px;
+    display: inline-block;
+}
+
+.texto-bienvenida h1 {
+    font-family: 'Playfair Display', serif;
+    color: var(--carbon);
+    font-weight: 900;
+}
+
+.card-citas-proximas {
+    background: var(--blanco);
+    border-radius: 16px;
+    border-left: 5px solid var(--verde);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    padding: 24px;
+}
+
+.cita-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border);
+}
+
+.cita-item:last-child {
+    border-bottom: none;
+}
+
+.badge-programada {
+    background-color: #d1fae5;
+    color: #065f46;
+    font-size: 0.75rem;
+    padding: 4px 12px;
+    border-radius: 100px;
+    font-weight: 600;
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.video-container {
+    position: relative;
+    width: 100%;
+    height: 400px; 
+    overflow: hidden;
+    background-color: var(--carbon);
+}
+
+.video-container video, 
+.video-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; 
+    object-position: center;
+}
+
+.hero-content {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4); 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    color: #ffffff;
+    text-align: center;
+    padding: 20px;
+}
+
+.hero-logo img {
+    max-height: 100px;
+    margin-bottom: 15px;
+    filter: drop-shadow(0 2px 10px rgba(0,0,0,0.3));
+}
+
+.hero-text {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.2rem, 4vw, 2rem);
+    font-weight: 700;
+    text-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+    max-width: 800px;
+}

@@ -1,0 +1,75 @@
+/* Fondo de la página — crema suave de la paleta cliente */
+.fondo-mascotas {
+    background-color: #FFFBF5;
+    min-height: 100vh;
+    padding: 40px 0;
+}
+/* Cada mascota es una tarjeta, no una fila de tabla */
+.tarjeta-mascota {
+    background: #ffffff;
+    border-radius: 14px;
+    border: 1px solid rgba(0, 0, 0, 0.07);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    animation: fadeInUp 0.6s ease-out both;
+    overflow: hidden;
+}
+.tarjeta-mascota:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.1);
+}
+/* Franja superior de color por especie */
+.tarjeta-mascota .franja {
+    height: 6px;
+    background-color: #52B788;
+}
+/* Ícono de la mascota */
+.icono-mascota {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: #FFF5E6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.6rem;
+    color: #E07B39;
+    margin-bottom: 10px;
+}
+/* Badge de estado — verde si activa, gris si inactiva */
+.badge-activa {
+    background-color: #D8F3DC;
+    color: #27500A;
+    font-size: 11px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-weight: 500;
+}
+.badge-inactiva {
+    background-color: #F1EFE8;
+    color: #5F5E5A;
+    font-size: 11px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-weight: 500;
+}
+/* Botones de acción dentro de la tarjeta */
+.acciones-mascota {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-top: 14px;
+}
+/* Estado vacío cuando no hay mascotas */
+.estado-vacio {
+    background: #ffffff;
+    border-radius: 14px;
+    border: 1px solid rgba(0, 0, 0, 0.07);
+    padding: 60px 40px;
+    text-align: center;
+}
+.estado-vacio .icono-vacio {
+    font-size: 3.5rem;
+    color: #d4c5b0;
+    margin-bottom: 16px;
+}

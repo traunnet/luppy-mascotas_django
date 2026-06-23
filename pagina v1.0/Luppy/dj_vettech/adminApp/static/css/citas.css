@@ -1,0 +1,104 @@
+/* Select inline para cambiar el estado de una cita desde la tabla */
+.form-select-estado {
+    border-radius: 7px;
+    border: 1.5px solid #C8E6C9;
+    font-size: 12.5px;
+    width: 130px;
+}
+
+.form-select-estado:focus {
+    border-color: var(--admin-verde);
+    box-shadow: 0 0 0 3px rgba(45, 106, 79, 0.12);
+}
+.info-banner{
+    background: linear-gradient(135deg,#0d6efd,#198754);
+    color:white;
+    border-radius:18px;
+    padding:25px;
+    margin-bottom:25px;
+    box-shadow:0 10px 25px rgba(0,0,0,.08);
+}
+
+.info-banner h5{
+    font-weight:700;
+}
+
+.stats-card{
+    background:white;
+    border-radius:18px;
+    padding:20px;
+    box-shadow:0 4px 15px rgba(0,0,0,.05);
+    transition:.3s;
+    height:100%;
+}
+
+.stats-card:hover{
+    transform:translateY(-4px);
+}
+
+.stats-icon{
+    width:55px;
+    height:55px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:1.4rem;
+}
+
+.filter-card{
+    background:white;
+    border-radius:18px;
+    padding:25px;
+    box-shadow:0 4px 15px rgba(0,0,0,.05);
+}
+
+.table-card{
+    background:white;
+    border-radius:18px;
+    overflow:hidden;
+    box-shadow:0 4px 20px rgba(0,0,0,.05);
+}
+
+.table-header{
+    padding:18px 25px;
+    background:#198754;
+    color:white;
+    font-weight:600;
+    font-size:1rem;
+}
+
+.table tbody tr{
+    transition:.3s;
+}
+
+.table tbody tr:hover{
+    background:#f8f9fa;
+}
+
+.badge-programada{
+    background:#fff3cd;
+    color:#856404;
+    padding:8px 12px;
+}
+
+.badge-completada{
+    background:#d1e7dd;
+    color:#146c43;
+    padding:8px 12px;
+}
+
+.badge-cancelada{
+    background:#f8d7da;
+    color:#b02a37;
+    padding:8px 12px;
+}
+
+.btn-actualizar{
+    border-radius:10px;
+}
+
+.form-select,
+.form-control{
+    border-radius:12px;
+}

@@ -1,0 +1,125 @@
+{% extends 'veterinarioApp/base.html' %}
+{% load static %}
+
+{% block title %}Reportes · Luppy{% endblock %}
+{% block nav_reportes %}active{% endblock %}
+
+{% block content %}
+<div class="d-flex align-items-center justify-content-between mb-4">
+    <div>
+        <h2 class="section-title mb-1"><i class="fas fa-chart-line text-verde-claro me-2"></i>Análisis de Negocio</h2>
+        <p class="text-muted small mb-0">Consulta el rendimiento de las ventas en Luppy.</p>
+    </div>
+    <div class="d-flex gap-2">
+        <a href="{% url 'vet_app:exportar_excel' %}" class="btn btn-outline-success px-3 shadow-sm">
+            <i class="fas fa-file-excel me-2"></i>Excel
+        </a>
+        <a href="{% url 'vet_app:exportar_pdf' %}" class="btn btn-outline-danger px-3 shadow-sm">
+            <i class="fas fa-file-pdf me-2"></i>PDF
+        </a>
+    </div>
+</div>
+
+<div class="card border-0 shadow-sm mb-4" style="border-radius: 20px;">
+    <div class="card-body p-3">
+        <form method="get" class="row g-3 align-items-end">
+            <div class="col-md-3">
+                <label class="form-label small fw-bold text-muted">Desde</label>
+                <input type="date" name="fecha_inicio" class="form-control form-control-sm">
+            </div>
+            <div class="col-md-3">
+                <label class="form-label small fw-bold text-muted">Hasta</label>
+                <input type="date" name="fecha_fin" class="form-control form-control-sm">
+            </div>
+            <div class="col-md-3">
+                <label class="form-label small fw-bold text-muted">Estado de Venta</label>
+                <select name="estado" class="form-select form-select-sm">
+                    <option value="">Todos los estados</option>
+                    <option value="COMPLETADO">✅ Completado</option>
+                    <option value="CARRITO">🛒 En Carrito</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <button class="btn btn-primary w-100 btn-sm py-2">
+                    <i class="fas fa-filter me-1"></i> Generar Reporte
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="row g-4 mb-4">
+    <div class="col-md-4">
+        <div class="card card-kpi p-4 border-0 shadow-sm h-100">
+            <div class="d-flex align-items-center justify-content-between mb-3">
+                <div class="icon-shape bg-success-subtle text-success">
+                    <i class="fas fa-dollar-sign"></i>
+                </div>
+                <span class="badge badge-completada">Ingresos</span>
+            </div>
+            <h6 class="text-muted fw-bold mb-1">Total Ventas</h6>
+            <h3 class="fw-bold text-carbon mb-0">${{ total_ventas|floatformat:0 }}</h3>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card card-kpi p-4 border-0 shadow-sm h-100">
+            <div class="d-flex align-items-center justify-content-between mb-3">
+                <div class="icon-shape bg-primary-subtle text-primary">
+                    <i class="fas fa-shopping-cart"></i>
+                </div>
+                <span class="badge bg-light text-dark border">Volumen</span>
+            </div>
+            <h6 class="text-muted fw-bold mb-1">Transacciones</h6>
+            <h3 class="fw-bold text-carbon mb-0">{{ cantidad_ventas }}</h3>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card card-kpi p-4 border-0 shadow-sm h-100">
+            <div class="d-flex align-items-center justify-content-between mb-3">
+                <div class="icon-shape bg-warning-subtle text-warning">
+                    <i class="fas fa-box-open"></i>
+                </div>
+                <span class="badge badge-pendiente">Rotación</span>
+            </div>
+            <h6 class="text-muted fw-bold mb-1">Items Vendidos</h6>
+            <h3 class="fw-bold text-carbon mb-0">{{ productos_vendidos }}</h3>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card-kpi {
+        border-radius: 24px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        background: #ffffff;
+    }
+    
+    .card-kpi:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.05) !important;
+    }
+
+    .icon-shape {
+        width: 45px;
+        height: 45px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 14px;
+        font-size: 20px;
+    }
+
+    .form-control-sm, .form-select-sm {
+        border-radius: 10px;
+        border-color: #e2e8f0;
+        padding-top: 8px;
+        padding-bottom: 8px;
+    }
+
+    .bg-success-subtle { background-color: #f0fdf4 !important; }
+    .bg-primary-subtle { background-color: #eff6ff !important; }
+    .bg-warning-subtle { background-color: #fffbeb !important; }
+</style>
+{% endblock %}

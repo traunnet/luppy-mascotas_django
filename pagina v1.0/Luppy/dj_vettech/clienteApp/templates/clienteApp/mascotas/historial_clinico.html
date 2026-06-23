@@ -1,0 +1,114 @@
+{% extends 'clienteApp/base_cliente.html' %}
+{% load static %}
+
+{% block titulo %}Historial Médico — {{ mascota.nombre }}{% endblock %}
+
+{% block estilos %}
+<link rel="stylesheet" href="{% static 'css/historial_clinico.css' %}">
+{% endblock %}
+
+{% block contenido %}
+<div class="fondo-historial-clinico">
+    <div class="container">
+
+        <!-- Botón volver arriba -->
+        <div class="mb-4">
+            <a href="{% url 'lista_mascotas' %}" class="btn btn-sm btn-outline-secondary">
+                <i class="fas fa-arrow-left me-2"></i>Volver a mis mascotas
+            </a>
+        </div>
+
+        <!-- Resumen de la mascota -->
+        <div class="tarjeta-mascota-resumen">
+            <div class="avatar-mascota">
+                {% if mascota.especie == 'Perro' or mascota.especie == 'perro' %}
+                    <i class="fas fa-dog"></i>
+                {% elif mascota.especie == 'Gato' or mascota.especie == 'gato' %}
+                    <i class="fas fa-cat"></i>
+                {% else %}
+                    <i class="fas fa-paw"></i>
+                {% endif %}
+            </div>
+            <div>
+                <h3 class="fw-semibold mb-1">{{ mascota.nombre }}</h3>
+                <p class="text-muted small mb-0">
+                    {{ mascota.especie }} · {{ mascota.raza }} ·
+                    <span>{{ mascota.cantidad_visitas }} visita{{ mascota.cantidad_visitas|pluralize }}</span>
+                </p>
+            </div>
+        </div>
+
+        <!-- Título de la sección -->
+        <h4 class="fw-semibold mb-4">
+            <i class="fas fa-notes-medical me-2" style="color: #E07B39;"></i>Historial médico
+        </h4>
+
+        {% if historial %}
+
+        <!-- Timeline de registros -->
+        <div class="timeline">
+            {% for registro in historial %}
+            <div class="timeline-item" style="animation-delay: {{ forloop.counter0 }}00ms;">
+                <div class="tarjeta-registro">
+
+                    <!-- Fecha y badge de estado en la misma línea -->
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div class="fecha-registro">
+                            <i class="fas fa-calendar me-1"></i>{{ registro.fecha }}
+                        </div>
+                        {% if registro.estado == 'EN_TRATAMIENTO' or registro.estado == 'En tratamiento' %}
+                            <span class="badge-en-tratamiento">En tratamiento</span>
+                        {% elif registro.estado == 'RECUPERADO' or registro.estado == 'Recuperado' %}
+                            <span class="badge-recuperado">Recuperado</span>
+                        {% elif registro.estado == 'SEGUIMIENTO' or registro.estado == 'Seguimiento' %}
+                            <span class="badge-seguimiento">Seguimiento</span>
+                        {% else %}
+                            <span class="badge-seguimiento">{{ registro.estado }}</span>
+                        {% endif %}
+                    </div>
+
+                    <!-- Campos del registro -->
+                    <div class="campo-registro">
+                        <span class="etiqueta"><i class="fas fa-question-circle me-1" style="color:#E07B39;"></i>Motivo</span>
+                        <span class="valor">{{ registro.motivo_consulta }}</span>
+                    </div>
+
+                    <div class="campo-registro">
+                        <span class="etiqueta"><i class="fas fa-diagnoses me-1" style="color:#E07B39;"></i>Diagnóstico</span>
+                        <span class="valor">{{ registro.diagnostico }}</span>
+                    </div>
+
+                    <div class="campo-registro">
+                        <span class="etiqueta"><i class="fas fa-syringe me-1" style="color:#E07B39;"></i>Tratamiento</span>
+                        <span class="valor">{{ registro.tratamiento }}</span>
+                    </div>
+
+                    <div class="campo-registro">
+                        <span class="etiqueta"><i class="fas fa-pills me-1" style="color:#E07B39;"></i>Medicación</span>
+                        <span class="valor">{{ registro.medicacion|default:"Ninguna" }}</span>
+                    </div>
+
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        {% else %}
+
+        <!-- Estado vacío -->
+        <div class="estado-vacio">
+            <div class="icono-vacio"><i class="fas fa-file-medical"></i></div>
+            <h4 class="fw-semibold mb-2">Sin registros médicos aún</h4>
+            <p class="text-muted mb-4">
+                El historial de {{ mascota.nombre }} aparecerá aquí después de su primera consulta.
+            </p>
+            <a href="{% url 'crear_cita' %}" class="btn btn-primary btn-lg">
+                <i class="fas fa-plus me-2"></i>Agendar primera cita
+            </a>
+        </div>
+
+        {% endif %}
+
+    </div>
+</div>
+{% endblock %}

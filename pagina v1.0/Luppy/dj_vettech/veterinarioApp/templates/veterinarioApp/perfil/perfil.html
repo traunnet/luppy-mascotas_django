@@ -1,0 +1,95 @@
+{% extends 'veterinarioApp/base.html' %}
+{% load static %}
+
+{% block title %}Mi Perfil · Luppy{% endblock %}
+{% block nav_perfil %}active{% endblock %}
+
+{% block content %}
+<div class="row g-4">
+    <div class="col-lg-4">
+        <div class="card text-center border-0 shadow-sm" style="border-radius: 24px;">
+            <div class="card-body p-4">
+                <div class="profile-avatar-container mx-auto mb-3">
+                    {% if perfil.usuario.foto_perfil %}
+                        <img src="{{ perfil.usuario.foto_perfil.url }}" class="rounded-circle shadow-sm border border-4 border-white" width="110" height="110" alt="Avatar">
+                    {% else %}
+                        <img src="https://ui-avatars.com/api/?name={{ perfil.usuario.nombre }}+{{ perfil.usuario.apellido }}&background=10b981&color=fff&size=128" 
+                             class="rounded-circle shadow-sm border border-4 border-white" width="110" height="110" alt="Avatar">
+                    {% endif %}
+                    <div class="status-indicator"></div>
+                </div>
+                <h4 class="fw-bold text-carbon mb-1">{{ perfil.usuario.nombre }} {{ perfil.usuario.apellido }}</h4>
+                <p class="text-muted small mb-3">
+                    <i class="fas fa-stethoscope me-1"></i> 
+                    {{ perfil.especialidad|default:"Médico Veterinario" }}
+                </p>
+                
+                <div class="license-badge-premium">
+                    <i class="fas fa-id-card me-2"></i>Lic. {{ perfil.numero_licencia }}
+                </div>
+
+                <hr class="my-4 opacity-50">
+                
+                <div class="d-grid gap-2">
+                    <a href="{% url 'vet_app:actualizar_perfil' %}" class="btn btn-primary btn-sm py-2">
+                        <i class="fas fa-edit me-2"></i>Editar Información
+                    </a>
+                    <a href="{% url 'auth_app:logout' %}" class="btn btn-outline-danger btn-sm py-2">
+                        <i class="fas fa-power-off me-2"></i>Cerrar Sesión
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-8">
+        <div class="card border-0 shadow-sm h-100" style="border-radius: 24px;">
+            <div class="card-header bg-transparent border-0 pt-4 px-4">
+                <h5 class="fw-bold text-carbon mb-0"><i class="fas fa-user-circle text-verde-claro me-2"></i>Datos Profesionales</h5>
+            </div>
+            <div class="card-body p-4">
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <div class="info-box-premium">
+                            <label>Correo Electrónico</label>
+                            <p>{{ perfil.usuario.correo }}</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="info-box-premium">
+                            <label>Teléfono</label>
+                            <p>{{ perfil.usuario.telefono|default:"No registrado" }}</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="info-box-premium">
+                            <label>Especialidad</label>
+                            <p>{{ perfil.especialidad|default:"General" }}</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="info-box-premium">
+                            <label>Años de Experiencia</label>
+                            <p>{{ perfil.anios_experiencia|default:"0" }} años</p>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="info-box-premium">
+                            <label>Dirección</label>
+                            <p>{{ perfil.usuario.direccion|default:"No registrada" }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* ... (mismo estilo de antes) ... */
+    .license-badge-premium { background: var(--crema); color: var(--verde); padding: 8px 16px; border-radius: 12px; font-size: 13px; font-weight: 700; display: inline-block; }
+    .info-box-premium { background: #f8fafc; padding: 15px; border-radius: 16px; border: 1px solid #edf2f7; }
+    .info-box-premium label { display: block; font-size: 11px; text-transform: uppercase; color: #94a3b8; font-weight: 700; margin-bottom: 5px; }
+    .info-box-premium p { margin-bottom: 0; color: var(--carbon); font-weight: 600; }
+</style>
+{% endblock %}

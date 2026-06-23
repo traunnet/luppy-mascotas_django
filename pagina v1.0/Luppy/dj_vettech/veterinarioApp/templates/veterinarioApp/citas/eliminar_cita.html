@@ -1,0 +1,62 @@
+{% extends 'veterinarioApp/base.html' %}
+{% load static %}
+
+{% block title %}Eliminar Cita · Luppy{% endblock %}
+{% block nav_gestion %}active{% endblock %}
+
+{% block estilos %}
+<link rel="stylesheet" href="{% static 'css/formularios_vet.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container py-5 shadow rounded-3">
+    <div class="form-card border-danger mx-auto" style="max-width: 600px;">
+        <div class="form-header" style="background-color: #fef2f2; border-bottom: 1px solid #fee2e2;">
+            <div class="form-icon-box" style="background:#fee2e2; color:#dc2626">
+                <i class="fas fa-trash-alt"></i>
+            </div>
+            <div>
+                <h2 class="h4 mb-1 fw-bold" style="color: #991b1b;">¿Eliminar esta cita?</h2>
+                <p class="text-muted mb-0 small">Esta acción no se puede deshacer.</p>
+            </div>
+        </div>
+
+        <div class="form-body">
+            <div class="alert alert-warning border-0 shadow-sm mb-4" style="border-radius: 12px; background-color: #fffbeb;">
+                <i class="fas fa-exclamation-triangle me-2 text-warning"></i>
+                Confirma si deseas borrar permanentemente este registro.
+            </div>
+
+            <div class="p-4 rounded-4 mb-4" style="background-color: var(--gris-claro); border: 1px dashed var(--border-light);">
+                <div class="mb-2">
+                    <span class="text-muted small d-block">Fecha y Hora:</span>
+                    <strong class="fs-5">{{ object.fecha_cita }} a las {{ object.hora_cita }}</strong>
+                </div>
+                
+                <div class="row mt-3">
+                    <div class="col-6">
+                        <span class="text-muted small d-block">Cliente:</span>
+                        <strong>{{ object.id_cliente.usuario.nombre }} {{ object.id_cliente.usuario.apellido }}</strong>
+                    </div>
+                    <div class="col-6">
+                        <span class="text-muted small d-block">Mascota:</span>
+                        <strong><i class="fas fa-paw text-verde me-1"></i> {{ object.id_mascota.nombre }}</strong>
+                    </div>
+                </div>
+            </div>
+
+            <form method="post">
+                {% csrf_token %}
+                <div class="d-flex gap-3 justify-content-end">
+                    <a href="{% url 'vet_app:gestion_citas' %}" class="btn btn-light px-4" style="border-radius: 10px; color: var(--gris-texto);">
+                        Cancelar
+                    </a>
+                    <button type="submit" class="btn btn-danger px-4 shadow-sm" style="border-radius: 10px; background-color: #dc2626; border: none;">
+                        <i class="fas fa-trash-alt me-2"></i>Eliminar Cita
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

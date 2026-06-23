@@ -1,0 +1,69 @@
+{% extends 'adminApp/base_admin.html' %}
+{% block titulo %}Eliminar Servicio{% endblock %}
+{% block titulo_pagina %}<i class="fas fa-trash-alt me-2 text-danger"></i>Eliminar Registro{% endblock %}
+
+{% load static %}
+{% block estilos %}
+<link rel="stylesheet" href="{% static 'css/base_admin.css' %}">
+<link rel="stylesheet" href="{% static 'css/inventario.css' %}">
+{% endblock %}
+
+{% block contenido %}
+<div class="row justify-content-center">
+    <div class="col-lg-5">
+        <div class="table-card shadow-sm border border-danger border-opacity-25 mb-5">
+            <div class="table-header header-salida" style="background:#B71C1C">
+                <i class="fas fa-exclamation-triangle me-2"></i>Confirmar Eliminación
+            </div>
+            <div class="card-body p-4 text-center">
+
+                <div class="mb-4">
+                    <div class="display-icon-box mb-3">
+                        <i class="fas fa-stethoscope fa-4x text-danger opacity-50"></i>
+                    </div>
+                    <h4 class="fw-bold text-dark mb-1">{{ servicio.tipo }}</h4>
+                    <span class="badge rounded-pill bg-light text-secondary border px-3 mb-4">Precio: ${{ servicio.precio }}</span>
+                    
+                    <div class="alert alert-danger text-start shadow-sm border-0 p-3">
+                        <div class="d-flex gap-2">
+                            <i class="fas fa-shield-alt fa-lg mt-1"></i>
+                            <div>
+                                Esta acción eliminará el servicio permanentemente del catálogo. Las citas históricas o agendadas asociadas **perderán la referencia** directa a este servicio.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex gap-2 justify-content-center pt-2 border-top">
+                    <button type="button" class="btn btn-danger btn-lg-custom shadow-sm" data-bs-toggle="modal" data-bs-target="#modalSeguridadServicio">
+                        <i class="fas fa-trash me-1"></i>Sí, eliminar
+                    </button>
+                    <a href="{% url 'admin_app:lista_servicios' %}" class="btn btn-light border text-secondary btn-lg-custom shadow-sm">
+                        <i class="fas fa-times me-1"></i>Cancelar
+                    </a>
+                </div>
+
+                <div class="modal fade" id="modalSeguridadServicio" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered modal-sm">
+                        <div class="modal-content border-0 shadow-lg style-modal-custom">
+                            <div class="modal-body p-4 text-center">
+                                <i class="fas fa-skull-crossbones fa-3x text-danger mb-3"></i>
+                                <h6 class="fw-bold text-dark mb-2">¿Confirmación Final?</h6>
+                                <p class="small text-muted mb-4">Esta acción purgará el servicio de la base de datos veterinaria de forma definitiva.</p>
+                                <form method="post">
+                                    {% csrf_token %}
+                                    <div class="d-grid gap-2">
+                                        <button type="submit" class="btn btn-danger shadow-sm">Eliminar Definitivamente</button>
+                                        <button type="button" class="btn btn-light border btn-sm text-secondary" data-bs-dismiss="modal">Abortar</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

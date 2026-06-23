@@ -1,0 +1,176 @@
+{% extends 'clienteApp/base_cliente.html' %}
+{% load static %}
+
+{% block titulo %}Mi Carrito{% endblock %}
+
+{% block estilos %}
+<link rel="stylesheet" href="{% static 'css/carrito.css' %}">
+{% endblock %}
+
+{% block contenido %}
+<div class="fondo-carrito">
+    <div class="container">
+
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h2 class="fw-semibold mb-1">Mi Carrito</h2>
+                <p class="text-muted small mb-0">{{ user.nombre }} {{ user.apellido }}</p>
+            </div>
+            <a href="{% url 'lista_productos' %}" class="btn btn-outline-secondary btn-sm">
+                <i class="fas fa-arrow-left me-2"></i>Continuar Comprando
+            </a>
+        </div>
+
+        {% if items %}
+        <div class="row g-4">
+
+            <div class="col-lg-8">
+                <div class="tarjeta-carrito">
+                    <div class="franja-top"></div>
+
+                    <div class="px-4 pt-4 pb-2">
+                        <h5 class="fw-semibold mb-0">
+                            <i class="fas fa-shopping-bag me-2" style="color:#52B788;"></i>
+                            Productos seleccionados
+                        </h5>
+                    </div>
+
+                    {% for item in items %}
+                    {% with producto=item.id_inventario.id_tipo_producto %}
+
+                    <div class="item-carrito" style="animation-delay: {{ forloop.counter0 }}0ms;">
+
+                        <div class="icono-producto">
+                            {% if producto.imagen %}
+                                <img src="{{ producto.imagen.url }}"
+                                     alt="{{ producto.nombre_producto }}"
+                                     class="img-producto-carrito">
+                            {% else %}
+                                <i class="fas fa-shopping-bag"></i>
+                            {% endif %}
+                        </div>
+
+                        <div>
+                            <div class="nombre-producto">{{ producto.nombre_producto }}</div>
+                            <div class="categoria-producto">
+                                {{ producto.categoria }}
+                                · Stock: {{ item.id_inventario.cantidad }}
+                            </div>
+                        </div>
+
+                        <div class="precio-item">
+                            ${{ producto.precio_unitario }}
+                        </div>
+
+                        <form method="post" action="{% url 'actualizar_carrito' item.pk %}">
+                            {% csrf_token %}
+                            <input type="number"
+                                   name="cantidad"
+                                   value="{{ item.cantidad }}"
+                                   min="1"
+                                   max="{{ item.id_inventario.cantidad }}"
+                                   class="input-cantidad"
+                                   onchange="this.form.submit()">
+                        </form>
+
+                        <a href="{% url 'eliminar_carrito' item.pk %}" class="btn-eliminar">
+                            <i class="fas fa-trash"></i>
+                        </a>
+
+                    </div>
+
+                    {% endwith %}
+                    {% endfor %}
+
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+
+                <div class="tarjeta-resumen">
+                    <div class="franja-top"></div>
+                    <div class="p-4 text-center">
+                        <div class="total-label">Total a pagar</div>
+                        <div class="total-valor mb-4">${{ total }}</div>
+
+                        <button class="btn btn-pagar btn-lg w-100"
+                                data-bs-toggle="modal"
+                                data-bs-target="#modalConfirmarPago">
+                            <i class="fas fa-credit-card me-2"></i>
+                            Proceder al Pago
+                        </button>
+                    </div>
+                </div>
+
+                <div class="tarjeta-info">
+                    <h6 class="fw-semibold mb-2">
+                        <i class="fas fa-info-circle me-2" style="color:#52B788;"></i>
+                        Información
+                    </h6>
+
+                    <div class="item-info-carrito">
+                        <i class="fas fa-truck"></i> Envío gratuito
+                    </div>
+                    <div class="item-info-carrito">
+                        <i class="fas fa-shield-alt"></i> Pago seguro
+                    </div>
+                    <div class="item-info-carrito">
+                        <i class="fas fa-undo"></i> Devoluciones fáciles
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        {% else %}
+        <div class="estado-vacio">
+            <div class="icono-vacio"><i class="fas fa-shopping-cart"></i></div>
+            <h4 class="fw-semibold mb-2">Tu carrito está vacío</h4>
+            <p class="text-muted mb-4">¡Agrega algunos productos para comenzar!</p>
+            <a href="{% url 'lista_productos' %}" class="btn btn-success btn-lg">
+                <i class="fas fa-plus me-2"></i>Ver Productos
+            </a>
+        </div>
+        {% endif %}
+
+    </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal fade" id="modalConfirmarPago" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="border-radius:16px; overflow:hidden;">
+
+            <div class="modal-header" style="background:#52B788;">
+                <h5 class="modal-title text-white fw-semibold">
+                    <i class="fas fa-credit-card me-2"></i>Confirmar compra
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body text-center py-4">
+                <i class="fas fa-shopping-bag mb-3"
+                   style="font-size:2.5rem; color:#52B788;"></i>
+
+                <p class="fw-semibold fs-5">¿Confirmas tu compra?</p>
+                <p class="text-muted small">
+                    Total a pagar: <strong>${{ total }}</strong>
+                </p>
+            </div>
+
+            <div class="modal-footer justify-content-center border-0 pb-4 gap-2">
+                <button type="button" class="btn btn-outline-secondary px-4"
+                        data-bs-dismiss="modal">
+                    Cancelar
+                </button>
+
+                <a href="{% url 'pagar' %}" class="btn btn-pagar px-4">
+                    Sí, confirmar
+                </a>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,141 @@
+{% extends 'clienteApp/base_cliente.html' %}
+{% load static %}
+
+{% block titulo %}Mis Mascotas{% endblock %}
+
+{% block estilos %}
+<link rel="stylesheet" href="{% static 'css/lista_mascota.css' %}">
+<style>
+    .toast-container-custom {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 9999;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        max-width: 380px;
+    }
+    .toast-custom {
+        background: #fff;
+        border-left: 4px solid #E63946;
+        border-radius: 10px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.13);
+        padding: 14px 18px;
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        animation: slideInRight 0.4s ease-out both;
+        cursor: pointer;
+    }
+    .toast-custom.toast-success { border-color: #2dc653; }
+    .toast-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+    .toast-icon.error { color: #E63946; }
+    .toast-icon.success { color: #2dc653; }
+    .toast-body { flex: 1; }
+    .toast-title { font-size: 13px; font-weight: 700; color: #2d2d2d; margin-bottom: 2px; }
+    .toast-msg { font-size: 12.5px; color: #555; line-height: 1.4; }
+    .toast-close {
+        background: none;
+        border: none;
+        font-size: 16px;
+        color: #aaa;
+        cursor: pointer;
+        padding: 0;
+        line-height: 1;
+    }
+    @keyframes slideInRight {
+        from { transform: translateX(110%); opacity: 0; }
+        to   { transform: translateX(0);   opacity: 1; }
+    }
+</style>
+{% endblock %}
+
+{% block contenido %}
+
+<div class="fondo-mascotas">
+    <div class="container">
+
+        <!-- Encabezado -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h2 class="fw-semibold mb-1">Mis Mascotas</h2>
+                <p class="text-muted small mb-0">{{ user.nombre }} {{ user.apellido }}</p>
+            </div>
+            <a href="{% url 'crear_mascota' %}" class="btn btn-primary">
+                <i class="fas fa-plus me-2"></i>Registrar Mascota
+            </a>
+        </div>
+
+        {% if mascotas %}
+
+        <div class="row g-4">
+            {% for mascota in mascotas %}
+            <div class="col-md-6 col-lg-4">
+                <div class="tarjeta-mascota" style="animation-delay: {{ forloop.counter0 }}00ms;">
+                    <div class="franja"></div>
+                    <div class="p-4">
+
+                        <!-- Ícono y nombre -->
+                        <div class="d-flex align-items-center gap-3 mb-3">
+                            <div class="icono-mascota">
+                                {% if mascota.especie == 'Perro' or mascota.especie == 'perro' %}
+                                    <i class="fas fa-dog"></i>
+                                {% elif mascota.especie == 'Gato' or mascota.especie == 'gato' %}
+                                    <i class="fas fa-cat"></i>
+                                {% else %}
+                                    <i class="fas fa-paw"></i>
+                                {% endif %}
+                            </div>
+                            <div>
+                                <h5 class="fw-semibold mb-0">{{ mascota.nombre }}</h5>
+                                <span class="text-muted small">{{ mascota.especie }} · {{ mascota.raza }}</span>
+                            </div>
+                        </div>
+
+                        <!-- Datos -->
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            {% if mascota.estado == 'ACTIVO' or mascota.estado == 'Activo' or mascota.estado == 'activo' %}
+                                <span class="badge-activa">Activa</span>
+                            {% else %}
+                                <span class="badge-inactiva">{{ mascota.estado }}</span>
+                            {% endif %}
+                        </div>
+
+                        <!-- Botones -->
+                        <div class="acciones-mascota">
+                            <a href="{% url 'editar_mascota' mascota.pk %}" class="btn btn-sm btn-success">
+                                <i class="fas fa-edit me-1"></i>Editar
+                            </a>
+                            <a href="{% url 'historial_clinico' mascota.pk %}" class="btn btn-sm btn-primary">
+                                <i class="fas fa-notes-medical me-1"></i>Historial
+                            </a>
+                            <a href="{% url 'eliminar_mascota' mascota.pk %}" class="btn btn-sm btn-outline-danger">
+                                <i class="fas fa-trash me-1"></i>Eliminar
+                            </a>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        {% else %}
+
+        <!-- Estado vacío -->
+        <div class="estado-vacio">
+            <div class="icono-vacio"><i class="fas fa-paw"></i></div>
+            <h4 class="fw-semibold mb-2">Aún no tienes mascotas registradas</h4>
+            <p class="text-muted mb-4">Registra a tu compañero y lleva un control de su salud fácilmente.</p>
+            <a href="{% url 'crear_mascota' %}" class="btn btn-primary btn-lg">
+                <i class="fas fa-plus me-2"></i>Registrar mi primera mascota
+            </a>
+        </div>
+
+        {% endif %}
+
+    </div>
+</div>
+
+{% endblock %}

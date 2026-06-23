@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8">
+  <title>Confirmación de compra - VetTech</title>
+</head>
+<body style="background-color:#f3f4f6; font-family:Arial, sans-serif; padding:24px; margin:0;">
+  {% load static %}
+  <div style="max-width:600px; margin:auto; background-color:#ffffff; border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.1); overflow:hidden;">
+
+    <div style="text-align:center; border-bottom:1px solid #e5e7eb; padding:24px;">
+      <h2 style="font-size:20px; font-weight:bold; color:#1f2937; margin:0;">🧾 Confirmación de compra</h2>
+      <p style="color:#6b7280; margin-top:8px;">¡Gracias por tu compra, {{ usuario.nombre }} 🐾!</p>
+    </div>
+
+    <div style="padding:24px;">
+      <h3 style="font-size:16px; font-weight:600; color:#374151; margin-bottom:16px;">🛒 Detalle de tu pedido:</h3>
+      <div>
+        {% for d in detalles %}
+          <div style="display:flex; justify-content:space-between; border-bottom:1px dashed #d1d5db; padding-bottom:8px; margin-bottom:8px;">
+            <span style="color:#374151;">{{ d.producto }} x{{ d.cantidad }}</span>
+            <span style="color:#111827; font-weight:500;">${{ d.subtotal }}</span>
+          </div>
+        {% endfor %}
+      </div>
+      <div style="margin-top:16px; text-align:right;">
+        <span style="font-size:18px; font-weight:bold; color:#16a34a;">💰 Total: ${{ total }}</span>
+      </div>
+    </div>
+
+    <div style="background-color:#f9fafb; text-align:center; padding:24px;">
+      <p style="color:#6b7280; margin:0;">Tu mascota merece lo mejor, y nosotros estamos felices de acompañarte en su cuidado.</p>
+      <p style="margin-top:12px; color:#dc2626; font-weight:600;">❤️ Luppy & Sus Mascotas</p>
+    </div>
+  </div>
+</body>
+</html>

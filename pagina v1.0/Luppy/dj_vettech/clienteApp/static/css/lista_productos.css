@@ -1,0 +1,191 @@
+/* ── Fondo de la página ── */
+.fondo-productos {
+    background-color: #FFFBF5;
+    min-height: 100vh;
+    padding: 40px 0;
+}
+
+/* ── Barra de filtros ── */
+.tarjeta-filtros {
+    background: #ffffff;
+    border-radius: 14px;
+    border: 1px solid rgba(0, 0, 0, 0.07);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+    padding: 20px 24px;
+    margin-bottom: 28px;
+    animation: fadeInUp 0.5s ease-out both;
+}
+
+.tarjeta-filtros label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #6B4226;
+    margin-bottom: 5px;
+    display: block;
+}
+
+.tarjeta-filtros input,
+.tarjeta-filtros select {
+    border-radius: 8px;
+    border: 1.5px solid #e0d9d0;
+    padding: 8px 12px;
+    font-size: 13.5px;
+    width: 100%;
+    background-color: #fdfcfb;
+    color: #333;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.tarjeta-filtros input:focus,
+.tarjeta-filtros select:focus {
+    border-color: #E07B39;
+    box-shadow: 0 0 0 3px rgba(224, 123, 57, 0.12);
+    outline: none;
+    background-color: #ffffff;
+}
+
+/* Checkbox disponible */
+.check-disponible {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding-top: 24px;
+    font-size: 13.5px;
+    color: #555;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.check-disponible input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    accent-color: #E07B39;
+    cursor: pointer;
+    margin: 0;
+}
+
+/* ── Cabecera de sección ── */
+.cabecera-productos {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 28px;
+}
+
+/* ── Tarjeta de producto ── */
+.tarjeta-producto {
+    background: #ffffff;
+    border-radius: 14px;
+    border: 1px solid rgba(0, 0, 0, 0.07);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+    overflow: hidden;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    animation: fadeInUp 0.6s ease-out both;
+    display: flex;
+    flex-direction: column;
+}
+
+.tarjeta-producto:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.1);
+}
+
+/* Imagen / ícono del producto */
+.imagen-producto {
+    height: 160px;
+    background-color: #D8F3DC;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+    color: #52B788;
+    flex-shrink: 0;
+}
+
+/* Cuerpo de la tarjeta */
+.cuerpo-producto {
+    padding: 18px 20px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.nombre-prod {
+    font-weight: 700;
+    font-size: 15px;
+    color: #2d2d2d;
+    margin-bottom: 4px;
+}
+
+.categoria-prod {
+    font-size: 12px;
+    color: #aaa;
+    margin-bottom: 6px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.descripcion-prod {
+    font-size: 13px;
+    color: #777;
+    margin-bottom: 10px;
+    flex-grow: 1;
+}
+
+.stock-prod {
+    font-size: 12px;
+    color: #aaa;
+    margin-bottom: 12px;
+}
+
+/* Precio */
+.precio-producto {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: #E07B39;
+    margin-bottom: 14px;
+}
+
+/* Botón agregar al carrito */
+.btn-carrito {
+    background-color: #52B788;
+    border-color: #52B788;
+    color: #fff;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    padding: 9px;
+    transition: all 0.2s ease;
+    width: 100%;
+    display: block;
+    text-align: center;
+    text-decoration: none;
+}
+
+.btn-carrito:hover {
+    background-color: #3d9e70;
+    border-color: #3d9e70;
+    color: #fff;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(82, 183, 136, 0.3);
+}
+
+/* ── Estado vacío ── */
+.estado-vacio {
+    background: #ffffff;
+    border-radius: 14px;
+    border: 1px solid rgba(0, 0, 0, 0.07);
+    padding: 60px 40px;
+    text-align: center;
+}
+
+.estado-vacio .icono-vacio {
+    font-size: 3.5rem;
+    color: #d4c5b0;
+    margin-bottom: 16px;
+}

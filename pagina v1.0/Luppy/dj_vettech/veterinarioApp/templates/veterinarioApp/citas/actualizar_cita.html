@@ -1,0 +1,208 @@
+{% extends 'veterinarioApp/base.html' %}
+{% load static %}
+
+{% block title %}Actualizar Cita · Luppy{% endblock %}
+{% block nav_gestion %}active{% endblock %}
+
+{% block estilos %}
+<link rel="stylesheet" href="{% static 'css/formularios_luppy.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="form-card">
+        <div class="form-header">
+            <div class="form-icon-box" style="background:#fef9c3; color:#ca8a04;">
+                <i class="fas fa-calendar-check"></i>
+            </div>
+            <div>
+                <h2 class="h4 mb-1 fw-bold" style="color: var(--carbon);">Actualizar Cita</h2>
+                <p class="text-muted mb-0 small">Modifica los datos de la cita programada.</p>
+            </div>
+        </div>
+
+        <div class="form-body">
+            <form method="post" id="formActualizarCita">
+                {% csrf_token %}
+                
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <label class="field-label">
+                            <i class="fas fa-calendar-alt text-verde"></i> Fecha
+                        </label>
+                        {{ form.fecha_cita }}
+                        {% if form.fecha_cita.errors %}
+                            <div class="text-danger small mt-1">{{ form.fecha_cita.errors }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="col-md-6">
+                        <label class="field-label">
+                            <i class="fas fa-clock text-verde"></i> Hora
+                        </label>
+                        {{ form.hora_cita }}
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="field-label">
+                            <i class="fas fa-user text-verde"></i> Cliente
+                        </label>
+                        {{ form.id_cliente }}
+                    </div>
+                    <div class="col-md-6">
+                        <label class="field-label">
+                            <i class="fas fa-paw text-verde"></i> Mascota
+                        </label>
+                        {{ form.id_mascota }}
+                    </div>
+
+                    <div class="col-12">
+                        <label class="field-label">
+                            <i class="fas fa-stethoscope text-verde"></i> Servicio solicitado
+                        </label>
+                        {{ form.id_servicio }}
+                        {% if form.id_servicio.errors %}
+                            <div class="text-danger small mt-1">{{ form.id_servicio.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="col-12">
+                        <label class="field-label">
+                            <i class="fas fa-flag text-verde"></i> Estado de la Cita
+                        </label>
+                        {{ form.estado_cita }}
+                    </div>
+
+                    <div class="col-12">
+                        <label class="field-label">
+                            <i class="fas fa-notes-medical text-verde"></i> Motivo / Observaciones
+                        </label>
+                        {{ form.motivo }}
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <a href="{% url 'vet_app:gestion_citas' %}" class="btn btn-light px-4" style="border-radius: 10px; color: var(--gris-texto);">
+                        <i class="fas fa-arrow-left me-2"></i>Volver
+                    </a>
+                    <button type="button" class="btn btn-success px-4" style="border-radius: 10px; background-color: #ca8a04; border-color: #ca8a04;" onclick="document.getElementById('modalConfirmar').style.display='flex'">
+                        <i class="fas fa-save me-2"></i>Guardar Cambios
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de confirmación -->
+<div id="modalConfirmar" style="
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 9999;
+    align-items: center;
+    justify-content: center;
+">
+    <div style="
+        background: white;
+        border-radius: 16px;
+        padding: 2rem;
+        max-width: 420px;
+        width: 90%;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        text-align: center;
+    ">
+        <div style="
+            width: 64px; height: 64px;
+            background: #fef9c3;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 28px;
+        ">
+            🐾
+        </div>
+        <h5 class="fw-bold mb-2" style="color: var(--carbon);">¿Confirmar cambios?</h5>
+        <p class="text-muted mb-4" style="font-size: 14px;">
+            Estás a punto de actualizar los datos de esta cita médica. ¿Deseas continuar?
+        </p>
+        <div class="d-flex gap-3 justify-content-center">
+            <button 
+                type="button" 
+                onclick="document.getElementById('modalConfirmar').style.display='none'"
+                style="
+                    padding: 10px 28px;
+                    border-radius: 10px;
+                    border: 1px solid #e5e7eb;
+                    background: white;
+                    color: #6b7280;
+                    font-weight: 600;
+                    cursor: pointer;
+                "
+            >
+                <i class="fas fa-times me-1"></i> No, cancelar
+            </button>
+            <button 
+                type="button"
+                onclick="document.getElementById('formActualizarCita').submit()"
+                style="
+                    padding: 10px 28px;
+                    border-radius: 10px;
+                    border: none;
+                    background: #ca8a04;
+                    color: white;
+                    font-weight: 600;
+                    cursor: pointer;
+                "
+            >
+                <i class="fas fa-check me-1"></i> Sí, guardar
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('modalConfirmar').addEventListener('click', function(e) {
+    if (e.target === this) this.style.display = 'none';
+});
+
+document.getElementById('id_cliente').addEventListener('change', function () {
+    const clienteId = this.value;
+    const mascotaSelect = document.getElementById('id_mascota');
+    mascotaSelect.innerHTML = '<option value="">---------</option>';
+    if (!clienteId) return;
+
+    fetch(`/veterinario/ajax/mascotas/${clienteId}/`)
+        .then(res => res.json())
+        .then(mascotas => {
+            mascotas.forEach(m => {
+                const option = document.createElement('option');
+                option.value = m.id;
+                option.textContent = m.nombre;
+                mascotaSelect.appendChild(option);
+            });
+        });
+});
+
+window.addEventListener('DOMContentLoaded', function () {
+    const clienteSelect = document.getElementById('id_cliente');
+    const mascotaActualId = "{{ object.id_mascota.id }}";
+    const clienteId = clienteSelect.value;
+    if (!clienteId) return;
+
+    fetch(`/veterinario/ajax/mascotas/${clienteId}/`)
+        .then(res => res.json())
+        .then(mascotas => {
+            const mascotaSelect = document.getElementById('id_mascota');
+            mascotaSelect.innerHTML = '<option value="">---------</option>';
+            mascotas.forEach(m => {
+                const option = document.createElement('option');
+                option.value = m.id;
+                option.textContent = m.nombre;
+                if (String(m.id) === mascotaActualId) option.selected = true;
+                mascotaSelect.appendChild(option);
+            });
+        });
+});
+</script>
+{% endblock %}

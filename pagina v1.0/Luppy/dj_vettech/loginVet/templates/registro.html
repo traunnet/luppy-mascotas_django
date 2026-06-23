@@ -1,13 +1,188 @@
-{% extends 'base.html' %}
-{% block titulo %}Luppy | Registro{% endblock %}
+{% extends "base_auth.html" %}
+{% load static %}
 {% load crispy_forms_tags %}
 
-{% block inicio %}
-<div class="container">
-    <h2>Registro</h2>
-    <form method="POST">
-        {% csrf_token %}
-        {{ form|crispy }}  <button type="submit" class="btn btn-primary">Registrarse</button>
-    </form>
+{% block titulo %}Luppy | Registro{% endblock %}
+
+{% block contenido %}
+<link rel="stylesheet" href="{% static 'css/auth.css' %}">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+<div class="auth-wrapper">
+    <div class="auth-bg"></div>
+
+    <div class="auth-card">
+        <h2 class="auth-title">Crear Cuenta</h2>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        {% if form.non_field_errors %}
+            <div class="alert alert-danger">
+                {% for error in form.non_field_errors %}
+                    {{ error }}
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <form method="POST" novalidate id="formRegistro">
+            {% csrf_token %}
+
+            <div class="row">
+
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Tipo de Documento</label>
+                    {{ form.tipo_doc }}
+                    {% for error in form.tipo_doc.errors %}
+                        <div class="text-danger small mt-1">{{ error }}</div>
+                    {% endfor %}
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Número de Documento</label>
+                    {{ form.numero_documento }}
+                    {% for error in form.numero_documento.errors %}
+                        <div class="text-danger small mt-1">{{ error }}</div>
+                    {% endfor %}
+                    <small class="text-muted">Sin puntos, sin espacios y sin caracteres especiales.</small>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Nombre</label>
+                    {{ form.nombre }}
+                    {% for error in form.nombre.errors %}
+                        <div class="text-danger small mt-1">{{ error }}</div>
+                    {% endfor %}
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Apellido</label>
+                    {{ form.apellido }}
+                    {% for error in form.apellido.errors %}
+                        <div class="text-danger small mt-1">{{ error }}</div>
+                    {% endfor %}
+                </div>
+
+                <div class="col-12 mb-3">
+                    <label class="form-label">Correo</label>
+                    {{ form.correo }}
+                    {% for error in form.correo.errors %}
+                        <div class="text-danger small mt-1">{{ error }}</div>
+                    {% endfor %}
+                </div>
+
+                <div class="col-12 mb-3">
+                    <label class="form-label">Teléfono</label>
+                    {{ form.telefono }}
+                    {% for error in form.telefono.errors %}
+                        <div class="text-danger small mt-1">{{ error }}</div>
+                    {% endfor %}
+                    <small class="text-muted">Exactamente 10 dígitos. Ejemplo: 3001234567</small>
+                </div>
+
+                <div class="col-12 mb-3">
+                    <label class="form-label">Dirección</label>
+                    {{ form.direccion }}
+                    {% for error in form.direccion.errors %}
+                        <div class="text-danger small mt-1">{{ error }}</div>
+                    {% endfor %}
+                </div>
+                <div class="col-12 mb-3">
+                    <label class="form-label">Contraseña</label>
+                    <div style="position: relative;">
+                        {{ form.password }}
+                        <button type="button" id="togglePassword" tabindex="-1" style="position:absolute; right:10px; top:50%; transform:translateY(-50%); background:none; border:none; cursor:pointer; color:rgb(255, 255, 255); padding:0; z-index:10;">
+                            <i class="bi bi-eye" id="iconPassword" style="font-size:1.2rem;"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="col-12 mb-3">
+                    <label class="form-label">Confirmar Contraseña</label>
+                    <div style="position: relative;">
+                        <input type="password" id="confirmar_password" name="confirmar_password" class="form-control" placeholder="Repite tu contraseña" autocomplete="new-password"> 
+                        <button type="button" id="toggleConfirmar" tabindex="-1" style="position:absolute; right:10px; top:50%; transform:translateY(-50%); background:none; border:none; cursor:pointer; color:rgb(255, 255, 255); padding:0; z-index:10;">
+                            <i class="bi bi-eye" id="iconConfirmar" style="font-size:1.2rem;"></i>
+                        </button>
+                    </div>
+                    <div id="msg-confirmar" class="small mt-1"></div>
+                </div>
+            </div>
+            <button type="submit" class="mb-2 btn btn-auth w-100" id="btnSubmit">
+                Registrarse
+            </button>
+            <br>
+            <div class="auth-footer">
+                ¿Ya tienes cuenta?
+                <a style="text-decoration: none; color: greenyellow;" href="{% url 'auth_app:login' %}">
+                    Iniciar sesión
+                </a>
+            </div>
+        </form>
+    </div>
 </div>
+
+<script>
+    function toggleVer(inputId, iconId) {
+        const input = document.getElementById(inputId);
+        const icon  = document.getElementById(iconId);
+        const mostrar = input.type === 'password';
+        input.type = mostrar ? 'text' : 'password';
+        icon.classList.toggle('bi-eye',       !mostrar);
+        icon.classList.toggle('bi-eye-slash',  mostrar);
+    }
+
+    document.getElementById('togglePassword').addEventListener('click', () =>
+        toggleVer('id_password', 'iconPassword'));
+
+    document.getElementById('toggleConfirmar').addEventListener('click', () =>
+        toggleVer('confirmar_password', 'iconConfirmar'));
+
+    const password   = document.getElementById('id_password');
+    const confirmar  = document.getElementById('confirmar_password');
+    const msgDiv     = document.getElementById('msg-confirmar');
+    const btnSubmit  = document.getElementById('btnSubmit');
+
+    function validarConfirmacion() {
+        const pass = password.value;
+        const conf = confirmar.value;
+
+        if (conf === '') {
+            msgDiv.textContent = '';
+            confirmar.classList.remove('is-valid', 'is-invalid');
+            btnSubmit.disabled = false;
+            return;
+        }
+
+        if (pass === conf) {
+            msgDiv.textContent = '✔ Las contraseñas coinciden.';
+            msgDiv.className = 'small mt-1 text-success';
+            confirmar.classList.remove('is-invalid');
+            confirmar.classList.add('is-valid');
+            btnSubmit.disabled = false;
+        } else {
+            msgDiv.textContent = '✖ Las contraseñas no coinciden.';
+            msgDiv.className = 'small mt-1 text-danger';
+            confirmar.classList.remove('is-valid');
+            confirmar.classList.add('is-invalid');
+            btnSubmit.disabled = true;
+        }
+    }
+
+    confirmar.addEventListener('input', validarConfirmacion);
+    password.addEventListener('input',  validarConfirmacion);
+
+    document.getElementById('formRegistro').addEventListener('submit', function (e) {
+        if (password.value !== confirmar.value) {
+            e.preventDefault();
+            validarConfirmacion();
+            confirmar.focus();
+        }
+    });
+</script>
 {% endblock %}

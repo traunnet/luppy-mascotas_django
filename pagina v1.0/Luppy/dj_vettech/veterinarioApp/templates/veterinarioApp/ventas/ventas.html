@@ -1,0 +1,116 @@
+{% extends 'veterinarioApp/base.html' %}
+{% load static %}
+
+{% block title %}Historial de Ventas · Luppy{% endblock %}
+
+{% block content %}
+<div class="d-flex align-items-center justify-content-between mb-4">
+    <div>
+        <h2 class="section-title mb-1"><i class="fas fa-receipt text-verde-claro me-2"></i>Registro de Ventas</h2>
+        <p class="text-muted small mb-0">Control de ingresos y facturación diaria.</p>
+    </div>
+    <a href="{% url 'vet_app:crear_venta' %}" class="btn btn-primary px-4 shadow-sm">
+        <i class="fas fa-cart-plus me-2"></i>Nueva Venta
+    </a>
+</div>
+
+<div class="card" style="border-radius: 18px; overflow: hidden;">
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead>
+                <tr>
+                    <th class="ps-4 py-3">PRODUCTO VENDIDO</th>
+                    <th>CANTIDAD</th>
+                    <th>FECHA Y HORA</th>
+                    <th class="text-end pe-4">VALOR TOTAL</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for v in ventas %}
+                    {% for d in v.detalleventa_set.all %}
+                    <tr>
+                        <td class="ps-4">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="sale-icon-circle">
+                                    <i class="fas fa-shopping-bag"></i>
+                                </div>
+                                <div>
+                                    <span class="fw-bold text-carbon d-block">
+                                        {{ d.id_inventario.id_tipo_producto.nombre_producto }}
+                                    </span>
+                                    <span class="text-muted" style="font-size: 10px; letter-spacing: 0.5px;">TICKET #{{ v.id|stringformat:"04d" }}</span>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <span class="badge-cantidad">
+                                x{{ d.cantidad }}
+                            </span>
+                        </td>
+                        <td>
+                            <div class="d-flex flex-column">
+                                <span class="text-carbon small fw-medium">{{ v.fecha_venta|date:"d M, Y" }}</span>
+                                <span class="text-muted" style="font-size: 11px;">{{ v.fecha_venta|date:"h:i a" }}</span>
+                            </div>
+                        </td>
+                        <td class="text-end pe-4">
+                            <span class="price-tag-premium">
+                                ${{ d.precio_unitario|floatformat:0 }}
+                            </span>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                {% empty %}
+                    <tr>
+                        <td colspan="4" class="text-center py-5">
+                            <div class="opacity-25 mb-3">
+                                <i class="fas fa-receipt fa-4x"></i>
+                            </div>
+                            <h5 class="text-muted fw-light">Sin ventas registradas</h5>
+                            <p class="text-muted small">Las transacciones de hoy aparecerán aquí.</p>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<style>
+    .sale-icon-circle {
+        width: 38px; height: 38px;
+        background: var(--crema);
+        color: var(--verde);
+        border-radius: 50%;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 14px;
+        border: 1px solid var(--verde-mint);
+    }
+
+    .badge-cantidad {
+        background: #f8fafc;
+        color: var(--carbon);
+        font-weight: 600;
+        padding: 4px 12px;
+        border-radius: 20px;
+        border: 1px solid var(--border-light);
+        font-size: 12px;
+    }
+
+    .price-tag-premium {
+        background: var(--carbon);
+        color: #ffffff;
+        font-weight: 600;
+        padding: 6px 14px;
+        border-radius: 8px;
+        font-size: 13px;
+        display: inline-block;
+        box-shadow: var(--shadow-sm);
+    }
+
+    .table-hover tbody tr:hover {
+        background-color: #fcfdfd !important;
+        transition: background-color 0.2s ease;
+    }
+</style>
+{% endblock %}

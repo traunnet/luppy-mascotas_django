@@ -1,0 +1,161 @@
+{% extends 'clienteApp/base_cliente.html' %}
+{% load static %}
+
+{% block titulo %}Actualizar Perfil{% endblock %}
+
+{% block estilos %}
+<link rel="stylesheet" href="{% static 'css/formulario_perfil.css' %}">
+{% endblock %}
+
+{% block contenido %}
+<div class="fondo-formulario-perfil">
+    <div class="container">
+
+        <div class="mb-4">
+            <a href="{% url 'perfil_cliente' %}" class="btn btn-sm btn-outline-secondary">
+                <i class="fas fa-arrow-left me-2"></i>Volver a mi perfil
+            </a>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-lg-8 col-md-10">
+
+                <div class="tarjeta-formulario-perfil">
+                    <div class="franja-top"></div>
+
+                    <div class="text-center mb-4">
+                        <div class="mb-3" style="font-size: 2.4rem; color: #E07B39;">
+                            <i class="fas fa-user-edit"></i>
+                        </div>
+                        <h3 class="fw-semibold mb-1">Actualizar Perfil</h3>
+                        <p class="text-muted small">
+                            {{ usuario.nombre }} {{ usuario.apellido }}, actualiza tu información personal
+                        </p>
+                    </div>
+
+                    <form method="post" enctype="multipart/form-data" id="formPerfil">
+                        {% csrf_token %}
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label>
+                                    <i class="fas fa-user me-1" style="color:#E07B39;"></i>Nombre
+                                </label>
+                                {{ form.nombre }}
+                                {% if form.nombre.errors %}
+                                    <div class="invalid-feedback d-block">{{ form.nombre.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label>
+                                    <i class="fas fa-user me-1" style="color:#E07B39;"></i>Apellido
+                                </label>
+                                {{ form.apellido }}
+                                {% if form.apellido.errors %}
+                                    <div class="invalid-feedback d-block">{{ form.apellido.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label>
+                                    <i class="fas fa-phone me-1" style="color:#E07B39;"></i>Teléfono
+                                </label>
+                                {{ form.telefono }}
+                                {% if form.telefono.errors %}
+                                    <div class="invalid-feedback d-block">{{ form.telefono.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label>
+                                    <i class="fas fa-id-card me-1" style="color:#E07B39;"></i>Tipo de Documento
+                                </label>
+                                {{ form.tipo_doc }}
+                                {% if form.tipo_doc.errors %}
+                                    <div class="invalid-feedback d-block">{{ form.tipo_doc.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label>
+                                    <i class="fas fa-hashtag me-1" style="color:#E07B39;"></i>Número de Documento
+                                </label>
+                                {{ form.numero_documento }}
+                                {% if form.numero_documento.errors %}
+                                    <div class="invalid-feedback d-block">{{ form.numero_documento.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label>
+                                <i class="fas fa-map-marker-alt me-1" style="color:#E07B39;"></i>Dirección
+                            </label>
+                            {{ form.direccion }}
+                            {% if form.direccion.errors %}
+                                <div class="invalid-feedback d-block">{{ form.direccion.errors.0 }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="mb-3">
+                            <label>
+                                <i class="fas fa-camera me-1" style="color:#E07B39;"></i>Foto de Perfil
+                            </label>
+                            {% if usuario.foto_perfil %}
+                                <div class="mb-2">
+                                    <img src="{{ usuario.foto_perfil.url }}" alt="Foto actual" class="foto-actual">
+                                    <small class="text-muted d-block">Foto actual</small>
+                                </div>
+                            {% endif %}
+                            {{ form.foto_perfil }}
+                            {% if form.foto_perfil.errors %}
+                                <div class="invalid-feedback d-block">{{ form.foto_perfil.errors.0 }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="d-flex gap-3 mt-4">
+                            <button type="button" class="btn btn-primary flex-grow-1" data-bs-toggle="modal" data-bs-target="#modalConfirmarPerfil">
+                                <i class="fas fa-save me-2"></i>Guardar cambios
+                            </button>
+                            <a href="{% url 'perfil_cliente' %}" class="btn btn-outline-secondary">
+                                Cancelar
+                            </a>
+                        </div>
+
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalConfirmarPerfil" tabindex="-1" aria-labelledby="modalConfirmarPerfilLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="border-radius:16px; border:none; overflow:hidden;">
+            <div class="modal-header" style="background:#E07B39; border:none;">
+                <h5 class="modal-title text-white fw-semibold" id="modalConfirmarPerfilLabel">
+                    <i class="fas fa-user-edit me-2"></i>Confirmar cambios
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body text-center py-4">
+                <i class="fas fa-user-check mb-3" style="font-size:2.5rem; color:#E07B39;"></i>
+                <p class="mb-1 fw-semibold fs-5">¿Guardar los cambios?</p>
+                <p class="text-muted small mb-0">Tu información de perfil será actualizada.</p>
+            </div>
+            <div class="modal-footer justify-content-center border-0 pb-4 gap-2">
+                <button type="button" class="btn btn-outline-secondary px-4" data-bs-dismiss="modal">
+                    <i class="fas fa-times me-1"></i>Cancelar
+                </button>
+                <button type="button" class="btn btn-primary px-4" onclick="document.getElementById('formPerfil').submit()">
+                    <i class="fas fa-check me-1"></i>Sí, guardar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

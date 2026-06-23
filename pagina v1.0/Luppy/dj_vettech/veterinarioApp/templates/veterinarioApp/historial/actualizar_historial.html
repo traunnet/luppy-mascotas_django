@@ -1,0 +1,215 @@
+{% extends 'veterinarioApp/base.html' %}
+{% load static %}
+
+{% block title %}Editar Historial · Luppy{% endblock %}
+{% block nav_historial %}active{% endblock %}
+
+{% block estilos %}
+<link rel="stylesheet" href="{% static 'css/formularios_luppy.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="form-card mx-auto" style="max-width: 850px;">
+        <div class="form-header" style="background: linear-gradient(135deg, #f5f3ff, #ede9fe); border-bottom: 1px solid #ddd6fe;">
+            <div class="form-icon-box" style="background:#ede9fe; color:#7c3aed;">
+                <i class="fas fa-book-medical"></i>
+            </div>
+            <div>
+                <h2 class="h4 mb-1 fw-bold" style="color: var(--carbon);">Actualizar Historial Clínico</h2>
+                <p class="text-muted mb-0 small">Editando registro médico del paciente.</p>
+            </div>
+        </div>
+
+        <div class="form-body">
+            <form method="post" id="formActualizarHistorial">
+                {% csrf_token %}
+                <div class="row g-3">
+
+                    <div class="col-md-6">
+                        <label class="field-label">
+                            <i class="fas fa-paw me-1" style="color:#7c3aed; font-size:12px;"></i>Mascota
+                        </label>
+                        {{ form.id_mascota }}
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="field-label">
+                            <i class="fas fa-briefcase-medical me-1" style="color:#7c3aed; font-size:12px;"></i>Servicio
+                        </label>
+                        {{ form.id_servicio }}
+                    </div>
+
+                    <div class="col-12">
+                        <label class="field-label">
+                            <i class="fas fa-calendar-check me-1" style="color:#7c3aed; font-size:12px;"></i>Cita asociada
+                        </label>
+                        {{ form.id_cita }}
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="field-label">
+                            <i class="fas fa-calendar-alt me-1" style="color:#7c3aed; font-size:12px;"></i>Fecha
+                        </label>
+                        {{ form.fecha }}
+                    </div>
+                    <div class="col-md-8">
+                        <label class="field-label">
+                            <i class="fas fa-comment-medical me-1" style="color:#7c3aed; font-size:12px;"></i>Motivo de Consulta
+                        </label>
+                        {{ form.motivo_consulta }}
+                    </div>
+                    <div class="col-12">
+                        <label class="field-label">
+                            <i class="fas fa-stethoscope me-1" style="color:#7c3aed; font-size:12px;"></i>Diagnóstico
+                        </label>
+                        {{ form.diagnostico }}
+                    </div>
+                    <div class="col-12">
+                        <label class="field-label">
+                            <i class="fas fa-prescription-bottle-alt me-1" style="color:#7c3aed; font-size:12px;"></i>Tratamiento
+                        </label>
+                        {{ form.tratamiento }}
+                    </div>
+                    <div class="col-md-6">
+                        <label class="field-label">
+                            <i class="fas fa-pills me-1" style="color:#7c3aed; font-size:12px;"></i>Medicación
+                        </label>
+                        {{ form.medicacion }}
+                    </div>
+                    <div class="col-md-6">
+                        <label class="field-label">
+                            <i class="fas fa-clock me-1" style="color:#7c3aed; font-size:12px;"></i>Frecuencia
+                        </label>
+                        {{ form.frecuencia }}
+                    </div>
+                    <div class="col-12">
+                        <label class="field-label">
+                            <i class="fas fa-heartbeat me-1" style="color:#7c3aed; font-size:12px;"></i>Estado
+                        </label>
+                        {{ form.estado }}
+                    </div>
+                </div>
+
+                <div class="form-actions mt-4">
+                    <a href="{% url 'vet_app:historial_clinico' %}" class="btn btn-light px-4">
+                        <i class="fas fa-arrow-left me-2"></i>Cancelar
+                    </a>
+                    <button type="button" class="btn px-4" 
+                        style="background-color:#7c3aed; border-color:#7c3aed; color:white; border-radius:10px;"
+                        onclick="document.getElementById('modalHistorial').style.display='flex'">
+                        <i class="fas fa-sync-alt me-2"></i>Actualizar Registro
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de confirmación -->
+<div id="modalHistorial" style="
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.35);
+    z-index: 9999;
+    align-items: center;
+    justify-content: center;
+">
+    <div style="
+        background: white;
+        border-radius: 20px;
+        padding: 2rem 2.2rem;
+        max-width: 400px;
+        width: 90%;
+        box-shadow: 0 8px 40px rgba(109,40,217,0.12);
+        text-align: center;
+    ">
+        <div style="
+            width: 56px; height: 56px;
+            background: #ede9fe;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 22px;
+            color: #7c3aed;
+        ">
+            <i class="fas fa-book-medical"></i>
+        </div>
+        <h6 class="fw-bold mb-1" style="color: #1f2937;">¿Guardar los cambios?</h6>
+        <p style="color: #6b7280; font-size: 13px; margin-bottom: 1.5rem;">
+            Se actualizará el historial clínico con la información ingresada.
+        </p>
+        <div class="d-flex gap-2 justify-content-center">
+            <button 
+                type="button"
+                onclick="document.getElementById('modalHistorial').style.display='none'"
+                style="
+                    padding: 9px 24px;
+                    border-radius: 10px;
+                    border: 1px solid #e5e7eb;
+                    background: #f9fafb;
+                    color: #6b7280;
+                    font-size: 14px;
+                    font-weight: 500;
+                    cursor: pointer;
+                "
+            >
+                <i class="fas fa-times me-1"></i> Cancelar
+            </button>
+            <button 
+                type="button"
+                onclick="document.getElementById('formActualizarHistorial').submit()"
+                style="
+                    padding: 9px 24px;
+                    border-radius: 10px;
+                    border: none;
+                    background: #7c3aed;
+                    color: white;
+                    font-size: 14px;
+                    font-weight: 500;
+                    cursor: pointer;
+                "
+            >
+                <i class="fas fa-check me-1"></i> Sí, actualizar
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('modalHistorial').addEventListener('click', function(e) {
+    if (e.target === this) this.style.display = 'none';
+});
+
+function cargarCitas(mascotaId, citaSeleccionadaId = null) {
+    const citaSelect = document.getElementById('id_id_cita');
+    citaSelect.innerHTML = '<option value="">---------</option>';
+    if (!mascotaId) return;
+
+    fetch(`/veterinario/ajax/citas/${mascotaId}/`)
+        .then(res => res.json())
+        .then(citas => {
+            citas.forEach(c => {
+                const option = document.createElement('option');
+                option.value = c.id;
+                option.textContent = c.label;
+                if (citaSeleccionadaId && String(c.id) === String(citaSeleccionadaId)) {
+                    option.selected = true;
+                }
+                citaSelect.appendChild(option);
+            });
+        });
+}
+
+document.getElementById('id_id_mascota').addEventListener('change', function () {
+    cargarCitas(this.value);
+});
+
+window.addEventListener('DOMContentLoaded', function () {
+    const mascotaId = document.getElementById('id_id_mascota').value;
+    const citaActualId = "{{ object.id_cita.id }}";
+    cargarCitas(mascotaId, citaActualId);
+});
+</script>
+{% endblock %}

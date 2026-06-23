@@ -1,0 +1,114 @@
+/* ── Fondo de la página ── */
+.fondo-perfil {
+    background-color: #FFFBF5;
+    min-height: 100vh;
+    padding: 40px 0;
+}
+
+/* ── Tarjeta principal del perfil ── */
+.tarjeta-perfil {
+    background: #ffffff;
+    border-radius: 14px;
+    border: 1px solid rgba(0, 0, 0, 0.07);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+    overflow: hidden;
+    animation: fadeInUp 0.6s ease-out both;
+    margin-bottom: 20px;
+}
+
+/* Franja superior naranja — identifica la sección */
+.tarjeta-perfil .franja-top {
+    height: 6px;
+    background-color: #E07B39;
+}
+
+/* ── Foto de perfil ── */
+.foto-perfil {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid #E07B39;
+    box-shadow: 0 4px 14px rgba(224, 123, 57, 0.25);
+}
+
+/* Placeholder cuando no hay foto */
+.foto-perfil-placeholder {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background-color: #FFF5E6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.8rem;
+    color: #E07B39;
+    border: 4px solid #e0d9d0;
+    margin: 0 auto;
+}
+
+/* Nombre debajo de la foto */
+.nombre-perfil {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #2d2d2d;
+    margin-top: 14px;
+    margin-bottom: 4px;
+}
+
+.rol-perfil {
+    font-size: 12px;
+    color: #999;
+    background-color: #FFF5E6;
+    padding: 3px 12px;
+    border-radius: 20px;
+    font-weight: 500;
+}
+
+/* ── Divisor vertical entre foto y datos ── */
+.divisor-vertical {
+    border-left: 1px solid #f0ebe3;
+}
+
+/* ── Cada ítem de información ── */
+.item-info {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 12px 0;
+    border-bottom: 1px solid #f7f3ee;
+}
+
+.item-info:last-child {
+    border-bottom: none;
+}
+
+/* Círculo con ícono */
+.icono-info {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background-color: #FFF5E6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #E07B39;
+    font-size: 0.85rem;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.etiqueta-info {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #aaa;
+    margin-bottom: 2px;
+}
+
+.valor-info {
+    font-size: 14px;
+    color: #333;
+    font-weight: 500;
+}

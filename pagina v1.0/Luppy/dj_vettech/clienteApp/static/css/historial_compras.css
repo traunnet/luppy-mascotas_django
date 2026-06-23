@@ -1,0 +1,131 @@
+/* ── Fondo de la página ── */
+.fondo-historial-compras {
+    background-color: #FFFBF5;
+    min-height: 100vh;
+    padding: 40px 0;
+}
+
+/* ── Tarjeta contenedora ── */
+.tarjeta-historial-compras {
+    background: #ffffff;
+    border-radius: 14px;
+    border: 1px solid rgba(0, 0, 0, 0.07);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+    overflow: hidden;
+    animation: fadeInUp 0.6s ease-out both;
+}
+
+/* Franja superior verde — sección de compras usa verde de marca */
+.tarjeta-historial-compras .franja-top {
+    height: 6px;
+    background-color: #52B788;
+}
+
+/* ── Encabezado interno de la tarjeta ── */
+.encabezado-historial {
+    padding: 20px 24px 16px;
+    border-bottom: 1px solid #f0ebe3;
+}
+
+/* ── Cada fila de compra ── */
+.item-compra {
+    display: grid;
+    grid-template-columns: 52px 1fr auto auto;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 24px;
+    border-bottom: 1px solid #f0ebe3;
+    transition: background-color 0.2s ease;
+}
+
+.item-compra:last-child {
+    border-bottom: none;
+}
+
+.item-compra:hover {
+    background-color: #FFFBF5;
+}
+
+/* ── Ícono de la compra ── */
+.icono-compra {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background-color: #D8F3DC;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    color: #52B788;
+    flex-shrink: 0;
+}
+
+/* ── Info de la compra ── */
+.numero-venta {
+    font-weight: 600;
+    font-size: 14px;
+    color: #2d2d2d;
+    margin-bottom: 2px;
+}
+
+.fecha-compra {
+    font-size: 12px;
+    color: #aaa;
+}
+
+/* ── Total de la compra ── */
+.total-compra {
+    font-weight: 700;
+    font-size: 15px;
+    color: #52B788;
+    white-space: nowrap;
+}
+
+/* ── Botón de recibo ── */
+.btn-recibo {
+    font-size: 12px;
+    padding: 5px 12px;
+    border-radius: 8px;
+    white-space: nowrap;
+    color: #E07B39;
+    border: 1.5px solid #E07B39;
+    background: transparent;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.btn-recibo:hover {
+    background-color: #E07B39;
+    color: #fff;
+}
+
+/* ── Estado vacío ── */
+.estado-vacio {
+    background: #ffffff;
+    border-radius: 14px;
+    border: 1px solid rgba(0, 0, 0, 0.07);
+    padding: 60px 40px;
+    text-align: center;
+}
+
+.estado-vacio .icono-vacio {
+    font-size: 3.5rem;
+    color: #d4c5b0;
+    margin-bottom: 16px;
+}
+
+/* ── Responsive ── */
+@media (max-width: 576px) {
+    .item-compra {
+        grid-template-columns: 44px 1fr;
+        gap: 10px;
+    }
+
+    .total-compra,
+    .btn-recibo {
+        grid-column: 2;
+    }
+}

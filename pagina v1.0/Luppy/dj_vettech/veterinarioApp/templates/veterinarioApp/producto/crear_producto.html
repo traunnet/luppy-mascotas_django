@@ -1,0 +1,149 @@
+{% extends 'veterinarioApp/base.html' %}
+
+{% block page_title %}Crear Producto{% endblock %}
+{% block nav_inventario %}active{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <div class="card shadow-sm">
+        <div class="card-header d-flex align-items-center gap-2">
+            <i class="fas fa-plus text-verde"></i>
+            Crear Producto
+        </div>
+
+        <div class="card-body">
+
+            <form method="post" enctype="multipart/form-data" id="formCrearProducto">
+                {% csrf_token %}
+
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Nombre</label>
+                        {{ form.nombre_producto }}
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">Categoría</label>
+                        {{ form.categoria }}
+                    </div>
+
+                    <div class="col-12">
+                        <label class="form-label">Descripción</label>
+                        {{ form.descripcion }}
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">Precio</label>
+                        {{ form.precio_unitario }}
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <label class="form-label">Stock</label>
+                        {{ form.cantidad }}
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <label class="form-label">Estante / Ubicación</label>
+                        {{ form.ubicacion }}
+                    </div> 
+
+                    <div class="col-md-6">
+                        <label class="form-label">Imagen del Producto</label>
+                        {{ form.imagen }}
+                    </div>
+                </div>
+
+                <div class="mt-4 d-flex gap-2">
+                    <button type="button" class="btn btn-primary" onclick="document.getElementById('modalCrear').style.display='flex'">
+                        <i class="fas fa-plus me-1"></i> Crear producto
+                    </button>
+                    <a href="{% url 'vet_app:lista_inventario' %}" class="btn btn-secondary">
+                        Cancelar
+                    </a>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de confirmación -->
+<div id="modalCrear" style="
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.35);
+    z-index: 9999;
+    align-items: center;
+    justify-content: center;
+">
+    <div style="
+        background: white;
+        border-radius: 20px;
+        padding: 2rem 2.2rem;
+        max-width: 400px;
+        width: 90%;
+        box-shadow: 0 8px 40px rgba(0,0,0,0.1);
+        text-align: center;
+    ">
+        <div style="
+            width: 56px; height: 56px;
+            background: #f0fdf4;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 22px;
+            color: #16a34a;
+        ">
+            <i class="fas fa-box-open"></i>
+        </div>
+        <h6 class="fw-bold mb-1" style="color: #1f2937;">¿Crear este producto?</h6>
+        <p style="color: #6b7280; font-size: 13px; margin-bottom: 1.5rem;">
+            Se registrará el nuevo producto en el inventario.
+        </p>
+        <div class="d-flex gap-2 justify-content-center">
+            <button 
+                type="button"
+                onclick="document.getElementById('modalCrear').style.display='none'"
+                style="
+                    padding: 9px 24px;
+                    border-radius: 10px;
+                    border: 1px solid #e5e7eb;
+                    background: #f9fafb;
+                    color: #6b7280;
+                    font-size: 14px;
+                    font-weight: 500;
+                    cursor: pointer;
+                "
+            >
+                <i class="fas fa-times me-1"></i> Cancelar
+            </button>
+            <button 
+                type="button"
+                onclick="document.getElementById('formCrearProducto').submit()"
+                style="
+                    padding: 9px 24px;
+                    border-radius: 10px;
+                    border: none;
+                    background: #16a34a;
+                    color: white;
+                    font-size: 14px;
+                    font-weight: 500;
+                    cursor: pointer;
+                "
+            >
+                <i class="fas fa-check me-1"></i> Sí, crear
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('modalCrear').addEventListener('click', function(e) {
+    if (e.target === this) this.style.display = 'none';
+});
+</script>
+
+{% endblock %}

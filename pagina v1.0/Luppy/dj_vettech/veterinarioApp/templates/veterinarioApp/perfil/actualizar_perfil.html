@@ -1,0 +1,197 @@
+{% extends 'veterinarioApp/base.html' %}
+{% load static %}
+
+{% block title %}Editar Perfil · Luppy{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm" style="border-radius: 20px;">
+
+                <div class="card-header border-0 p-4" style="background: linear-gradient(135deg, #f0f9ff, #e0f2fe); border-radius: 20px 20px 0 0;">
+                    <div class="d-flex align-items-center gap-3">
+                        <div style="width:48px; height:48px; background:white; border-radius:14px; display:flex; align-items:center; justify-content:center; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
+                            <i class="fas fa-user-edit" style="color:#0ea5e9; font-size:18px;"></i>
+                        </div>
+                        <div>
+                            <h5 class="mb-0 fw-bold" style="color:#0f172a;">Configuración de Perfil</h5>
+                            <p class="mb-0 small" style="color:#64748b;">Actualiza tu información personal y profesional.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-body p-4">
+                    <form method="post" enctype="multipart/form-data" id="formPerfil">
+                        {% csrf_token %}
+
+                        <p class="fw-semibold mb-3" style="color:#0ea5e9; font-size:11px; letter-spacing:1.2px; text-transform:uppercase;">Información Básica</p>
+
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold small" style="color:#475569;">Nombre</label>
+                                {{ form.nombre }}
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold small" style="color:#475569;">Apellido</label>
+                                {{ form.apellido }}
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold small" style="color:#475569;">Correo Electrónico</label>
+                                {{ form.correo }}
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold small" style="color:#475569;">Teléfono</label>
+                                {{ form.telefono }}
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label fw-semibold small" style="color:#475569;">Dirección</label>
+                                {{ form.direccion }}
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label fw-semibold small" style="color:#475569;">Foto de Perfil</label>
+                                <div class="d-flex align-items-center gap-3">
+                                    {% if perfil.usuario.foto_perfil %}
+                                    <img src="{{ perfil.usuario.foto_perfil.url }}" class="rounded-circle border" width="52" height="52" style="object-fit:cover; box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+                                    {% endif %}
+                                    {{ form.foto_perfil }}
+                                </div>
+                                <p class="mt-1 mb-0" style="font-size:11px; color:#94a3b8;">Formatos: JPG, PNG. Máximo 2MB.</p>
+                            </div>
+                        </div>
+
+                        <hr style="border-color:#f1f5f9; margin: 1.5rem 0;">
+
+                        <p class="fw-semibold mb-3" style="color:#0ea5e9; font-size:11px; letter-spacing:1.2px; text-transform:uppercase;">Credenciales Profesionales</p>
+
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold small" style="color:#475569;">Número de Licencia</label>
+                                {{ form.numero_licencia }}
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold small" style="color:#475569;">Especialidad</label>
+                                {{ form.especialidad }}
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold small" style="color:#475569;">Años de Experiencia</label>
+                                {{ form.anios_experiencia }}
+                            </div>
+                        </div>
+
+                        <div class="d-flex gap-2 pt-3 border-top" style="border-color:#f1f5f9 !important;">
+                            <button type="button" class="btn px-4"
+                                style="background:#0ea5e9; color:white; border-radius:12px; font-weight:600; border:none;"
+                                onclick="document.getElementById('modalPerfil').style.display='flex'">
+                                <i class="fas fa-save me-2"></i>Guardar Cambios
+                            </button>
+                            <a href="{% url 'vet_app:perfil' %}" class="btn px-4"
+                                style="background:#f1f5f9; color:#64748b; border-radius:12px; border:none; font-weight:500;">
+                                Cancelar
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de confirmación -->
+<div id="modalPerfil" style="
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.3);
+    z-index: 9999;
+    align-items: center;
+    justify-content: center;
+">
+    <div style="
+        background: white;
+        border-radius: 20px;
+        padding: 2rem 2.2rem;
+        max-width: 400px;
+        width: 90%;
+        box-shadow: 0 8px 40px rgba(14,165,233,0.12);
+        text-align: center;
+    ">
+        <div style="
+            width: 56px; height: 56px;
+            background: #f0f9ff;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 22px;
+            color: #0ea5e9;
+        ">
+            <i class="fas fa-user-check"></i>
+        </div>
+        <h6 class="fw-bold mb-1" style="color:#0f172a;">¿Guardar los cambios?</h6>
+        <p style="color:#64748b; font-size:13px; margin-bottom:1.5rem;">
+            Se actualizará tu información de perfil con los datos ingresados.
+        </p>
+        <div class="d-flex gap-2 justify-content-center">
+            <button
+                type="button"
+                onclick="document.getElementById('modalPerfil').style.display='none'"
+                style="
+                    padding: 9px 24px;
+                    border-radius: 10px;
+                    border: 1px solid #e2e8f0;
+                    background: #f8fafc;
+                    color: #64748b;
+                    font-size: 14px;
+                    font-weight: 500;
+                    cursor: pointer;
+                "
+            >
+                <i class="fas fa-times me-1"></i> Cancelar
+            </button>
+            <button
+                type="button"
+                onclick="document.getElementById('formPerfil').submit()"
+                style="
+                    padding: 9px 24px;
+                    border-radius: 10px;
+                    border: none;
+                    background: #0ea5e9;
+                    color: white;
+                    font-size: 14px;
+                    font-weight: 500;
+                    cursor: pointer;
+                "
+            >
+                <i class="fas fa-check me-1"></i> Sí, guardar
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('modalPerfil').addEventListener('click', function(e) {
+    if (e.target === this) this.style.display = 'none';
+});
+</script>
+
+<style>
+input, select, textarea {
+    display: block;
+    width: 100%;
+    padding: 0.7rem 1rem;
+    font-size: 14px;
+    color: #0f172a;
+    background-color: #f8fafc;
+    border-radius: 12px !important;
+    border: 1px solid #e2e8f0;
+    transition: all 0.2s ease-in-out;
+}
+input:focus, select:focus, textarea:focus {
+    background-color: #fff;
+    border-color: #0ea5e9;
+    outline: 0;
+    box-shadow: 0 0 0 3px rgba(14,165,233,0.1);
+}
+.form-label { margin-bottom: 0.4rem; }
+</style>
+{% endblock %}
