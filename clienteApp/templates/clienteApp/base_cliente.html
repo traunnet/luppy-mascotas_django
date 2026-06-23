@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static %}
+
+    <title>{% block title %}Luppy & Sus Mascotas{% endblock %}</title>
+    <link rel="icon" type="image/x-icon" href="{% static 'ico/image.ico' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    
+    {% block estilos %}{% endblock %}
+</head>
+<body>
+
+    <nav class="lp-navbar">
+        <div class="lp-navbar-inner">
+            <a href="{% url 'dashboard_cliente' %}" class="lp-brand">
+                <div class="lp-brand-icon">🐾</div>
+                <div>
+                    <span class="lp-brand-text">Luppy</span>
+                    <span class="lp-brand-sub">& Sus Mascotas</span>
+                </div>
+            </a>
+
+            <ul class="lp-nav-links">
+                <li>
+                    <a href="{% url 'dashboard_cliente' %}" class="{% block nav_home %}{% endblock %}">
+                        <i class="fas fa-home fa-xs"></i> Inicio
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'lista_mascotas' %}" class="{% block nav_mascotas %}{% endblock %}">
+                        <i class="fas fa-paw fa-xs"></i> Mis Mascotas
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'lista_citas' %}" class="{% block nav_citas %}{% endblock %}">
+                        <i class="fas fa-calendar-check fa-xs"></i> Citas
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'lista_productos' %}" class="{% block nav_compras %}{% endblock %}">
+                        <i class="fas fa-shopping-bag fa-xs"></i> Compras
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'perfil_cliente' %}" class="{% block nav_perfil %}{% endblock %}">
+                        <i class="fas fa-user fa-xs"></i> Perfil
+                    </a>
+                </li>
+            </ul>
+
+            <div class="lp-user-area" style="display:flex; align-items:center; gap:10px;">
+                {% if user.is_authenticated %}
+                    <div class="lp-user-pill">
+                        <div class="lp-avatar">{{ user.nombre|first|upper }}</div>
+                        <span>{{ user.nombre|capfirst }}</span>
+                    </div>
+                    <form method="post" action="{% url 'auth_app:logout' %}" style="margin:0;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn-logout-nav">
+                            <i class="fas fa-sign-out-alt fa-xs"></i> Salir
+                        </button>
+                    </form>
+                {% endif %}
+            </div>
+
+            <button class="lp-hamburger" id="lpHamburger" aria-label="Menú">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+
+        <div class="lp-mobile-menu" id="lpMobileMenu">
+            <a href="{% url 'dashboard_cliente' %}"><i class="fas fa-home fa-sm"></i> Inicio</a>
+            <a href="{% url 'lista_mascotas' %}"><i class="fas fa-paw fa-sm"></i> Mis Mascotas</a>
+            <a href="{% url 'lista_citas' %}"><i class="fas fa-calendar-check fa-sm"></i> Citas</a>
+            <a href="{% url 'lista_productos' %}"><i class="fas fa-shopping-bag fa-sm"></i> Compras</a>
+            <a href="{% url 'perfil_cliente' %}"><i class="fas fa-user fa-sm"></i> Perfil</a>
+            
+            {% if user.is_authenticated %}
+                <form method="post" action="{% url 'auth_app:logout' %}" style="margin-top:12px;">
+                    {% csrf_token %}
+                    <button type="submit" style="width:100%; background:rgba(248,113,113,0.1); color:#f87171; border:1px solid rgba(248,113,113,0.2); border-radius:10px; padding:11px; font-family:'DM Sans',sans-serif; font-size:0.9rem; cursor:pointer;">
+                        <i class="fas fa-sign-out-alt fa-sm"></i> &nbsp;Cerrar Sesión
+                    </button>
+                </form>
+            {% endif %}
+        </div>
+    </nav>
+
+    {% block hero %}{% endblock %}
+
+    {% if messages %}
+        <div style="max-width:1280px; margin:20px auto 0; padding:0 28px;">
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <div class="lp-content">
+        {% block contenido %}{% endblock %}
+    </div>
+
+    <footer class="lp-footer">
+        <div class="lp-footer-body">
+            <span class="lp-footer-copy">© 2026 Luppy & Sus Mascotas · Todos los derechos reservados</span>
+            <div class="lp-footer-links">
+                <a href="#">Privacidad</a>
+                <a href="#">Términos</a>
+                <a href="#">Cookies</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const ham = document.getElementById('lpHamburger');
+        const mob = document.getElementById('lpMobileMenu');
+        let open = false;
+
+        ham.addEventListener('click', () => {
+            open = !open;
+            mob.style.display = open ? 'block' : 'none';
+            const s = ham.querySelectorAll('span');
+            if (open) {
+                s[0].style.transform = 'rotate(45deg) translate(5px,5px)';
+                s[1].style.opacity  = '0';
+                s[2].style.transform = 'rotate(-45deg) translate(5px,-5px)';
+            } else {
+                s.forEach(x => { x.style.transform=''; x.style.opacity=''; });
+            }
+        });
+    </script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

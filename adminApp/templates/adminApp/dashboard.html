@@ -1,0 +1,134 @@
+{% extends 'adminApp/base_admin.html' %}
+{% block titulo %}Dashboard - VetTech Admin{% endblock %}
+
+{% block titulo_pagina %}
+    <i class="fas fa-chart-pie me-2"></i>Dashboard General
+{% endblock %}
+
+{% load static %}
+{% block estilos %}
+<link rel="stylesheet" href="{% static 'css/base_admin.css' %}">
+<link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+{% endblock %}
+
+{% block contenido %}
+
+<div class="row g-3 mb-4">
+    <div class="col-md-6 col-xl-3">
+        <div class="adm-metric">
+            <div class="adm-metric-value">{{ total_usuarios }}</div>
+            <div class="adm-metric-label">Total Usuarios</div>
+            <i class="fas fa-users adm-metric-icon"></i>
+        </div>
+    </div>
+    <div class="col-md-6 col-xl-3">
+        <div class="adm-metric">
+            <div class="adm-metric-value">{{ total_mascotas }}</div>
+            <div class="adm-metric-label">Mascotas Registradas</div>
+            <i class="fas fa-paw adm-metric-icon"></i>
+        </div>
+    </div>
+    <div class="col-md-6 col-xl-3">
+        <div class="adm-metric">
+            <div class="adm-metric-value">{{ citas_hoy }}</div>
+            <div class="adm-metric-label">Citas Hoy</div>
+            <i class="fas fa-calendar-day adm-metric-icon"></i>
+        </div>
+    </div>
+    <div class="col-md-6 col-xl-3">
+        <div class="adm-metric metric-ingresos">
+            <div class="adm-metric-value text-success">${{ ingresos_totales|floatformat:0 }}</div>
+            <div class="adm-metric-label">Ingresos Totales</div>
+            <i class="fas fa-dollar-sign adm-metric-icon"></i>
+        </div>
+    </div>
+</div>
+
+<div class="row g-3 mb-4">
+    <div class="col-sm-4">
+        <div class="adm-table-card text-center py-4 border-bottom-blue">
+            <div class="adm-metric-label mb-1">Programadas</div>
+            <div class="h2 mb-0 text-primary fw-bold">{{ citas_programadas }}</div>
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="adm-table-card text-center py-4 border-bottom-green">
+            <div class="adm-metric-label mb-1">Completadas</div>
+            <div class="h2 mb-0 text-success fw-bold">{{ citas_completadas }}</div>
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="adm-table-card text-center py-4 border-bottom-red">
+            <div class="adm-metric-label mb-1">Canceladas</div>
+            <div class="h2 mb-0 text-danger fw-bold">{{ citas_canceladas }}</div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-3">
+    <div class="col-lg-4">
+        <div class="adm-table-card">
+            <div class="adm-table-header bg-danger-soft">
+                <h6><i class="fas fa-exclamation-triangle me-2"></i>Stock Crítico</h6>
+            </div>
+            <div class="mini-lista">
+                {% for inv in productos_bajo_stock %}
+                <div class="mini-fila d-flex justify-content-between align-items-center p-3 border-bottom">
+                    <div>
+                        <div class="fw-bold small">{{ inv.id_tipo_producto.nombre_producto }}</div>
+                        <div class="text-muted" style="font-size: 0.75rem;">{{ inv.id_tipo_producto.categoria }}</div>
+                    </div>
+                    <span class="badge badge-bajo-stock">{{ inv.cantidad }} uds</span>
+                </div>
+                {% empty %}
+                <div class="text-center py-4 text-success small">Todo el stock está al día</div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="adm-table-card">
+            <div class="adm-table-header bg-primary-soft">
+                <h6><i class="fas fa-calendar-alt me-2"></i>Próximas Citas</h6>
+            </div>
+            <div class="mini-lista">
+                {% for cita in proximas_citas %}
+                <div class="mini-fila p-3 border-bottom">
+                    <div class="d-flex justify-content-between">
+                        <span class="fw-bold small">{{ cita.id_mascota.nombre }}</span>
+                        <span class="badge badge-programada">{{ cita.hora_cita|time:"H:i" }}</span>
+                    </div>
+                    <div class="text-muted mt-1" style="font-size: 0.75rem;">
+                        Dr. {{ cita.id_veterinario.usuario.apellido }} | {{ cita.fecha_cita|date:"d/m" }}
+                    </div>
+                </div>
+                {% empty %}
+                <div class="text-center py-4 text-muted small">Sin citas pendientes</div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="adm-table-card">
+            <div class="adm-table-header">
+                <h6><i class="fas fa-shopping-bag me-2"></i>Ventas Recientes</h6>
+            </div>
+            <div class="mini-lista">
+                {% for venta in ultimas_ventas %}
+                <div class="mini-fila d-flex justify-content-between align-items-center p-3 border-bottom">
+                    <div>
+                        <div class="fw-bold small">Ticket #{{ venta.pk }}</div>
+                        <div class="text-muted" style="font-size: 0.75rem;">{{ venta.fecha_venta|date:"d/m/Y" }}</div>
+                    </div>
+                    <span class="text-success fw-bold">${{ venta.total|floatformat:0 }}</span>
+                </div>
+                {% empty %}
+                <div class="text-center py-4 text-muted small">No hay ventas registradas</div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

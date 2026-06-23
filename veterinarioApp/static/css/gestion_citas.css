@@ -1,0 +1,100 @@
+.filter-card {
+    background: var(--blanco);
+    border: 1px solid var(--border-light);
+    border-radius: 14px;
+    padding: 16px 20px;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.search-group {
+    position: relative;
+    flex: 1;
+    min-width: 250px;
+}
+
+.search-group i {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--gris-texto);
+    font-size: 0.9rem;
+}
+
+.search-group .form-control {
+    padding-left: 35px;
+    background: #f9fafb;
+}
+
+.table-container {
+    background: var(--blanco);
+    border: 1px solid var(--border-light);
+    border-radius: 14px;
+    overflow: hidden;
+}
+
+.patient-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.patient-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: #f0fdf4;
+    color: var(--verde);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+}
+
+.appointment-time {
+    display: block;
+    font-weight: 600;
+    color: var(--carbon);
+}
+
+.appointment-date {
+    display: block;
+    font-size: 0.75rem;
+    color: var(--gris-texto);
+}
+
+.actions-cell {
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+}
+
+.btn-action {
+    width: 32px;
+    height: 32px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    transition: all 0.2s;
+    border: 1px solid var(--border-light);
+    background: var(--blanco);
+    color: var(--carbon-mid);
+}
+
+.btn-action:hover {
+    background: #f3f4f6;
+    color: var(--verde);
+    border-color: var(--verde-mint);
+}
+
+.btn-action.delete:hover {
+    color: #dc2626;
+    border-color: #fca5a5;
+    background: #fef2f2;
+}

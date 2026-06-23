@@ -1,0 +1,260 @@
+{% extends 'base.html' %}
+{% block titulo %}Luppy | Inicio{% endblock %}
+{% load static %}
+
+{% block inicio %}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'css/inicioVet.css' %}">
+<link rel="stylesheet" href="{% static 'css/general.css' %}">
+
+<div class="lp-container" style="max-width:1180px; margin:0 auto; padding:0 20px;">
+
+  <!-- ═══ HERO ═══════════════════════════════════════════════════════ -->
+  <section class="lp-hero">
+    <div class="lp-hero-blob"></div>
+    <div class="lp-hero-blob2"></div>
+
+    <div class="lp-hero-content">
+      <div class="lp-hero-badge">
+        Veterinaria de confianza
+      </div>
+
+      <h1>
+        El mejor cuidado<br>para tu <span>mascota</span>
+      </h1>
+
+      <p>
+        En Luppy & Sus Mascotas, cada animal es tratado con amor, experiencia y la tecnología más avanzada. Tu tranquilidad comienza aquí.
+      </p>
+
+      <div class="lp-hero-btns">
+        <a href="{% url 'auth_app:login' %}" class="btn-hero-primary">
+          Agendar cita ahora →
+        </a>
+        <a href="{% url 'inicioServ' %}" class="btn-hero-ghost">
+          Ver servicios
+        </a>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══ STATS ════════════════════════════════════════════════════════ -->
+  <div class="lp-stats">
+    <div class="lp-stat-item">
+      <div class="lp-stat-num">+500</div>
+      <div class="lp-stat-label">Mascotas atendidas</div>
+    </div>
+    <div class="lp-stat-item">
+      <div class="lp-stat-num">8</div>
+      <div class="lp-stat-label">Años de experiencia</div>
+    </div>
+    <div class="lp-stat-item">
+      <div class="lp-stat-num">{{ total_servicios|default:"10" }}+</div>
+      <div class="lp-stat-label">Servicios disponibles</div>
+    </div>
+    <div class="lp-stat-item">
+      <div class="lp-stat-num">4.9★</div>
+      <div class="lp-stat-label">Calificación promedio</div>
+    </div>
+  </div>
+
+
+  <!-- ═══ SERVICIOS ════════════════════════════════════════════════════ -->
+  <section style="margin-bottom:90px;">
+    <div class="d-flex justify-content-between align-items-end flex-wrap gap-3">
+      <div>
+        <p class="lp-section-label">Lo que ofrecemos</p>
+        <h2 class="lp-section-title">Servicios diseñados<br>para su bienestar</h2>
+      </div>
+      <a href="{% url 'inicioServ' %}" class="btn btn-outline-success rounded-pill px-4 py-2" style="font-size:0.9rem;">
+        Ver todos los servicios →
+      </a>
+    </div>
+
+    <div class="lp-services-grid">
+
+      <div class="lp-service-card delay-1">
+        <div class="lp-service-icon">🩺</div>
+        <h4>Veterinaria General</h4>
+        <p>Consultas médicas, diagnóstico y tratamientos por profesionales certificados que cuidan cada detalle de la salud de tu mascota.</p>
+        <div>
+          <span class="lp-service-tag">Consultas</span>
+          <span class="lp-service-tag">Diagnóstico</span>
+          <span class="lp-service-tag">Cirugías</span>
+        </div>
+        <a href="{% url 'auth_app:login' %}" class="lp-service-link">
+          Agendar consulta <span>→</span>
+        </a>
+      </div>
+
+      <div class="lp-service-card delay-2">
+        <div class="lp-service-icon">💉</div>
+        <h4>Vacunación</h4>
+        <p>Mantén el plan de vacunación de tu mascota al día con nuestros recordatorios y seguimiento personalizado del historial.</p>
+        <div>
+          <span class="lp-service-tag">Plan vacunal</span>
+          <span class="lp-service-tag">Recordatorios</span>
+        </div>
+        <a href="{% url 'auth_app:login' %}" class="lp-service-link">
+          Programar vacuna <span>→</span>
+        </a>
+      </div>
+
+      <div class="lp-service-card delay-3">
+        <div class="lp-service-icon">✂️</div>
+        <h4>Grooming & Estética</h4>
+        <p>Baño, corte de pelo, limpieza de oídos y más. Porque tu mascota también merece sentirse y verse increíble.</p>
+        <div>
+          <span class="lp-service-tag">Baño y corte</span>
+          <span class="lp-service-tag">Oídos</span>
+          <span class="lp-service-tag">Uñas</span>
+        </div>
+        <a href="{% url 'auth_app:login' %}" class="lp-service-link">
+          Reservar sesión <span>→</span>
+        </a>
+      </div>
+
+      <div class="lp-service-card delay-1">
+        <div class="lp-service-icon">📋</div>
+        <h4>Historial Clínico</h4>
+        <p>Accede al historial médico completo de tus mascotas: diagnósticos, tratamientos, pruebas y seguimientos en un solo lugar.</p>
+        <div>
+          <span class="lp-service-tag">Historial digital</span>
+          <span class="lp-service-tag">Seguimiento</span>
+        </div>
+        <a href="{% url 'auth_app:login' %}" class="lp-service-link">
+          Ver historial <span>→</span>
+        </a>
+      </div>
+
+      <div class="lp-service-card delay-2">
+        <div class="lp-service-icon">🧪</div>
+        <h4>Laboratorio</h4>
+        <p>Análisis clínicos, exámenes de sangre y pruebas diagnósticas con resultados rápidos para tomar las mejores decisiones.</p>
+        <div>
+          <span class="lp-service-tag">Análisis</span>
+          <span class="lp-service-tag">Resultados rápidos</span>
+        </div>
+        <a href="{% url 'auth_app:login' %}" class="lp-service-link">
+          Solicitar examen <span>→</span>
+        </a>
+      </div>
+
+      <div class="lp-service-card delay-3">
+        <div class="lp-service-icon">🛍️</div>
+        <h4>Tienda & Productos</h4>
+        <p>Alimentos, medicamentos, accesorios y todo lo que tu mascota necesita, disponible directamente en nuestro local.</p>
+        <div>
+          <span class="lp-service-tag">Alimentos</span>
+          <span class="lp-service-tag">Medicamentos</span>
+          <span class="lp-service-tag">Accesorios</span>
+        </div>
+        <a href="{% url 'auth_app:login' %}" class="lp-service-link">
+          Ver productos <span>→</span>
+        </a>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ═══ TESTIMONIOS ══════════════════════════════════════════════════ -->
+  <section class="lp-testimonials">
+    <div style="position:relative;z-index:1;">
+      <p class="lp-section-label" style="color:#74c69d;">Lo que dicen nuestros clientes</p>
+      <h2 class="lp-section-title" style="color:#fff; max-width:480px;">
+        Historias reales de mascotas felices
+      </h2>
+    </div>
+
+    <div class="lp-testimonials-grid" style="position:relative;z-index:1;">
+
+      <div class="lp-testimonial-card">
+        <div class="lp-stars">★★★★★</div>
+        <p>"Llevé a mi perro Rocky con mucha angustia y el equipo fue increíblemente atento. Lo trataron como si fuera de ellos. Ya es nuestro veterinario de cabecera."</p>
+        <div class="lp-testimonial-author">
+          <div class="lp-author-avatar">JR</div>
+          <div>
+            <div class="lp-author-name">Juan Rodríguez</div>
+            <div class="lp-author-pet">🐕 Rocky, Labrador</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="lp-testimonial-card">
+        <div class="lp-stars">★★★★★</div>
+        <p>"El servicio de grooming es excelente. Mi gata Mía siempre sale perfumada, feliz y con un corte precioso. Los recomiendo completamente."</p>
+        <div class="lp-testimonial-author">
+          <div class="lp-author-avatar">MC</div>
+          <div>
+            <div class="lp-author-name">María Castillo</div>
+            <div class="lp-author-pet">🐈 Mía, Angora</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="lp-testimonial-card">
+        <div class="lp-stars">★★★★★</div>
+        <p>"El historial clínico digital es genial. Puedo ver todo el historial de mis mascotas desde el teléfono. La atención rápida y muy profesional."</p>
+        <div class="lp-testimonial-author">
+          <div class="lp-author-avatar">CP</div>
+          <div>
+            <div class="lp-author-name">Carlos Pérez</div>
+            <div class="lp-author-pet">🐕 Toby & Luna</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ═══ MAPA + CTA ════════════════════════════════════════════════════ -->
+  <div class="lp-bottom-grid">
+
+    <div class="lp-map-card">
+      <div class="lp-map-header">
+        <h4>📍 Nuestra Ubicación</h4>
+        <p>Visítanos en Bogotá — siempre listos para recibir a tu mascota</p>
+      </div>
+      <div class="lp-map-frame">
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1988.686563768575!2d-74.09415146497643!3d4.5266283429622245!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e3fa2426ecda831%3A0x699806ea79e934e7!2sLupi%20Y%20Sus%20Mascotas!5e0!3m2!1ses!2sco!4v1774833035257!5m2!1ses!2sco"
+          allowfullscreen=""
+          loading="lazy">
+        </iframe>
+      </div>
+    </div>
+
+    <div class="lp-cta-card">
+      <h3>¿Listo para agendar la próxima cita?</h3>
+      <p>Regístrate o inicia sesión para gestionar las citas, el historial clínico y los servicios de tus mascotas de forma rápida y sencilla.</p>
+
+      <div class="lp-cta-detail">
+        <span class="lp-cta-detail-icon">✅</span> Citas en línea 24/7
+      </div>
+      <div class="lp-cta-detail">
+        <span class="lp-cta-detail-icon">✅</span> Historial clínico digital
+      </div>
+      <div class="lp-cta-detail">
+        <span class="lp-cta-detail-icon">✅</span> Recordatorios automáticos
+      </div>
+
+      {% if user.is_authenticated %}
+        <a href="#" class="btn-cta">
+          Ir a mi panel →
+        </a>
+      {% else %}
+        <a href="{% url 'auth_app:registro' %}" class="btn-cta">
+          Crear cuenta gratis →
+        </a>
+      {% endif %}
+    </div>
+
+  </div>
+
+</div>
+{% endblock %}

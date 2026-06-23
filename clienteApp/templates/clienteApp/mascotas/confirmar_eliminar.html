@@ -1,0 +1,182 @@
+{% extends 'clienteApp/base_cliente.html' %}
+{% load static %}
+
+{% block titulo %}Eliminar Mascota{% endblock %}
+
+{% block estilos %}
+<style>
+    .fondo-eliminar {
+        background-color: #FFFBF5;
+        min-height: 100vh;
+        padding: 40px 0;
+    }
+    .tarjeta-eliminar {
+        background: #ffffff;
+        border-radius: 14px;
+        border: 1px solid rgba(0,0,0,0.07);
+        box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+        overflow: hidden;
+        animation: fadeInUp 0.6s ease-out both;
+    }
+    .tarjeta-eliminar .franja-top {
+        height: 5px;
+        background-color: #E63946;
+    }
+    .icono-advertencia {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        background-color: #FCEBEB;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2.2rem;
+        color: #E63946;
+        margin: 0 auto 20px;
+    }
+    .nombre-mascota-destacado {
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: #2d2d2d;
+    }
+    .aviso-eliminar {
+        background-color: #FCEBEB;
+        border-left: 3px solid #E63946;
+        border-radius: 0 8px 8px 0;
+        padding: 12px 16px;
+        font-size: 13px;
+        color: #791F1F;
+        margin: 20px 0;
+    }
+    /* Toast */
+    .toast-container-custom {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 9999;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        max-width: 380px;
+    }
+    .toast-custom {
+        background: #fff;
+        border-left: 4px solid #E63946;
+        border-radius: 10px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.13);
+        padding: 14px 18px;
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        animation: slideInRight 0.4s ease-out both;
+        cursor: pointer;
+    }
+    .toast-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; color: #E63946; }
+    .toast-body { flex: 1; }
+    .toast-title { font-size: 13px; font-weight: 700; color: #2d2d2d; margin-bottom: 2px; }
+    .toast-msg { font-size: 12.5px; color: #555; line-height: 1.4; }
+    .toast-close {
+        background: none;
+        border: none;
+        font-size: 16px;
+        color: #aaa;
+        cursor: pointer;
+        padding: 0;
+    }
+    @keyframes slideInRight {
+        from { transform: translateX(110%); opacity: 0; }
+        to   { transform: translateX(0);   opacity: 1; }
+    }
+    @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(16px); }
+        to   { opacity: 1; transform: translateY(0); }
+    }
+</style>
+{% endblock %}
+
+{% block contenido %}
+
+<!-- Toasts para mensajes Django -->
+<div class="toast-container-custom" id="toastContainer">
+    {% for message in messages %}
+    <div class="toast-custom" onclick="this.remove()">
+        <span class="toast-icon"><i class="fas fa-exclamation-circle"></i></span>
+        <div class="toast-body">
+            <div class="toast-title">Atención</div>
+            <div class="toast-msg">{{ message }}</div>
+        </div>
+        <button class="toast-close" onclick="event.stopPropagation(); this.parentElement.remove()">×</button>
+    </div>
+    {% endfor %}
+</div>
+
+<div class="fondo-eliminar">
+    <div class="container">
+
+        <!-- Botón volver -->
+        <div class="mb-4">
+            <a href="{% url 'lista_mascotas' %}" class="btn btn-sm btn-outline-secondary">
+                <i class="fas fa-arrow-left me-2"></i>Volver a mis mascotas
+            </a>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-lg-5 col-md-7">
+
+                <div class="tarjeta-eliminar">
+                    <div class="franja-top"></div>
+                    <div class="p-4 p-md-5 text-center">
+
+                        <!-- Ícono advertencia -->
+                        <div class="icono-advertencia">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+
+                        <!-- Título y datos de la mascota -->
+                        <h3 class="fw-semibold mb-2">¿Eliminar mascota?</h3>
+                        <p class="text-muted small mb-1">Estás a punto de eliminar a</p>
+                        <div class="nombre-mascota-destacado mb-1">{{ mascota.nombre }}</div>
+                        <p class="text-muted small">{{ mascota.especie }} · {{ mascota.raza }}</p>
+
+                        <!-- Aviso -->
+                        <div class="aviso-eliminar text-start">
+                            <i class="fas fa-exclamation-circle me-2"></i>
+                            Esta acción no se puede deshacer. Se eliminará también todo el historial médico asociado.
+                        </div>
+
+                        <!-- Botones -->
+                        <form method="post">
+                            {% csrf_token %}
+                            <div class="d-flex gap-3 mt-4">
+                                <a href="{% url 'lista_mascotas' %}" class="btn btn-outline-secondary flex-grow-1">
+                                    <i class="fas fa-times me-2"></i>Cancelar
+                                </a>
+                                <button type="submit" class="btn btn-danger flex-grow-1" id="btnEliminar">
+                                    <i class="fas fa-trash me-2"></i>Sí, eliminar
+                                </button>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    // Spinner en el botón al confirmar
+    document.getElementById('btnEliminar').addEventListener('click', function () {
+        this.disabled = true;
+        this.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Eliminando...';
+    });
+
+    // Auto-cerrar toasts
+    setTimeout(() => {
+        document.querySelectorAll('.toast-custom').forEach(t => t.remove());
+    }, 5500);
+</script>
+
+{% endblock %}

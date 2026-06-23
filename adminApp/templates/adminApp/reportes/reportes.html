@@ -1,0 +1,371 @@
+{% extends 'adminApp/base_admin.html' %}
+{% block titulo %}Reportes y Analíticas{% endblock %}
+{% block titulo_pagina %}<i class="fas fa-chart-line me-2 text-verde-dark"></i>Panel de Control y Analíticas{% endblock %}
+
+{% load static %}
+{% block estilos %}
+<link rel="stylesheet" href="{% static 'css/base_admin.css' %}">
+<link rel="stylesheet" href="{% static 'css/inventario.css' %}">
+<style>
+    /* Estilos específicos para la sección premium de reportes */
+    .kpi-card {
+        background: #ffffff;
+        border-radius: 12px;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        position: relative;
+        overflow: hidden;
+    }
+    .kpi-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.06) !important;
+    }
+    .kpi-icon-wrapper {
+        width: 48px;
+        height: 48px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 10px;
+    }
+    .chart-container-custom {
+        position: relative;
+        height: 280px;
+        width: 100%;
+    }
+    .filter-badge-btn {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.825rem;
+        border-radius: 8px;
+        transition: all 0.2s;
+    }
+</style>
+{% endblock %}
+
+{% block contenido %}
+
+<!-- Cabecera de Acciones Corporativas -->
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-4 gap-3">
+    <div>
+        <h5 class="fw-bold text-dark mb-1">Fichas e Informes Exportables</h5>
+        <p class="text-muted small mb-0"><i class="fas fa-info-circle me-1 text-success"></i> Genera y descarga documentos oficiales en PDF parametrizados según los rangos activos.</p>
+    </div>
+    <div class="d-flex flex-wrap gap-2">
+        <a href="{% url 'admin_app:reporte_ventas_pdf' %}{{ request.GET.urlencode }}" class="btn btn-outline-danger filter-badge-btn shadow-sm fw-semibold">
+            <i class="fas fa-file-pdf me-1"></i> Exportar Ventas
+        </a>
+        <a href="{% url 'admin_app:reporte_clientes_pdf' %}" class="btn btn-outline-danger filter-badge-btn shadow-sm fw-semibold">
+            <i class="fas fa-file-pdf me-1"></i> Catálogo Clientes
+        </a>
+        <a href="{% url 'admin_app:reporte_veterinarios_pdf' %}" class="btn btn-outline-danger filter-badge-btn shadow-sm fw-semibold">
+            <i class="fas fa-file-pdf me-1"></i> Cuerpo Médico
+        </a>
+    </div>
+</div>
+
+<!-- Bloque de Filtros Paramétricos Avanzados -->
+<div class="row g-3 mb-4">
+    <!-- Filtro de Ventas -->
+    <div class="col-lg-6">
+        <div class="table-card shadow-sm border-0">
+            <div class="table-header header-verde py-2.5 fs-6">
+                <i class="fas fa-filter me-2 fs-6"></i>Segmentación de Ventas
+            </div>
+            <div class="card-body p-4">
+                <form method="get">
+                    <div class="row g-3 align-items-end">
+                        <div class="col-md-5">
+                            <label class="form-label text-muted small fw-bold text-uppercase tracking-wide">Fecha Inicial</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light text-muted border-end-0"><i class="far fa-calendar-alt"></i></span>
+                                <input type="date" name="fecha_desde" class="form-control form-control-custom border-start-0 ps-0" value="{{ form_ventas.fecha_desde.value|default:'' }}">
+                            </div>
+                        </div>
+                        <div class="col-md-5">
+                            <label class="form-label text-muted small fw-bold text-uppercase tracking-wide">Fecha Final</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light text-muted border-end-0"><i class="far fa-calendar-alt"></i></span>
+                                <input type="date" name="fecha_hasta" class="form-control form-control-custom border-start-0 ps-0" value="{{ form_ventas.fecha_hasta.value|default:'' }}">
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <button type="submit" class="btn btn-verde w-100 py-2 shadow-sm" title="Aplicar Filtro de Caja">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filtro de Citas -->
+    <div class="col-lg-6">
+        <div class="table-card shadow-sm border-0">
+            <div class="table-header header-verde py-2.5 fs-6" style="background: #2b6cb0;">
+                <i class="fas fa-calendar-check me-2 fs-6"></i>Consola de Citas Médicas
+            </div>
+            <div class="card-body p-4">
+                <form method="get">
+                    <div class="row g-3 align-items-end">
+                        <div class="col-sm-4 col-md-3">
+                            <label class="form-label text-muted small fw-bold text-uppercase tracking-wide">Desde</label>
+                            <input type="date" name="citas_desde" class="form-control form-control-custom" value="{{ form_citas.fecha_desde.value|default:'' }}">
+                        </div>
+                        <div class="col-sm-4 col-md-3">
+                            <label class="form-label text-muted small fw-bold text-uppercase tracking-wide">Hasta</label>
+                            <input type="date" name="citas_hasta" class="form-control form-control-custom" value="{{ form_citas.fecha_hasta.value|default:'' }}">
+                        </div>
+                        <div class="col-sm-4 col-md-4">
+                            <label class="form-label text-muted small fw-bold text-uppercase tracking-wide">Estado Clínico</label>
+                            <select name="estado" class="form-select form-control-custom">
+                                {% for choice in form_citas.estado.field.choices %}
+                                    <option value="{{ choice.0 }}" {% if form_citas.estado.value == choice.0 %}selected{% endif %}>{{ choice.1 }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-12 col-md-2">
+                            <button type="submit" class="btn btn-primary w-100 py-2 shadow-sm" style="background: #2b6cb0; border-color: #2b6cb0;" title="Filtrar Agenda">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Grid de Indicadores Clave de Rendimiento (KPI Cards) -->
+<div class="row g-3 mb-4">
+    <div class="col-md-4">
+        <div class="kpi-card shadow-sm p-4 border-start border-success border-4">
+            <div class="d-flex align-items-center justify-content-between">
+                <div>
+                    <span class="text-uppercase small fw-bold text-muted tracking-wide d-block mb-1">Ingresos de Caja</span>
+                    <h3 class="fw-extrabold text-success mb-0">${{ total_ventas|floatformat:0 }}</h3>
+                </div>
+                <div class="kpi-icon-wrapper bg-success bg-opacity-10 text-success">
+                    <i class="fas fa-wallet fa-lg"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="kpi-card shadow-sm p-4 border-start border-primary border-4">
+            <div class="d-flex align-items-center justify-content-between">
+                <div>
+                    <span class="text-uppercase small fw-bold text-muted tracking-wide d-block mb-1">Atenciones Médicas</span>
+                    <h3 class="fw-extrabold text-primary mb-0">{{ total_citas }}</h3>
+                </div>
+                <div class="kpi-icon-wrapper bg-primary bg-opacity-10 text-primary">
+                    <i class="fas fa-notes-medical fa-lg"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="kpi-card shadow-sm p-4 border-start border-warning border-4">
+            <div class="d-flex align-items-center justify-content-between">
+                <div>
+                    <span class="text-uppercase small fw-bold text-muted tracking-wide d-block mb-1">Índice de Rotación</span>
+                    <h3 class="fw-extrabold text-warning mb-0">{{ productos_mas_vendidos|length }} <span class="fs-6 fw-normal text-muted">Ref.</span></h3>
+                </div>
+                <div class="kpi-icon-wrapper bg-warning bg-opacity-10 text-warning">
+                    <i class="fas fa-box fa-lg"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Gráficos de Gestión Corporativa -->
+<div class="row g-3 mb-4">
+    <div class="col-lg-5">
+        <div class="table-card shadow-sm border-0 h-100">
+            <div class="table-header header-verde py-2.5 fs-6 bg-dark text-white">
+                <i class="fas fa-chart-pie me-2 fs-6 text-warning"></i>Balance Operativo de Citas
+            </div>
+            <div class="card-body p-4 d-flex justify-content-center align-items-center">
+                <div class="chart-container-custom">
+                    <canvas id="graficoCitasEstado"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-7">
+        <div class="table-card shadow-sm border-0 h-100">
+            <div class="table-header header-verde py-2.5 fs-6 bg-dark text-white">
+                <i class="fas fa-chart-bar me-2 fs-6 text-info"></i>Productividad del Cuerpo Médico
+            </div>
+            <div class="card-body p-4 d-flex justify-content-center align-items-center">
+                <div class="chart-container-custom">
+                    <canvas id="graficoCitasVet"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Tablas de Datos Analíticos -->
+<div class="row g-3 mb-5">
+    <!-- Últimas Transacciones -->
+    <div class="col-lg-7">
+        <div class="table-card shadow-sm border-0">
+            <div class="table-header header-verde d-flex justify-content-between align-items-center py-2.5">
+                <span class="fs-6 fw-bold"><i class="fas fa-shopping-basket me-2"></i>Historial Reciente de Caja</span>
+                <span class="badge rounded-pill bg-white text-success px-3 fw-bold border border-success border-opacity-25">{{ ventas|length }} Muestras</span>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="bg-light text-muted small text-uppercase">
+                        <tr>
+                            <th class="ps-4" style="width: 100px;">Comprobante</th>
+                            <th>Propietario / Cliente</th>
+                            <th>Fecha Registro</th>
+                            <th class="text-end pe-4">Monto Liquidado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for v in ventas %}
+                        <tr class="transition-row">
+                            <td class="ps-4 fw-mono text-secondary small">#{{ v.pk }}</td>
+                            <td>
+                                <div class="fw-bold text-dark">{{ v.id_cliente.usuario.nombre|default:"Consumidor" }} {{ v.id_cliente.usuario.apellido|default:"Anónimo" }}</div>
+                                <span class="text-muted d-block" style="font-size: 0.75rem;">Cuenta Verificada</span>
+                            </td>
+                            <td class="text-secondary small">{{ v.fecha_venta|date:"d M, Y" }}</td>
+                            <td class="text-end pe-4 fw-bold text-success fs-6">${{ v.total|floatformat:0 }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="4" class="text-center py-5 text-muted">
+                                <i class="fas fa-folder-open fa-2x d-block mb-2 opacity-25"></i>
+                                <span class="small">No se registraron transacciones financieras en el intervalo configurado.</span>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Top Productos -->
+    <div class="col-lg-5">
+        <div class="table-card shadow-sm border-0">
+            <div class="table-header header-verde py-2.5 fs-6" style="background: #e67e22;">
+                <i class="fas fa-crown me-2 fs-6 text-white"></i>Artículos de Alta Rotación
+            </div>
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="bg-light text-muted small text-uppercase">
+                        <tr>
+                            <th class="ps-4">Detalle del Producto</th>
+                            <th class="text-end pe-4" style="width: 140px;">Volumen</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for p in productos_mas_vendidos %}
+                        <tr class="transition-row">
+                            <td class="ps-4">
+                                <div class="fw-bold text-dark text-truncate-custom" style="max-width: 220px;" title="{{ p.id_inventario__id_tipo_producto__nombre_producto }}">
+                                    {{ p.id_inventario__id_tipo_producto__nombre_producto }}
+                                </div>
+                            </td>
+                            <td class="text-end pe-4">
+                                <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-10 px-3 py-1.5 rounded-3 fw-bold">
+                                    <i class="fas fa-arrow-up me-1 small"></i>{{ p.total_vendido }} uds
+                                </span>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="2" class="text-center py-5 text-muted">
+                                <i class="fas fa-boxes fa-2x d-block mb-2 opacity-25"></i>
+                                <span class="small">Sin fluctuaciones en las existencias físicas de almacén.</span>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+// Configuración de Identidad Visual Corporativa Luppy
+const paletaPremium = {
+    primario: '#2E7D32',
+    secundario: '#1976D2',
+    alerta: '#C62828',
+    neutralClaro: '#757575',
+    bordeGris: '#E0E0E0'
+};
+
+// Gráfico Donut: Balance Operativo de Citas
+const estadoLabels  = [{% for c in citas_por_estado %}"{{ c.estado_cita }}"{% if not forloop.last %},{% endif %}{% endfor %}];
+const estadoValores = [{% for c in citas_por_estado %}{{ c.total }}{% if not forloop.last %},{% endif %}{% endfor %}];
+
+new Chart(document.getElementById('graficoCitasEstado'), {
+    type: 'doughnut',
+    data: {
+        labels: estadoLabels,
+        datasets: [{
+            data: estadoValores,
+            backgroundColor: [paletaPremium.secundario, paletaPremium.primario, paletaPremium.alerta],
+            hoverOffset: 6,
+            borderWidth: 2,
+            borderColor: '#ffffff'
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: { 
+                position: 'bottom', 
+                labels: { usePointStyle: true, pointStyle: 'circle', padding: 15, font: { size: 12, weight: '500' } } 
+            }
+        },
+        cutout: '75%'
+    }
+});
+
+// Gráfico de Barras: Rendimiento Clínico
+const vetLabels  = [{% for v in citas_por_vet %}"{{ v.id_veterinario__usuario__nombre }} {{ v.id_veterinario__usuario__apellido }}"{% if not forloop.last %},{% endif %}{% endfor %}];
+const vetValores = [{% for v in citas_por_vet %}{{ v.total }}{% if not forloop.last %},{% endif %}{% endfor %}];
+
+new Chart(document.getElementById('graficoCitasVet'), {
+    type: 'bar',
+    data: {
+        labels: vetLabels,
+        datasets: [{
+            label: 'Atenciones Concluidas',
+            data: vetValores,
+            backgroundColor: 'rgba(46, 125, 50, 0.85)',
+            hoverBackgroundColor: paletaPremium.primario,
+            borderRadius: 6,
+            barThickness: 22
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+            y: { 
+                beginAtZero: true, 
+                grid: { color: '#f1f1f1', drawBorder: false },
+                ticks: { stepSize: 1, color: paletaPremium.neutralClaro }
+            },
+            x: { grid: { display: false }, ticks: { color: paletaPremium.neutralClaro } }
+        }
+    }
+});
+</script>
+{% endblock %}

@@ -1,0 +1,262 @@
+{% extends 'adminApp/base_admin.html' %}
+
+{% block titulo %}Veterinarios{% endblock %}
+
+{% block titulo_pagina %} <i class="fas fa-user-md me-2"></i>Gestión de Veterinarios
+{% endblock %}
+
+{% block contenido %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+
+<div>
+    <h4 class="fw-bold mb-1" style="color: var(--carbon);">
+        Cuerpo Médico Veterinario
+    </h4>
+
+    <p class="text-muted mb-0">
+        Administración y control del personal médico registrado en VetTech.
+    </p>
+</div>
+
+<a href="{% url 'admin_app:crear_veterinario' %}"
+   class="btn btn-success rounded-pill px-4 shadow-sm">
+
+    <i class="fas fa-plus me-2"></i>
+    Nuevo Veterinario
+
+</a>
+
+
+</div>
+
+<div class="alert border-0 shadow-sm mb-4"
+     style="background:linear-gradient(135deg,#f4fff8,#edfdf5);
+            border-left:5px solid #198754 !important;
+            border-radius:18px;">
+<div class="d-flex">
+
+    <div class="me-3">
+        <i class="fas fa-user-md text-success fa-2x"></i>
+    </div>
+
+    <div>
+
+        <h6 class="fw-bold text-success mb-2">
+            Administración del Personal Médico
+        </h6>
+
+        <p class="mb-0 text-muted">
+            Mantener actualizada la información de los veterinarios permite
+            mejorar la asignación de citas, controlar especialidades,
+            gestionar la experiencia profesional y garantizar una atención
+            clínica organizada dentro del sistema VetTech.
+        </p>
+
+    </div>
+
+</div>
+</div>
+
+<div class="card border-0 shadow-sm">
+<div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
+
+    <div>
+
+        <h6 class="mb-0">
+            <i class="fas fa-list me-2"></i>
+            Veterinarios Registrados
+        </h6>
+
+        <small>
+            Total: {{ veterinarios|length }} registros
+        </small>
+
+    </div>
+
+    <span class="badge bg-light text-dark">
+        {{ veterinarios|length }} veterinarios
+    </span>
+
+</div>
+
+<div class="table-responsive">
+
+    <table class="table table-hover align-middle mb-0">
+
+        <thead class="table-light">
+
+            <tr>
+                <th>Profesional</th>
+                <th>Contacto</th>
+                <th>Licencia</th>
+                <th>Especialidad</th>
+                <th>Estado</th>
+                <th class="text-end">Acciones</th>
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+            {% for vet in veterinarios %}
+
+            <tr>
+
+                <td>
+
+                    <div class="fw-bold">
+                        {{ vet.usuario.nombre }}
+                        {{ vet.usuario.apellido }}
+                    </div>
+
+                    <small class="text-muted">
+
+                        <i class="fas fa-briefcase-medical me-1"></i>
+
+                        {{ vet.anios_experiencia|default:"0" }}
+                        años de experiencia
+
+                    </small>
+
+                </td>
+
+                <td>
+
+                    <div>
+                        <i class="far fa-envelope me-1 text-muted"></i>
+                        {{ vet.usuario.correo }}
+                    </div>
+
+                    <small class="text-muted">
+
+                        <i class="fas fa-phone me-1"></i>
+
+                        {{ vet.usuario.telefono|default:"No registrado" }}
+
+                    </small>
+
+                </td>
+
+                <td>
+
+                    <span class="badge bg-secondary px-3 py-2">
+                        {{ vet.numero_licencia }}
+                    </span>
+
+                </td>
+
+                <td>
+
+                    <span class="badge bg-info text-dark px-3 py-2">
+
+                        {{ vet.especialidad|default:"Clínica General" }}
+
+                    </span>
+
+                </td>
+
+                <td>
+
+                    {% if vet.usuario.is_active %}
+
+                        <span class="badge bg-success">
+
+                            <i class="fas fa-check-circle me-1"></i>
+                            Activo
+
+                        </span>
+
+                    {% else %}
+
+                        <span class="badge bg-danger">
+
+                            <i class="fas fa-times-circle me-1"></i>
+                            Inactivo
+
+                        </span>
+
+                    {% endif %}
+
+                </td>
+
+                <td class="text-end">
+
+                    <div class="d-flex justify-content-end gap-2">
+
+                        <a href="{% url 'admin_app:editar_veterinario' vet.pk %}"
+                           class="btn btn-outline-success btn-sm rounded-pill px-3">
+
+                            <i class="fas fa-edit me-1"></i>
+                            Editar
+
+                        </a>
+
+                        <form method="post"
+                              action="{% url 'admin_app:toggle_usuario' vet.usuario.pk %}">
+
+                            {% csrf_token %}
+
+                            <button type="submit"
+                                    class="btn btn-sm rounded-pill px-3 {% if vet.usuario.is_active %}btn-outline-danger{% else %}btn-outline-success{% endif %}">
+
+                                <i class="fas fa-{% if vet.usuario.is_active %}ban{% else %}check{% endif %} me-1"></i>
+
+                                {% if vet.usuario.is_active %}
+                                    Desactivar
+                                {% else %}
+                                    Activar
+                                {% endif %}
+
+                            </button>
+
+                        </form>
+
+                    </div>
+
+                </td>
+
+            </tr>
+
+            {% empty %}
+
+            <tr>
+
+                <td colspan="6">
+
+                    <div class="text-center py-5">
+
+                        <i class="fas fa-user-md fa-4x text-muted opacity-25 mb-3"></i>
+
+                        <h5 class="fw-bold">
+                            No existen veterinarios registrados
+                        </h5>
+
+                        <p class="text-muted">
+                            Registra profesionales para comenzar la gestión clínica.
+                        </p>
+
+                        <a href="{% url 'admin_app:crear_veterinario' %}"
+                           class="btn btn-success rounded-pill px-4">
+
+                            <i class="fas fa-plus me-2"></i>
+                            Registrar Veterinario
+
+                        </a>
+
+                    </div>
+
+                </td>
+
+            </tr>
+
+            {% endfor %}
+
+        </tbody>
+
+    </table>
+
+</div>
+</div>
+
+{% endblock %}

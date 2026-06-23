@@ -1,0 +1,90 @@
+{% extends 'clienteApp/base_cliente.html' %}
+{% load static %}
+
+{% block titulo %}Historial de Compras{% endblock %}
+
+{% block estilos %}
+<link rel="stylesheet" href="{% static 'css/historial_compras.css' %}">
+{% endblock %}
+
+{% block contenido %}
+<div class="fondo-historial-compras">
+    <div class="container">
+
+        <!-- Cabecera -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h2 class="fw-semibold mb-1">Historial de Compras</h2>
+                <p class="text-muted small mb-0">{{ user.nombre }} {{ user.apellido }}</p>
+            </div>
+            <a href="{% url 'lista_productos' %}" class="btn btn-success">
+                <i class="fas fa-store me-2"></i>Ver Productos
+            </a>
+        </div>
+
+        {% if ventas %}
+
+        <div class="tarjeta-historial-compras">
+            <div class="franja-top"></div>
+
+            <!-- Encabezado interno -->
+            <div class="encabezado-historial">
+                <h5 class="fw-semibold mb-0">
+                    <i class="fas fa-receipt me-2" style="color:#52B788;"></i>Tus Compras
+                </h5>
+            </div>
+
+            <!-- Filas de compras -->
+            {% for venta in ventas %}
+            <div class="item-compra" style="animation-delay: {{ forloop.counter0 }}0ms;">
+
+                <!-- Ícono -->
+                <div class="icono-compra">
+                    <i class="fas fa-shopping-bag"></i>
+                </div>
+
+                <!-- Info -->
+                <div>
+                    <div class="numero-venta">Venta #{{ venta.pk }}</div>
+                    <div class="fecha-compra">
+                        <i class="fas fa-calendar me-1"></i>{{ venta.fecha_venta|date:"d/m/Y" }}
+                    </div>
+                </div>
+
+                <!-- Total -->
+                <div class="total-compra">${{ venta.total }}</div>
+
+                <!-- Recibo -->
+                <a href="{% url 'descargar_recibo' venta.pk %}" class="btn-recibo">
+                    <i class="fas fa-file-pdf"></i>Recibo
+                </a>
+
+            </div>
+            {% endfor %}
+
+        </div>
+
+        {% else %}
+
+        <!-- Estado vacío -->
+        <div class="estado-vacio">
+            <div class="icono-vacio"><i class="fas fa-shopping-cart"></i></div>
+            <h4 class="fw-semibold mb-2">Aún no has realizado compras</h4>
+            <p class="text-muted mb-4">¡Explora nuestros productos y haz tu primera compra!</p>
+            <a href="{% url 'lista_productos' %}" class="btn btn-success btn-lg">
+                <i class="fas fa-store me-2"></i>Ver Productos
+            </a>
+        </div>
+
+        {% endif %}
+
+        <!-- Volver -->
+        <div class="mt-4">
+            <a href="{% url 'lista_productos' %}" class="btn btn-outline-secondary">
+                <i class="fas fa-arrow-left me-2"></i>Volver a Productos
+            </a>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

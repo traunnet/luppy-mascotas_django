@@ -1,0 +1,57 @@
+==========================================================
+GUÍA DE MIGRACIÓN: PROYECTO DJANGO CON MYSQL
+==========================================================
+
+PASO 1: EN LA COMPUTADORA DE ORIGEN (TU PC ACTUAL)
+----------------------------------------------------------
+1. Exportar librerías instaladas:
+   Abre la terminal en la carpeta de tu proyecto y escribe:
+   > pip freeze > requirements.txt
+
+2. Exportar la base de datos (MySQL):
+   Si el comando simple falla, usa la ruta completa (ajusta la versión 8.0 si es necesario):
+   > & "C:\Program Files\MySQL\MySQL Server 8.0\bin\mysqldump.exe" -u root -p dj_vettech > backup_datos.sql
+   (Luego ingresa tu contraseña de MySQL cuando la pida).
+
+3. Asegurar archivos de migración y Media:
+   - Verifica que cada "app" tenga su carpeta 'migrations' con archivos .py.
+   - Si tienes fotos de mascotas cargadas, asegúrate de copiar la carpeta 'media'.
+
+
+PASO 2: PREPARAR EL PROYECTO PARA EL TRASLADO
+----------------------------------------------------------
+1. Copia toda la carpeta del proyecto (dj_vettech) a una USB o la nube.
+   * IMPORTANTE: NO copiar la carpeta 'env' o 'venv'.
+   * Asegúrate de que el archivo 'backup_datos.sql' esté dentro de la carpeta.
+
+
+PASO 3: EN LA COMPUTADORA DE DESTINO
+----------------------------------------------------------
+1. Instalar Python y MySQL:
+   Asegúrate de que la nueva PC tenga instalados ambos programas.
+
+2. Crear y activar Entorno Virtual:
+   Dentro de la carpeta del proyecto en la nueva PC:
+   > python -m venv env
+   > .\env\Scripts\activate  (En Windows)
+
+3. Instalar librerías:
+   > pip install -r requirements.txt
+   * Nota: Si 'mysqlclient' da error, instalar 'pymysql' como alternativa.
+
+4. Configurar la base de datos en MySQL:
+   - Abre la terminal de MySQL o Workbench y crea la base vacía: 
+     CREATE DATABASE dj_vettech;
+   - Importa los datos (Usa la ruta completa si es necesario):
+     > & "C:\Program Files\MySQL\MySQL Server 8.0\bin\mysql.exe" -u root -p dj_vettech < backup_datos.sql
+
+5. Ajustar settings.py:
+   Revisa la sección DATABASES. El USER y PASSWORD deben ser los de la NUEVA PC.
+
+6. Finalizar conexión y correr:
+   > python manage.py migrate
+   > python manage.py runserver
+
+==========================================================
+PROYECTO LISTO PARA TRABAJAR
+==========================================================

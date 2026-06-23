@@ -1,0 +1,29 @@
+/* --- Ajustes específicos para las métricas del Dashboard --- */
+.metric-ingresos::after {
+   background: linear-gradient(90deg, #ff8f00, #ffca28) !important;
+}
+
+/* --- Bordes de colores para las tarjetas de resumen --- */
+.border-bottom-blue { border-bottom: 4px solid #3b82f6 !important; }
+.border-bottom-green { border-bottom: 4px solid #10b981 !important; }
+.border-bottom-red { border-bottom: 4px solid #ef4444 !important; }
+
+/* --- Fondos suaves para cabeceras de tablas --- */
+.bg-danger-soft { background-color: rgba(239, 68, 68, 0.05); }
+.bg-primary-soft { background-color: rgba(59, 130, 246, 0.05); }
+
+/* --- Estilo de las mini listas --- */
+.mini-lista {
+   max-height: 320px;
+   overflow-y: auto;
+}
+
+.mini-fila:hover {
+   background-color: #f9fafb;
+   transition: 0.2s;
+}
+
+/* Ajuste para que los canvas de Chart.js no se deformen */
+canvas {
+   max-width: 100% !important;
+}

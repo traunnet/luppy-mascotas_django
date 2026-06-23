@@ -1,0 +1,98 @@
+{% extends 'adminApp/base_admin.html' %}
+{% block titulo %}Registrar Salida{% endblock %}
+{% block titulo_pagina %}<i class="fas fa-arrow-up me-2 text-danger"></i>Registrar Salida de Stock{% endblock %}
+
+{% load static %}
+{% block estilos %}
+<link rel="stylesheet" href="{% static 'css/base_admin.css' %}">
+<link rel="stylesheet" href="{% static 'css/inventario.css' %}">  
+{% endblock %}
+
+{% block contenido %}
+<div class="row justify-content-center">
+    <div class="col-lg-7">
+
+        <!-- Alerta de Advertencia Estilizada -->
+        <div class="alert alert-salida shadow-sm mb-4">
+            <i class="fas fa-exclamation-triangle fa-lg me-2"></i>
+            <span><strong>Atención:</strong> Esta operación reducirá el stock actual. Úsala exclusivamente para bajas, pérdidas o caducidad.</span>
+        </div>
+
+        <div class="table-card shadow-sm mb-5">
+            <div class="table-header header-salida">
+                <i class="fas fa-arrow-up me-2"></i>Nueva Salida de Inventario
+            </div>
+            <div class="card-body p-4">
+                <form method="post" id="formSalida">
+                    {% csrf_token %}
+                    <div class="row g-3">
+
+                        <div class="col-12">
+                            <label class="form-label text-muted small fw-bold text-uppercase tracking-wide">Producto</label>
+                            <div class="custom-form-container">{{ form.id_inventario }}</div>
+                            {% if form.id_inventario.errors %}
+                                <div class="text-danger small mt-1"><i class="fas fa-exclamation-circle me-1"></i>{{ form.id_inventario.errors|striptags }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label text-muted small fw-bold text-uppercase tracking-wide">Cantidad a Retirar</label>
+                            <div class="custom-form-container">{{ form.cantidad }}</div>
+                            {% if form.cantidad.errors %}
+                                <div class="text-danger small mt-1"><i class="fas fa-exclamation-circle me-1"></i>{{ form.cantidad.errors|striptags }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label text-muted small fw-bold text-uppercase tracking-wide">Motivo del Egreso</label>
+                            <div class="custom-form-container">{{ form.motivo }}</div>
+                        </div>
+
+                        <div class="col-12">
+                            <label class="form-label text-muted small fw-bold text-uppercase tracking-wide">
+                                Observación <span class="text-lowercase text-muted fw-normal">(opcional)</span>
+                            </label>
+                            <div class="custom-form-container">{{ form.observacion }}</div>
+                        </div>
+
+                    </div>
+
+                    {% if form.non_field_errors %}
+                        <div class="alert alert-danger mt-3 shadow-sm border-0">{{ form.non_field_errors }}</div>
+                    {% endif %}
+
+                    <!-- Botonera Principal -->
+                    <div class="d-flex gap-2 mt-4 pt-2 border-top">
+                        <button type="button" class="btn btn-danger btn-lg-custom shadow-sm" data-bs-toggle="modal" data-bs-target="#modalConfirmarSalida">
+                            <i class="fas fa-check-circle me-2"></i>Registrar Salida
+                        </button>
+                        <a href="{% url 'admin_app:lista_inventario' %}" class="btn btn-light border text-secondary btn-lg-custom shadow-sm">Cancelar</a>
+                    </div>
+
+                    <!-- Modal de Confirmación -->
+                    <div class="modal fade" id="modalConfirmarSalida" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content border-0 shadow-lg style-modal-custom">
+                                <div class="modal-header bg-light border-0 py-3">
+                                    <h5 class="modal-title fw-bold text-dark"><i class="fas fa-exclamation-circle text-danger me-2"></i>¿Confirmar Reducción de Stock?</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body p-4 text-center">
+                                    <i class="fas fa-file-export fa-3x text-danger mb-3 opacity-75"></i>
+                                    <p class="mb-0 text-secondary">¿Confirmas el retiro físico y digital de estas existencias? Esta acción no se puede deshacer de forma automática.</p>
+                                </div>
+                                <div class="modal-footer border-0 bg-light py-3">
+                                    <button type="button" class="btn btn-light border text-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                    <button type="submit" class="btn btn-danger px-4 shadow-sm">Sí, Descontar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

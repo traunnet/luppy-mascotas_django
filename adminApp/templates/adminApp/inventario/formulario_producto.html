@@ -1,0 +1,104 @@
+{% extends 'adminApp/base_admin.html' %}
+{% block titulo %}Formulario de Producto{% endblock %}
+{% block titulo_pagina %}<i class="fas fa-box me-2 text-verde-dark"></i>{{ titulo }}{% endblock %}
+
+{% load static %}
+{% block estilos %}
+<link rel="stylesheet" href="{% static 'css/base_admin.css' %}">
+<link rel="stylesheet" href="{% static 'css/inventario.css' %}">
+{% endblock %}
+
+{% block contenido %}
+<div class="row justify-content-center">
+    <div class="col-lg-7">
+        <div class="table-card shadow-sm mb-5">
+            <div class="table-header header-verde">
+                <i class="fas fa-tags me-2"></i>{{ titulo }}
+            </div>
+            <div class="card-body p-4">
+                <form method="post" id="formProducto">
+                    {% csrf_token %}
+                    <div class="row g-3">
+                        
+                        <div class="col-12">
+                            <label class="form-label text-muted small fw-bold text-uppercase tracking-wide">Nombre del Producto</label>
+                            <div class="custom-form-container">{{ form.nombre_producto }}</div>
+                            {% if form.nombre_producto.errors %}
+                                <div class="text-danger small mt-1"><i class="fas fa-exclamation-circle me-1"></i>{{ form.nombre_producto.errors|striptags }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label text-muted small fw-bold text-uppercase tracking-wide">Categoría</label>
+                            <div class="custom-form-container">{{ form.categoria }}</div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label text-muted small fw-bold text-uppercase tracking-wide">Precio Unitario ($)</label>
+                            <div class="custom-form-container">{{ form.precio_unitario }}</div>
+                        </div>
+
+                        <div class="col-12">
+                            <label class="form-label text-muted small fw-bold text-uppercase tracking-wide">Descripción</label>
+                            <div class="custom-form-container">{{ form.descripcion }}</div>
+                        </div>
+
+                        <!-- Bloque Exclusivo de Creación Inicial -->
+                        {% if not form.instance.pk %}
+                        <div class="col-md-6">
+                            <label class="form-label text-muted small fw-bold text-uppercase tracking-wide">
+                                Stock Inicial <span class="text-lowercase text-muted fw-normal">(opcional)</span>
+                            </label>
+                            <div class="custom-form-container">{{ form.stock_inicial }}</div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label text-muted small fw-bold text-uppercase tracking-wide">
+                                Ubicación en Bodega <span class="text-lowercase text-muted fw-normal">(opcional)</span>
+                            </label>
+                            <div class="custom-form-container">{{ form.ubicacion }}</div>
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    {% if form.errors and not form.nombre_producto.errors %}
+                    <div class="alert alert-danger mt-3 border-0 shadow-sm">
+                        {% for field in form %}{% for e in field.errors %}
+                        <div><i class="fas fa-exclamation-triangle me-1"></i><strong>{{ field.label }}:</strong> {{ e }}</div>
+                        {% endfor %}{% endfor %}
+                    </div>
+                    {% endif %}
+
+                    <!-- Botonera Principal -->
+                    <div class="d-flex gap-2 mt-4 pt-2 border-top">
+                        <button type="button" class="btn btn-verde btn-lg-custom shadow-sm" data-bs-toggle="modal" data-bs-target="#modalConfirmarProducto">
+                            <i class="fas fa-save me-2"></i>Guardar Producto
+                        </button>
+                        <a href="{% url 'admin_app:lista_inventario' %}" class="btn btn-light border text-secondary btn-lg-custom shadow-sm">Cancelar</a>
+                    </div>
+
+                    <!-- Modal de Confirmación -->
+                    <div class="modal fade" id="modalConfirmarProducto" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content border-0 shadow-lg style-modal-custom">
+                                <div class="modal-header bg-light border-0 py-3">
+                                    <h5 class="modal-title fw-bold text-dark"><i class="fas fa-question-circle text-success me-2"></i>¿Confirmar Cambios?</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body p-4 text-center">
+                                    <i class="fas fa-box-open fa-3x text-success mb-3 opacity-75"></i>
+                                    <p class="mb-0 text-secondary">¿Estás seguro de que deseas procesar la información de este producto en el catálogo de la veterinaria?</p>
+                                </div>
+                                <div class="modal-footer border-0 bg-light py-3">
+                                    <button type="button" class="btn btn-light border text-secondary" data-bs-dismiss="modal">Revisar</button>
+                                    <button type="submit" class="btn btn-verde px-4 shadow-sm">Confirmar y Guardar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

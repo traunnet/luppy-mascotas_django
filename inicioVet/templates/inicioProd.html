@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block titulo %}Luppy | Productos{% endblock %}
+{% block nav_prod %}active{% endblock %}
+
+{% block inicio %}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'css/general.css' %}">
+<link rel="stylesheet" href="{% static 'css/inicioProd.css' %}">
+
+<div class="pd-header">
+    <div class="pd-header-blob"></div>
+    <div class="pd-header-inner">
+        <div>
+            <div class="pd-header-badge">🛒 Tienda para mascotas</div>
+            <h1>Nuestros<br><em>Productos</em></h1>
+            <p>
+                Descubre alimentos, accesorios y productos de cuidado
+                seleccionados para garantizar el bienestar y felicidad
+                de tu mascota.
+            </p>
+        </div>
+        <div class="pd-header-right">
+            <div class="pd-header-pill">
+                📦 &nbsp;{{ prods|length }} producto{{ prods|length|pluralize }} disponible{{ prods|length|pluralize }}
+            </div>
+            <div class="pd-header-pill">
+                🐾 &nbsp;Calidad garantizada para tu mascota
+            </div>
+            <div class="pd-header-pill">
+                🔒 &nbsp;Compra segura al iniciar sesión
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="pd-grid">
+    {% for prod in prods %}
+        <div class="pd-card">
+            <div class="pd-card-img">
+                {% if prod.imagen %}
+                    <img src="{{ prod.imagen.url }}" alt="{{ prod.nombre_producto }}">
+                {% else %}
+                    <div class="pd-card-img-placeholder">📦</div>
+                {% endif %}
+                <span class="pd-price-badge">${{ prod.precio_unitario }}</span>
+            </div>
+            
+            <div class="pd-card-body">
+                <h5>{{ prod.nombre_producto }}</h5>
+                <span class="categoria-badge">
+                    {{ prod.categoria }}
+                </span>
+                <p>
+                    {{ prod.descripcion|default:"Producto de alta calidad para el cuidado y bienestar de tu mascota." }}
+                </p>
+            </div>
+
+            <div class="pd-card-meta">
+                {% if user.is_authenticated %}
+                    <a href="#" class="btn-comprar">
+                        Comprar →
+                    </a>
+                {% else %}
+                    <a href="{% url 'auth_app:login' %}" class="btn-comprar"
+                       onclick="alert('Aún no has iniciado sesión, hazlo para comenzar a comprar nuestros productos.');">
+                        Comprar →
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    {% empty %}
+        <div class="sv-empty">
+            <div class="sv-empty-icon">🐾</div>
+            <h4>Próximamente más productos</h4>
+            <p>Estamos preparando nuestro catálogo. Vuelve pronto o contáctanos directamente.</p>
+        </div>
+    {% endfor %}
+</div>
+
+<div class="sv-cta-bottom">
+    <div style="position:relative;z-index:1;">
+        <h3>¿No encontraste lo que buscas?</h3>
+        <p>Escríbenos y te ayudamos a encontrar la mejor opción para tu mascota.</p>
+    </div>
+
+    {% if user.is_authenticated %}
+        <a href="{% url 'auth_app:login' %}" class="btn-cta-white" style="position:relative;z-index:1;">
+            Ir a mi panel →
+        </a>
+    {% else %}
+        <a href="{% url 'auth_app:registro' %}" class="btn-cta-white" style="position:relative;z-index:1;">
+            Crear cuenta gratis →
+        </a>
+    {% endif %}
+</div>
+
+{% endblock %}

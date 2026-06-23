@@ -1,0 +1,112 @@
+{% extends 'veterinarioApp/base.html' %}
+{% load static %}
+
+{% block title %}Agendar Cita · Luppy{% endblock %}
+{% block nav_gestion %}active{% endblock %}
+
+{% block estilos %}
+<link rel="stylesheet" href="{% static 'css/formularios_luppy.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="form-card">
+        <div class="form-header">
+            <div class="form-icon-box">
+                <i class="fas fa-calendar-plus"></i>
+            </div>
+            <div>
+                <h2 class="h4 mb-1 fw-bold" style="color: var(--carbon);">Nueva Cita Médica</h2>
+                <p class="text-muted mb-0 small">Asigna un espacio en la agenda para un paciente.</p>
+            </div>
+        </div>
+
+        <div class="form-body">
+            <form method="post">
+                {% csrf_token %}
+                
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <label class="field-label">
+                            <i class="fas fa-calendar-alt text-verde"></i> Fecha de atención
+                        </label>
+                        {{ form.fecha_cita }}
+                    </div>
+                    <div class="col-md-6">
+                        <label class="field-label">
+                            <i class="fas fa-clock text-verde"></i> Hora sugerida
+                        </label>
+                        {{ form.hora_cita }}
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="field-label">
+                            <i class="fas fa-user text-verde"></i> Propietario
+                        </label>
+                        {{ form.id_cliente }}
+                    </div>
+                    <div class="col-md-6">
+                        <label class="field-label">
+                            <i class="fas fa-paw text-verde"></i> Mascota / Paciente
+                        </label>
+                        {{ form.id_mascota }}
+                    </div>
+
+                    <div class="col-12">
+                        <label class="field-label">
+                            <i class="fas fa-stethoscope text-verde"></i> Servicio solicitado
+                        </label>
+                        {{ form.id_servicio }}
+                    </div>
+
+                    <div class="col-12">
+                        <label class="field-label">
+                            <i class="fas fa-notes-medical text-verde"></i> Observaciones o motivo
+                        </label>
+                        {{ form.motivo }}
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <a href="{% url 'vet_app:gestion_citas' %}" class="btn btn-light px-4" style="border-radius: 10px; color: var(--gris-texto);">
+                        <i class="fas fa-times me-2"></i>Cancelar
+                    </a>
+                    <button type="submit" class="btn btn-success px-4" style="border-radius: 10px;">
+                        <i class="fas fa-check me-2"></i>Confirmar Cita
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('id_cliente').addEventListener('change', function () {
+    const clienteId = this.value;
+    const mascotaSelect = document.getElementById('id_mascota');
+
+    mascotaSelect.innerHTML = '<option value="">---------</option>';
+
+    if (!clienteId) return;
+
+    fetch(`/veterinario/ajax/mascotas/${clienteId}/`)
+        .then(res => res.json())
+        .then(mascotas => {
+            if (mascotas.length === 0) {
+                mascotaSelect.innerHTML = '<option value="">Sin mascotas registradas</option>';
+                return;
+            }
+            mascotas.forEach(m => {
+                const option = document.createElement('option');
+                option.value = m.id;
+                option.textContent = m.nombre;
+                mascotaSelect.appendChild(option);
+            });
+        })
+        .catch(() => {
+            mascotaSelect.innerHTML = '<option value="">Error al cargar mascotas</option>';
+        });
+});
+</script>
+
+{% endblock %}

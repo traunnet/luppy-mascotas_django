@@ -1,0 +1,315 @@
+{% extends 'adminApp/base_admin.html' %}
+{% block titulo %}{{ titulo }}{% endblock %}
+{% block titulo_pagina %}<i class="fas fa-user-md me-2"></i>{{ titulo }}{% endblock %}
+
+{% block contenido %}
+<div class="row justify-content-center">
+    <div class="col-lg-10">
+
+        <div class="adm-table-card shadow-sm">
+            <div class="adm-table-header">
+                <h6 class="mb-0"><i class="fas fa-id-card me-2"></i>Perfil del Especialista</h6>
+            </div>
+
+            <div class="p-4">
+
+                <div class="alert border-0 shadow-sm mb-4"
+                     style="background: linear-gradient(135deg,#f5fff9,#eefbf3);
+                            border-left:5px solid #198754;
+                            border-radius:15px;">
+                    <div class="d-flex align-items-start">
+                        <i class="fas fa-stethoscope text-success fa-2x me-3"></i>
+                        <div>
+                            <h6 class="fw-bold text-success mb-1">Registro profesional veterinario</h6>
+                            <p class="mb-0 text-muted">
+                                Mantener actualizados los datos del veterinario permite un mejor control clínico,
+                                asignación de citas, trazabilidad del personal médico y gestión segura dentro del sistema.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <form method="post" id="formVeterinario" novalidate>
+                    {% csrf_token %}
+
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="bg-verde-claro p-2 rounded-circle me-2"
+                             style="width: 35px; height: 35px; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-user text-verde small"></i>
+                        </div>
+                        <h6 class="text-verde fw-bold mb-0">Información Personal</h6>
+                    </div>
+
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-6">
+                            <label class="form-label">Nombre</label>
+                            <input type="text"
+                                   name="{{ form_usuario.nombre.name }}"
+                                   id="{{ form_usuario.nombre.id_for_label }}"
+                                   class="form-control"
+                                   value="{{ form_usuario.nombre.value|default:'' }}"
+                                   required
+                                   pattern="^[A-Za-zÑñÁáÉéÍíÓóÚúÜü\s]+$"
+                                   title="Solo letras y espacios">
+
+                            {% for error in form_usuario.nombre.errors %}
+                                <div class="text-danger small mt-1">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">Apellido</label>
+                            <input type="text"
+                                   name="{{ form_usuario.apellido.name }}"
+                                   id="{{ form_usuario.apellido.id_for_label }}"
+                                   class="form-control"
+                                   value="{{ form_usuario.apellido.value|default:'' }}"
+                                   required
+                                   pattern="^[A-Za-zÑñÁáÉéÍíÓóÚúÜü\s]+$"
+                                   title="Solo letras y espacios">
+
+                            {% for error in form_usuario.apellido.errors %}
+                                <div class="text-danger small mt-1">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">Correo Electrónico</label>
+                            <input type="email"
+                                   name="{{ form_usuario.correo.name }}"
+                                   id="{{ form_usuario.correo.id_for_label }}"
+                                   class="form-control"
+                                   value="{{ form_usuario.correo.value|default:'' }}"
+                                   required>
+
+                            {% for error in form_usuario.correo.errors %}
+                                <div class="text-danger small mt-1">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">Contraseña</label>
+                            <input type="password"
+                                   name="{{ form_usuario.password.name }}"
+                                   id="{{ form_usuario.password.id_for_label }}"
+                                   class="form-control"
+                                   {% if not form_usuario.instance.pk %}required{% endif %}>
+
+                            <small class="text-muted d-block mt-1" style="font-size: 0.75rem;">
+                                {{ form_usuario.password.help_text }}
+                            </small>
+
+                            {% for error in form_usuario.password.errors %}
+                                <div class="text-danger small mt-1">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="form-label">Teléfono</label>
+                            <input type="tel"
+                                   name="{{ form_usuario.telefono.name }}"
+                                   id="{{ form_usuario.telefono.id_for_label }}"
+                                   class="form-control"
+                                   value="{{ form_usuario.telefono.value|default:'' }}"
+                                   placeholder="3001234567"
+                                   pattern="^3[0-9]{9}$"
+                                   maxlength="10"
+                                   minlength="10"
+                                   inputmode="numeric">
+
+                            {% for error in form_usuario.telefono.errors %}
+                                <div class="text-danger small mt-1">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="form-label">Tipo Doc.</label>
+                            <select name="{{ form_usuario.tipo_doc.name }}" class="form-select">
+                                {% for val, text in form_usuario.tipo_doc.field.choices %}
+                                    <option value="{{ val }}" {% if form_usuario.tipo_doc.value == val %}selected{% endif %}>
+                                        {{ text }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+
+                            {% for error in form_usuario.tipo_doc.errors %}
+                                <div class="text-danger small mt-1">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="form-label">Núm. Documento</label>
+                            <input type="text"
+                                   name="{{ form_usuario.numero_documento.name }}"
+                                   id="{{ form_usuario.numero_documento.id_for_label }}"
+                                   class="form-control"
+                                   value="{{ form_usuario.numero_documento.value|default:'' }}"
+                                   pattern="^[0-9]{6,12}$"
+                                   maxlength="12"
+                                   inputmode="numeric"
+                                   placeholder="Sin puntos ni espacios">
+
+                            {% for error in form_usuario.numero_documento.errors %}
+                                <div class="text-danger small mt-1">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="col-12">
+                            <label class="form-label">Dirección de Residencia</label>
+                            <input type="text"
+                                   name="{{ form_usuario.direccion.name }}"
+                                   id="{{ form_usuario.direccion.id_for_label }}"
+                                   class="form-control"
+                                   value="{{ form_usuario.direccion.value|default:'' }}"
+                                   placeholder="Dirección de residencia">
+
+                            {% for error in form_usuario.direccion.errors %}
+                                <div class="text-danger small mt-1">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="col-12">
+                            <div class="form-check form-switch mt-2">
+                                <input type="checkbox"
+                                       name="{{ form_usuario.is_active.name }}"
+                                       id="{{ form_usuario.is_active.id_for_label }}"
+                                       class="form-check-input"
+                                       {% if form_usuario.is_active.value %}checked{% endif %}>
+                                <label class="form-check-label fw-bold" for="{{ form_usuario.is_active.id_for_label }}">
+                                    Estado de acceso activo
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr class="my-4 opacity-25">
+
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="bg-verde-claro p-2 rounded-circle me-2"
+                             style="width: 35px; height: 35px; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-stethoscope text-verde small"></i>
+                        </div>
+                        <h6 class="text-verde fw-bold mb-0">Credenciales Médicas</h6>
+                    </div>
+
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <label class="form-label">Número de Licencia</label>
+                            <input type="text"
+                                   name="{{ form_vet.numero_licencia.name }}"
+                                   id="{{ form_vet.numero_licencia.id_for_label }}"
+                                   class="form-control"
+                                   value="{{ form_vet.numero_licencia.value|default:'' }}"
+                                   required>
+
+                            {% for error in form_vet.numero_licencia.errors %}
+                                <div class="text-danger small mt-1">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="col-md-5">
+                            <label class="form-label">Especialidad Principal</label>
+                            <input type="text"
+                                   name="{{ form_vet.especialidad.name }}"
+                                   id="{{ form_vet.especialidad.id_for_label }}"
+                                   class="form-control"
+                                   value="{{ form_vet.especialidad.value|default:'' }}"
+                                   placeholder="Ej: Cirugía, Dermatología...">
+
+                            {% for error in form_vet.especialidad.errors %}
+                                <div class="text-danger small mt-1">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="col-md-3">
+                            <label class="form-label">Años Experiencia</label>
+                            <input type="number"
+                                   name="{{ form_vet.anios_experiencia.name }}"
+                                   id="{{ form_vet.anios_experiencia.id_for_label }}"
+                                   class="form-control"
+                                   value="{{ form_vet.anios_experiencia.value|default:'0' }}"
+                                   min="0">
+
+                            {% for error in form_vet.anios_experiencia.errors %}
+                                <div class="text-danger small mt-1">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    {% if form_usuario.errors or form_vet.errors %}
+                    <div class="alert alert-danger mt-4">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        Por favor verifique los campos obligatorios.
+                    </div>
+                    {% endif %}
+
+                    <div class="d-flex gap-2 mt-5 pt-3 border-top">
+                        <button type="button" id="btnAbrirModalVet" class="btn btn-verde rounded-pill px-4">
+                            <i class="fas fa-save me-2"></i>Registrar Veterinario
+                        </button>
+                        <a href="{% url 'admin_app:lista_veterinarios' %}" class="btn btn-outline-secondary rounded-pill px-4">
+                            Cancelar
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="confirmarModalVet" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg" style="border-radius: 18px;">
+            <div class="modal-header border-0 pb-0">
+                <h5 class="modal-title fw-bold">
+                    <i class="fas fa-user-md text-success me-2"></i>
+                    Confirmar registro
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+
+            <div class="modal-body text-center px-4 pb-4">
+                <div class="mb-3">
+                    <i class="fas fa-question-circle text-warning" style="font-size: 4rem;"></i>
+                </div>
+                <h5 class="fw-bold mb-2">¿Desea guardar este veterinario?</h5>
+                <p class="text-muted mb-0">
+                    El sistema validará nuevamente la información en el backend antes de guardar.
+                    Verifique que los datos personales y médicos sean correctos.
+                </p>
+            </div>
+
+            <div class="modal-footer border-0 justify-content-center pb-4">
+                <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">
+                    Cancelar
+                </button>
+                <button type="button" id="confirmarEnvioVet" class="btn btn-success rounded-pill px-4">
+                    <i class="fas fa-check me-2"></i>Sí, guardar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const form = document.getElementById('formVeterinario');
+    const btnAbrirModal = document.getElementById('btnAbrirModalVet');
+    const btnConfirmar = document.getElementById('confirmarEnvioVet');
+    const modalEl = document.getElementById('confirmarModalVet');
+    const modal = new bootstrap.Modal(modalEl);
+
+    btnAbrirModal.addEventListener('click', function () {
+        if (form.checkValidity()) {
+            modal.show();
+        } else {
+            form.reportValidity();
+        }
+    });
+
+    btnConfirmar.addEventListener('click', function () {
+        form.submit();
+    });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,372 @@
+{% extends 'clienteApp/base_cliente.html' %}
+{% load static %}
+
+{% block titulo %}
+    {% if form.instance.pk %}Editar Mascota{% else %}Registrar Mascota{% endif %}
+{% endblock %}
+
+{% block estilos %}
+<style>
+    .fondo-formulario-mascota {
+        background-color: #FFFBF5;
+        min-height: 100vh;
+        padding: 40px 0;
+    }
+    .tarjeta-formulario {
+        background: #ffffff;
+        border-radius: 14px;
+        border: 1px solid rgba(0,0,0,0.07);
+        box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+        padding: 36px 40px;
+        animation: fadeInUp 0.6s ease-out both;
+    }
+    .tarjeta-formulario .franja-top {
+        height: 5px;
+        background-color: #E07B39;
+        border-radius: 14px 14px 0 0;
+        margin: -36px -40px 28px -40px;
+    }
+    .tarjeta-formulario label {
+        font-size: 13px;
+        font-weight: 600;
+        color: #444;
+        margin-bottom: 5px;
+    }
+    .tarjeta-formulario input,
+    .tarjeta-formulario select,
+    .tarjeta-formulario textarea {
+        border-radius: 8px;
+        border: 1.5px solid #e0d9d0;
+        padding: 9px 13px;
+        font-size: 14px;
+        width: 100%;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        background-color: #fdfcfb;
+        color: #333;
+        margin-bottom: 4px;
+    }
+    .tarjeta-formulario input:focus,
+    .tarjeta-formulario select:focus {
+        border-color: #E07B39;
+        box-shadow: 0 0 0 3px rgba(224,123,57,0.12);
+        outline: none;
+        background-color: #fff;
+    }
+    .campo-error input,
+    .campo-error select {
+        border-color: #E63946 !important;
+        background-color: #fff8f8 !important;
+    }
+    .mensaje-error-campo {
+        font-size: 12px;
+        color: #E63946;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+    @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(16px); }
+        to   { opacity: 1; transform: translateY(0); }
+    }
+</style>
+{% endblock %}
+
+{% block contenido %}
+<div class="fondo-formulario-mascota">
+    <div class="container">
+        <div class="mb-4">
+            <a href="{% url 'lista_mascotas' %}" class="btn btn-sm btn-outline-secondary">
+                <i class="fas fa-arrow-left me-2"></i>Volver a mis mascotas
+            </a>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-lg-7 col-md-9">
+                <div class="tarjeta-formulario">
+                    <div class="franja-top"></div>
+
+                    <div class="text-center mb-4">
+                        <div class="mb-3" style="font-size:2.4rem;color:#E07B39;">
+                            <i class="fas fa-paw"></i>
+                        </div>
+                        <h3 class="fw-semibold mb-1">
+                            {% if form.instance.pk %}Editar mascota{% else %}Registrar nueva mascota{% endif %}
+                        </h3>
+                        <p class="text-muted small">
+                            {% if form.instance.pk %}Actualiza los datos de tu mascota
+                            {% else %}Completa los datos para registrar a tu compañero{% endif %}
+                        </p>
+                    </div>
+
+                    {% if form.errors %}
+                    <div class="alert alert-danger mb-3" style="border-radius:8px; font-size:13px;">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        Corrige los errores marcados en rojo antes de continuar.
+                    </div>
+                    {% endif %}
+
+                    <form method="post" novalidate id="formMascota">
+                        {% csrf_token %}
+
+                        <div class="mb-1 {% if form.nombre.errors %}campo-error{% endif %}">
+                            <label for="{{ form.nombre.id_for_label }}">Nombre</label>
+                            {{ form.nombre }}
+                            {% for error in form.nombre.errors %}
+                                <div class="mensaje-error-campo">
+                                    <i class="fas fa-exclamation-circle"></i>{{ error }}
+                                </div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="mb-1 {% if form.especie.errors %}campo-error{% endif %}">
+                            <label for="{{ form.especie.id_for_label }}">Especie</label>
+                            {{ form.especie }}
+                            {% for error in form.especie.errors %}
+                                <div class="mensaje-error-campo">
+                                    <i class="fas fa-exclamation-circle"></i>{{ error }}
+                                </div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="mb-1 {% if form.raza.errors %}campo-error{% endif %}">
+                            <label for="{{ form.raza.id_for_label }}">Raza</label>
+                            {{ form.raza }}
+                            {% for error in form.raza.errors %}
+                                <div class="mensaje-error-campo">
+                                    <i class="fas fa-exclamation-circle"></i>{{ error }}
+                                </div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="mb-1 {% if form.sexo.errors %}campo-error{% endif %}">
+                            <label for="{{ form.sexo.id_for_label }}">Sexo</label>
+                            {{ form.sexo }}
+                            {% for error in form.sexo.errors %}
+                                <div class="mensaje-error-campo">
+                                    <i class="fas fa-exclamation-circle"></i>{{ error }}
+                                </div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="mb-1 {% if form.color.errors %}campo-error{% endif %}">
+                            <label for="{{ form.color.id_for_label }}">
+                                Color <span class="text-muted fw-normal">(opcional)</span>
+                            </label>
+                            {{ form.color }}
+                            {% for error in form.color.errors %}
+                                <div class="mensaje-error-campo">
+                                    <i class="fas fa-exclamation-circle"></i>{{ error }}
+                                </div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="mb-1 {% if form.edad.errors %}campo-error{% endif %}">
+                            <label for="{{ form.edad.id_for_label }}">
+                                Edad (años) <span class="text-muted fw-normal">(opcional)</span>
+                            </label>
+                            {{ form.edad }}
+                            {% for error in form.edad.errors %}
+                                <div class="mensaje-error-campo">
+                                    <i class="fas fa-exclamation-circle"></i>{{ error }}
+                                </div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="mb-1 {% if form.fecha_nacimiento.errors %}campo-error{% endif %}">
+                            <label for="{{ form.fecha_nacimiento.id_for_label }}">
+                                Fecha de nacimiento <span class="text-muted fw-normal">(opcional)</span>
+                            </label>
+                            {{ form.fecha_nacimiento }}
+                            {% for error in form.fecha_nacimiento.errors %}
+                                <div class="mensaje-error-campo">
+                                    <i class="fas fa-exclamation-circle"></i>{{ error }}
+                                </div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="d-flex gap-3 mt-4">
+                            <button type="button" class="btn btn-primary flex-grow-1" id="btnAbrirModal">
+                                <i class="fas fa-save me-2"></i>
+                                {% if form.instance.pk %}Guardar cambios{% else %}Registrar mascota{% endif %}
+                            </button>
+                            <a href="{% url 'lista_mascotas' %}" class="btn btn-outline-secondary">Cancelar</a>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalConfirmarMascota" tabindex="-1" aria-labelledby="modalConfirmarMascotaLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="border-radius:16px; border:none; overflow:hidden;">
+            <div class="modal-header" style="background:#E07B39; border:none;">
+                <h5 class="modal-title text-white fw-semibold" id="modalConfirmarMascotaLabel">
+                    <i class="fas fa-paw me-2"></i>
+                    {% if form.instance.pk %}Confirmar cambios{% else %}Confirmar registro{% endif %}
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body text-center py-4">
+                <i class="fas fa-paw mb-3" style="font-size:2.5rem; color:#E07B39;"></i>
+                {% if form.instance.pk %}
+                    <p class="mb-1 fw-semibold fs-5">¿Guardar los cambios?</p>
+                    <p class="text-muted small mb-0">Los datos de tu mascota serán actualizados.</p>
+                {% else %}
+                    <p class="mb-1 fw-semibold fs-5">¿Registrar esta mascota?</p>
+                    <p class="text-muted small mb-0">Tu compañero quedará registrado en tu perfil.</p>
+                {% endif %}
+            </div>
+            <div class="modal-footer justify-content-center border-0 pb-4 gap-2">
+                <button type="button" class="btn btn-outline-secondary px-4" data-bs-dismiss="modal">
+                    <i class="fas fa-times me-1"></i>Cancelar
+                </button>
+                <button type="button" class="btn btn-primary px-4" onclick="document.getElementById('formMascota').submit()" style="background:#E07B39; border-color:#E07B39;">
+                    <i class="fas fa-check me-1"></i>
+                    {% if form.instance.pk %}Sí, guardar{% else %}Sí, registrar{% endif %}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    /* ── Razas dinámicas ── */
+    const especieSelect = document.getElementById('id_especie');
+    const razaSelect    = document.getElementById('id_raza');
+
+    especieSelect.addEventListener('change', function () {
+        razaSelect.innerHTML = '<option>Cargando...</option>';
+        fetch(`{% url 'obtener_razas' %}?especie=${this.value}`)
+            .then(r => r.json())
+            .then(data => {
+                razaSelect.innerHTML = '<option value="">Seleccione una raza</option>';
+                data.razas.forEach(raza => {
+                    const opt = document.createElement('option');
+                    opt.value = raza;
+                    opt.textContent = raza;
+                    razaSelect.appendChild(opt);
+                });
+            });
+    });
+
+    /* ── Validación JS antes de abrir modal ── */
+    const SOLO_LETRAS = /^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s\-]+$/;
+
+    function limpiarError(inputId) {
+        const el = document.getElementById(inputId);
+        if (!el) return;
+        const wrapper = el.closest('.mb-1');
+        wrapper.classList.remove('campo-error');
+        const prev = wrapper.querySelector('.error-js');
+        if (prev) prev.remove();
+    }
+
+    function mostrarError(inputId, mensaje) {
+        const el = document.getElementById(inputId);
+        if (!el) return;
+        const wrapper = el.closest('.mb-1');
+        wrapper.classList.add('campo-error');
+        if (!wrapper.querySelector('.error-js')) {
+            const div = document.createElement('div');
+            div.className = 'mensaje-error-campo error-js';
+            div.innerHTML = `<i class="fas fa-exclamation-circle"></i>${mensaje}`;
+            el.insertAdjacentElement('afterend', div);
+        }
+    }
+
+    function validarFormulario() {
+        let valido = true;
+
+        /* Nombre */
+        const nombre = document.getElementById('id_nombre').value.trim();
+        limpiarError('id_nombre');
+        if (!nombre) {
+            mostrarError('id_nombre', 'El nombre de la mascota es obligatorio.');
+            valido = false;
+        } else if (!SOLO_LETRAS.test(nombre)) {
+            mostrarError('id_nombre', 'El nombre solo puede contener letras, sin números ni caracteres especiales.');
+            valido = false;
+        } else if (nombre.length < 2) {
+            mostrarError('id_nombre', 'El nombre debe tener al menos 2 caracteres.');
+            valido = false;
+        } else if (nombre.length > 50) {
+            mostrarError('id_nombre', 'El nombre no puede superar los 50 caracteres.');
+            valido = false;
+        }
+
+        /* Especie */
+        const especie = document.getElementById('id_especie').value;
+        limpiarError('id_especie');
+        if (!especie) {
+            mostrarError('id_especie', 'Selecciona una especie.');
+            valido = false;
+        }
+
+        /* Raza */
+        const raza = document.getElementById('id_raza').value;
+        limpiarError('id_raza');
+        if (!raza) {
+            mostrarError('id_raza', 'Selecciona una raza.');
+            valido = false;
+        }
+
+        /* Color (opcional) */
+        const color = document.getElementById('id_color').value.trim();
+        limpiarError('id_color');
+        if (color && !/^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s\/\-]+$/.test(color)) {
+            mostrarError('id_color', 'El color solo puede contener letras.');
+            valido = false;
+        }
+
+        /* Edad (opcional) */
+        const edadVal = document.getElementById('id_edad').value;
+        limpiarError('id_edad');
+        if (edadVal !== '') {
+            const edad = parseInt(edadVal);
+            const maxEdad = especie === 'Perro' ? 20 : especie === 'Gato' ? 25 : 30;
+            if (isNaN(edad) || edad < 0) {
+                mostrarError('id_edad', 'La edad no puede ser negativa.');
+                valido = false;
+            } else if (edad > maxEdad) {
+                mostrarError('id_edad', `La edad máxima para un ${especie || 'animal'} es de ${maxEdad} años.`);
+                valido = false;
+            }
+        }
+
+        /* Fecha nacimiento (opcional) */
+        const fechaVal = document.getElementById('id_fecha_nacimiento').value;
+        limpiarError('id_fecha_nacimiento');
+        if (fechaVal) {
+            const fecha = new Date(fechaVal);
+            const hoy = new Date();
+            if (fecha > hoy) {
+                mostrarError('id_fecha_nacimiento', 'La fecha de nacimiento no puede ser futura.');
+                valido = false;
+            } else if (fecha.getFullYear() < 1990) {
+                mostrarError('id_fecha_nacimiento', 'La fecha de nacimiento parece incorrecta. Verifica el año.');
+                valido = false;
+            }
+        }
+
+        return valido;
+    }
+
+    document.getElementById('btnAbrirModal').addEventListener('click', function () {
+        if (validarFormulario()) {
+            const modal = new bootstrap.Modal(document.getElementById('modalConfirmarMascota'));
+            modal.show();
+        } else {
+            const primerError = document.querySelector('.campo-error input, .campo-error select');
+            if (primerError) primerError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+    });
+
+});
+</script>
+{% endblock %}

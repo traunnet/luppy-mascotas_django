@@ -1,0 +1,112 @@
+{% extends 'clienteApp/base_cliente.html' %}
+{% load static %}
+
+{% block titulo %}Mi Perfil{% endblock %}
+
+{% block estilos %}
+<link rel="stylesheet" href="{% static 'css/perfil.css' %}">
+{% endblock %}
+
+{% block contenido %}
+<div class="fondo-perfil">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+
+                <!-- Cabecera de sección -->
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div>
+                        <h2 class="fw-semibold mb-1">Mi Perfil</h2>
+                        <p class="text-muted small mb-0">Información personal de {{ usuario.nombre }} {{ usuario.apellido }}</p>
+                    </div>
+                    <a href="{% url 'actualizar_perfil' %}" class="btn btn-primary">
+                        <i class="fas fa-edit me-2"></i>Actualizar Perfil
+                    </a>
+                </div>
+
+                <!-- Tarjeta principal -->
+                <div class="tarjeta-perfil">
+                    <div class="franja-top"></div>
+                    <div class="p-4">
+                        <div class="row">
+
+                            <!-- Columna izquierda: foto y nombre -->
+                            <div class="col-md-4 text-center d-flex flex-column align-items-center justify-content-center pb-4 pb-md-0">
+                                {% if usuario.foto_perfil %}
+                                    <img src="{{ usuario.foto_perfil.url }}" alt="Foto de perfil" class="foto-perfil">
+                                {% else %}
+                                    <div class="foto-perfil-placeholder">
+                                        <i class="fas fa-user"></i>
+                                    </div>
+                                {% endif %}
+
+                                <div class="nombre-perfil">{{ usuario.nombre }} {{ usuario.apellido }}</div>
+                                <span class="rol-perfil">Cliente</span>
+                            </div>
+
+                            <!-- Divisor vertical solo en desktop -->
+                            <div class="col-md-1 d-none d-md-flex divisor-vertical px-0"></div>
+
+                            <!-- Columna derecha: datos personales -->
+                            <div class="col-md-7 ps-md-4 pt-4 pt-md-0">
+
+                                <div class="item-info">
+                                    <div class="icono-info">
+                                        <i class="fas fa-envelope"></i>
+                                    </div>
+                                    <div>
+                                        <div class="etiqueta-info">Correo</div>
+                                        <div class="valor-info">{{ usuario.correo }}</div>
+                                    </div>
+                                </div>
+
+                                <div class="item-info">
+                                    <div class="icono-info">
+                                        <i class="fas fa-phone"></i>
+                                    </div>
+                                    <div>
+                                        <div class="etiqueta-info">Teléfono</div>
+                                        <div class="valor-info">{{ usuario.telefono|default:"No especificado" }}</div>
+                                    </div>
+                                </div>
+
+                                <div class="item-info">
+                                    <div class="icono-info">
+                                        <i class="fas fa-map-marker-alt"></i>
+                                    </div>
+                                    <div>
+                                        <div class="etiqueta-info">Dirección</div>
+                                        <div class="valor-info">{{ usuario.direccion|default:"No especificada" }}</div>
+                                    </div>
+                                </div>
+
+                                <div class="item-info">
+                                    <div class="icono-info">
+                                        <i class="fas fa-id-card"></i>
+                                    </div>
+                                    <div>
+                                        <div class="etiqueta-info">Tipo de Documento</div>
+                                        <div class="valor-info">{{ usuario.tipo_doc }}</div>
+                                    </div>
+                                </div>
+
+                                <div class="item-info">
+                                    <div class="icono-info">
+                                        <i class="fas fa-hashtag"></i>
+                                    </div>
+                                    <div>
+                                        <div class="etiqueta-info">Número de Documento</div>
+                                        <div class="valor-info">{{ usuario.numero_documento|default:"No especificado" }}</div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

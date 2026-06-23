@@ -1,0 +1,143 @@
+{% extends 'clienteApp/base_cliente.html' %}
+{% load static %}
+
+{% block titulo %}Mis Citas{% endblock %}
+
+{% block estilos %}
+<link rel="stylesheet" href="{% static 'css/lista_citas.css' %}">
+{% endblock %}
+
+{% block contenido %}
+<div class="fondo-citas">
+    <div class="container">
+
+        <div class="cabecera-citas">
+            <div>
+                <h2 class="fw-semibold mb-1">Mis Citas</h2>
+                <p class="text-muted small mb-0">{{ user.nombre }} {{ user.apellido }}</p>
+            </div>
+            <a href="{% url 'crear_cita' %}" class="btn btn-primary">
+                <i class="fas fa-plus me-2"></i>Agendar Nueva Cita
+            </a>
+        </div>
+
+        {% if citas %}
+        <div class="tarjeta-citas">
+
+            <div class="fila-cita encabezado">
+                <div></div>
+                <div>Mascota</div>
+                <div>Servicio</div>
+                <div>Veterinario</div>
+                <div>Fecha / Hora</div>
+                <div>Estado</div>
+                <div>Acción</div>
+            </div>
+
+            {% for cita in citas %}
+            {% with estado=cita.estado_cita|upper %}
+            <div class="fila-cita" style="animation-delay: {{ forloop.counter0 }}0ms;">
+                
+                <div class="icono-cita">
+                    <i class="fas fa-paw"></i>
+                </div>
+
+                <div>
+                    <div class="nombre-mascota">{{ cita.id_mascota.nombre }}</div>
+                    <div class="sub-texto">{{ cita.id_mascota.especie }}</div>
+                </div>
+
+                <div class="celda-texto">{{ cita.id_servicio.tipo }}</div>
+
+                <div>
+                    <div class="celda-texto">
+                        {{ cita.id_veterinario.usuario.nombre }} {{ cita.id_veterinario.usuario.apellido }}
+                    </div>
+                </div>
+
+                <div class="celda-fecha">
+                    {{ cita.fecha_cita }}
+                    <span class="hora">{{ cita.hora_cita }}</span>
+                </div>
+
+                <div>
+                    {% if estado == 'PROGRAMADA' %}
+                        <span class="badge-programada">Programada</span>
+                    {% elif estado == 'CANCELADA' %}
+                        <span class="badge-cancelada">Cancelada</span>
+                    {% elif estado == 'COMPLETADA' %}
+                        <span class="badge-completada">Completada</span>
+                    {% else %}
+                        <span class="badge-pendiente">{{ cita.estado_cita }}</span>
+                    {% endif %}
+                </div>
+
+                <div>
+                    {% if estado == 'PROGRAMADA' %}
+                    <button type="button"
+                            class="btn btn-sm btn-outline-danger btn-cancelar-cita"
+                            data-bs-toggle="modal"
+                            data-bs-target="#modalEliminarCita{{ cita.pk }}">
+                        <i class="fas fa-times me-1"></i>Cancelar
+                    </button>
+                    {% endif %}
+                </div>
+
+            </div>
+            {% endwith %}
+            {% endfor %}
+
+        </div>
+        {% else %}
+        <div class="estado-vacio">
+            <div class="icono-vacio"><i class="fas fa-calendar-times"></i></div>
+            <h4 class="fw-semibold mb-2">No tienes citas registradas aún</h4>
+            <p class="text-muted mb-4">
+                Agenda una cita para que tu mascota reciba la atención que merece.
+            </p>
+            <a href="{% url 'crear_cita' %}" class="btn btn-primary btn-lg">
+                <i class="fas fa-plus me-2"></i>Agendar primera cita
+            </a>
+        </div>
+        {% endif %}
+
+        {% for cita in citas %}
+        <div class="modal fade" id="modalEliminarCita{{ cita.pk }}" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content border-0 shadow">
+
+                    <div class="modal-header">
+                        <h5 class="modal-title">Confirmar acción</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+
+                    <div class="modal-body">
+                        ¿Estás seguro de eliminar esta cita?
+                        <div class="mt-2 text-muted small">
+                            {{ cita.id_mascota.nombre }} — {{ cita.fecha_cita }} {{ cita.hora_cita }}
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button"
+                                class="btn btn-outline-secondary"
+                                data-bs-dismiss="modal">
+                            No, volver
+                        </button>
+
+                        <form method="post" action="{% url 'eliminar_cita' cita.pk %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger">
+                                Sí, eliminar
+                            </button>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
+    </div>
+</div>
+{% endblock %}

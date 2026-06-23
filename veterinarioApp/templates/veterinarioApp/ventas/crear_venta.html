@@ -1,0 +1,175 @@
+{% extends 'veterinarioApp/base.html' %}
+{% load static %}
+
+{% block title %}Nueva Venta · Luppy{% endblock %}
+{% block nav_inventario %}active{% endblock %}
+
+{% block estilos %}
+<link rel="stylesheet" href="{% static 'css/formularios_luppy.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="form-card mx-auto shadow-lg" style="max-width: 600px; border-radius: 20px;">
+        <div class="form-header text-white" style="background: linear-gradient(135deg, #16a34a 0%, #22c55e 100%);">
+            <div class="form-icon-box bg-white text-verde">
+                <i class="fas fa-cash-register"></i>
+            </div>
+            <div>
+                <h2 class="h4 mb-0 fw-bold">Registrar Venta</h2>
+                <p class="mb-0 small opacity-75">Selecciona el producto y la cantidad</p>
+            </div>
+        </div>
+
+        <div class="form-body p-4">
+            <form method="post" id="formVenta">
+                {% csrf_token %}
+                <div class="mb-4">
+                    <label class="field-label fw-bold">
+                        <i class="fas fa-tag text-verde me-2"></i>Seleccionar Producto
+                    </label>
+                    <select name="producto" id="selectProducto" class="form-select form-select-lg border-2" style="border-radius: 12px;">
+                        {% for inv in inventarios %}
+                            <option value="{{ inv.id }}" data-nombre="{{ inv.id_tipo_producto.nombre_producto }}" data-stock="{{ inv.cantidad }}">
+                                {{ inv.id_tipo_producto.nombre_producto }} — Stock: {{ inv.cantidad }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="mb-4">
+                    <label class="field-label fw-bold">
+                        <i class="fas fa-sort-numeric-up-alt text-verde me-2"></i>Cantidad a Vender
+                    </label>
+                    <input type="number" name="cantidad" id="inputCantidad" class="form-control form-control-lg border-2" 
+                           placeholder="0" min="1" required style="border-radius: 12px;">
+                </div>
+
+                {% if error %}
+                    <div class="alert alert-danger border-0 shadow-sm d-flex align-items-center" style="border-radius: 12px;">
+                        <i class="fas fa-exclamation-circle me-3 fs-4"></i>
+                        <div>{{ error }}</div>
+                    </div>
+                {% endif %}
+
+                <div class="form-actions mt-5 pt-3 border-top d-flex gap-3">
+                    <a href="{% url 'vet_app:ventas' %}" class="btn btn-light flex-grow-1 py-3" style="border-radius: 15px;">
+                        Cancelar
+                    </a>
+                    <button type="button" class="btn btn-verde flex-grow-1 py-3 shadow" 
+                        style="border-radius: 15px; font-weight: 700; background:#16a34a; color:white; border:none;"
+                        onclick="abrirModalVenta()">
+                        <i class="fas fa-check-circle me-2"></i>COMPLETAR VENTA
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de confirmación -->
+<div id="modalVenta" style="
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.35);
+    z-index: 9999;
+    align-items: center;
+    justify-content: center;
+">
+    <div style="
+        background: white;
+        border-radius: 20px;
+        padding: 2rem 2.2rem;
+        max-width: 420px;
+        width: 90%;
+        box-shadow: 0 8px 40px rgba(22,163,74,0.15);
+        text-align: center;
+    ">
+        <div style="
+            width: 56px; height: 56px;
+            background: #f0fdf4;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 22px;
+            color: #16a34a;
+        ">
+            <i class="fas fa-cash-register"></i>
+        </div>
+
+        <h6 class="fw-bold mb-1" style="color: #1f2937;">¿Confirmar esta venta?</h6>
+        <p style="color: #6b7280; font-size: 13px; margin-bottom: 1rem;">
+            Estás a punto de registrar la siguiente venta:
+        </p>
+
+        <div style="background:#f9fafb; border-radius:12px; padding:1rem; margin-bottom:1.5rem; text-align:left;">
+            <div class="d-flex justify-content-between mb-1">
+                <span style="color:#6b7280; font-size:13px;">Producto:</span>
+                <span id="modalNombreProducto" style="font-weight:600; font-size:13px; color:#1f2937;"></span>
+            </div>
+            <div class="d-flex justify-content-between">
+                <span style="color:#6b7280; font-size:13px;">Cantidad:</span>
+                <span id="modalCantidad" style="font-weight:600; font-size:13px; color:#1f2937;"></span>
+            </div>
+        </div>
+
+        <div class="d-flex gap-2 justify-content-center">
+            <button 
+                type="button"
+                onclick="document.getElementById('modalVenta').style.display='none'"
+                style="
+                    padding: 9px 24px;
+                    border-radius: 10px;
+                    border: 1px solid #e5e7eb;
+                    background: #f9fafb;
+                    color: #6b7280;
+                    font-size: 14px;
+                    font-weight: 500;
+                    cursor: pointer;
+                "
+            >
+                <i class="fas fa-times me-1"></i> No, cancelar
+            </button>
+            <button 
+                type="button"
+                onclick="document.getElementById('formVenta').submit()"
+                style="
+                    padding: 9px 24px;
+                    border-radius: 10px;
+                    border: none;
+                    background: #16a34a;
+                    color: white;
+                    font-size: 14px;
+                    font-weight: 500;
+                    cursor: pointer;
+                "
+            >
+                <i class="fas fa-check me-1"></i> Sí, vender
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('modalVenta').addEventListener('click', function(e) {
+    if (e.target === this) this.style.display = 'none';
+});
+
+function abrirModalVenta() {
+    const select = document.getElementById('selectProducto');
+    const cantidad = document.getElementById('inputCantidad').value;
+
+    if (!cantidad || cantidad < 1) {
+        alert('Por favor ingresa una cantidad válida.');
+        return;
+    }
+
+    const nombreProducto = select.options[select.selectedIndex].dataset.nombre;
+
+    document.getElementById('modalNombreProducto').textContent = nombreProducto;
+    document.getElementById('modalCantidad').textContent = cantidad + ' unidad(es)';
+    document.getElementById('modalVenta').style.display = 'flex';
+}
+</script>
+{% endblock %}

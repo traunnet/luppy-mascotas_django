@@ -1,0 +1,276 @@
+{% extends 'adminApp/base_admin.html' %}
+{% block titulo %}{{ titulo }}{% endblock %}
+{% block titulo_pagina %}<i class="fas fa-user-plus me-2"></i>{{ titulo }}{% endblock %}
+
+{% block contenido %}
+<div class="row justify-content-center">
+    <div class="col-lg-10">
+
+        <div class="adm-table-card shadow-sm">
+            <div class="adm-table-header">
+                <h6 class="mb-0"><i class="fas fa-edit me-2"></i>Datos del Usuario</h6>
+            </div>
+
+            <div class="p-4">
+
+                <div class="alert border-0 shadow-sm mb-4"
+                     style="background: linear-gradient(135deg,#f5fff9,#eefbf3);
+                            border-left:5px solid #198754;
+                            border-radius:15px;">
+                    <div class="d-flex align-items-start">
+                        <i class="fas fa-user-shield text-success fa-2x me-3"></i>
+                        <div>
+                            <h6 class="fw-bold text-success mb-1">Registro y control de usuarios</h6>
+                            <p class="mb-0 text-muted">
+                                Mantener actualizada la información de cada usuario mejora la seguridad,
+                                el control de accesos y la administración general del sistema.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <form method="post" id="formUsuario" novalidate>
+                    {% csrf_token %}
+
+                    <div class="row g-3">
+
+                        <div class="col-md-6">
+                            <label class="form-label">Nombre</label>
+                            <input type="text"
+                                   name="{{ form.nombre.name }}"
+                                   id="{{ form.nombre.id_for_label }}"
+                                   class="form-control"
+                                   value="{{ form.nombre.value|default:'' }}"
+                                   required
+                                   pattern="^[A-Za-zÑñÁáÉéÍíÓóÚúÜü\s]+$"
+                                   title="Solo letras y espacios">
+
+                            {% for error in form.nombre.errors %}
+                                <div class="text-danger small mt-1">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">Apellido</label>
+                            <input type="text"
+                                   name="{{ form.apellido.name }}"
+                                   id="{{ form.apellido.id_for_label }}"
+                                   class="form-control"
+                                   value="{{ form.apellido.value|default:'' }}"
+                                   required
+                                   pattern="^[A-Za-zÑñÁáÉéÍíÓóÚúÜü\s]+$"
+                                   title="Solo letras y espacios">
+
+                            {% for error in form.apellido.errors %}
+                                <div class="text-danger small mt-1">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">Correo Electrónico</label>
+                            <input type="email"
+                                   name="{{ form.correo.name }}"
+                                   id="{{ form.correo.id_for_label }}"
+                                   class="form-control"
+                                   value="{{ form.correo.value|default:'' }}"
+                                   required>
+
+                            {% for error in form.correo.errors %}
+                                <div class="text-danger small mt-1">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">Contraseña</label>
+                            <input type="password"
+                                   name="{{ form.password.name }}"
+                                   id="{{ form.password.id_for_label }}"
+                                   class="form-control"
+                                   {% if not form.instance.pk %}required{% endif %}>
+
+                            {% if form.password.help_text %}
+                                <small class="text-muted d-block mt-1" style="font-size: 0.75rem;">
+                                    {{ form.password.help_text }}
+                                </small>
+                            {% endif %}
+
+                            {% for error in form.password.errors %}
+                                <div class="text-danger small mt-1">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="form-label">Teléfono</label>
+                            <input type="tel"
+                                   name="{{ form.telefono.name }}"
+                                   id="{{ form.telefono.id_for_label }}"
+                                   class="form-control"
+                                   value="{{ form.telefono.value|default:'' }}"
+                                   pattern="^3[0-9]{9}$"
+                                   maxlength="10"
+                                   minlength="10"
+                                   inputmode="numeric"
+                                   placeholder="3001234567">
+
+                            {% for error in form.telefono.errors %}
+                                <div class="text-danger small mt-1">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="form-label">Tipo Documento</label>
+                            <select name="{{ form.tipo_doc.name }}"
+                                    id="{{ form.tipo_doc.id_for_label }}"
+                                    class="form-select">
+                                {% for val, text in form.tipo_doc.field.choices %}
+                                    <option value="{{ val }}" {% if form.tipo_doc.value == val %}selected{% endif %}>
+                                        {{ text }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+
+                            {% for error in form.tipo_doc.errors %}
+                                <div class="text-danger small mt-1">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="form-label">Número Documento</label>
+                            <input type="text"
+                                   name="{{ form.numero_documento.name }}"
+                                   id="{{ form.numero_documento.id_for_label }}"
+                                   class="form-control"
+                                   value="{{ form.numero_documento.value|default:'' }}"
+                                   pattern="^[0-9]{6,12}$"
+                                   maxlength="12"
+                                   inputmode="numeric"
+                                   placeholder="Sin puntos ni espacios">
+
+                            {% for error in form.numero_documento.errors %}
+                                <div class="text-danger small mt-1">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">Rol del Sistema</label>
+                            <select name="{{ form.rol.name }}"
+                                    id="{{ form.rol.id_for_label }}"
+                                    class="form-select">
+                                {% for val, text in form.rol.field.choices %}
+                                    <option value="{{ val }}" {% if form.rol.value|stringformat:"s" == val|stringformat:"s" %}selected{% endif %}>
+                                        {{ text }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+
+                            {% for error in form.rol.errors %}
+                                <div class="text-danger small mt-1">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">Dirección</label>
+                            <input type="text"
+                                   name="{{ form.direccion.name }}"
+                                   id="{{ form.direccion.id_for_label }}"
+                                   class="form-control"
+                                   value="{{ form.direccion.value|default:'' }}"
+                                   placeholder="Dirección de residencia">
+
+                            {% for error in form.direccion.errors %}
+                                <div class="text-danger small mt-1">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="col-12 mt-2">
+                            <div class="form-check form-switch">
+                                <input type="checkbox"
+                                       name="{{ form.is_active.name }}"
+                                       id="{{ form.is_active.id_for_label }}"
+                                       class="form-check-input"
+                                       {% if form.is_active.value %}checked{% endif %}>
+                                <label class="form-check-label fw-bold" for="{{ form.is_active.id_for_label }}">
+                                    Usuario con acceso activo
+                                </label>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    {% if form.errors %}
+                    <div class="alert alert-danger mt-4">
+                        <i class="fas fa-exclamation-circle me-2"></i>
+                        Por favor corrige los errores en el formulario.
+                    </div>
+                    {% endif %}
+
+                    <div class="d-flex gap-2 mt-4 pt-3 border-top">
+                        <button type="button" id="btnAbrirModalUsuario" class="btn btn-verde rounded-pill px-4">
+                            <i class="fas fa-save me-2"></i>Guardar Usuario
+                        </button>
+                        <a href="{% url 'admin_app:lista_usuarios' %}" class="btn btn-outline-secondary rounded-pill px-4">
+                            Cancelar
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="confirmarModalUsuario" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg" style="border-radius: 18px;">
+            <div class="modal-header border-0 pb-0">
+                <h5 class="modal-title fw-bold">
+                    <i class="fas fa-user-edit text-success me-2"></i>
+                    Confirmar cambios
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+
+            <div class="modal-body text-center px-4 pb-4">
+                <div class="mb-3">
+                    <i class="fas fa-question-circle text-warning" style="font-size: 4rem;"></i>
+                </div>
+                <h5 class="fw-bold mb-2">¿Desea guardar los cambios?</h5>
+                <p class="text-muted mb-0">
+                    El sistema validará la información nuevamente en el backend antes de guardar.
+                    Verifique que los datos sean correctos antes de continuar.
+                </p>
+            </div>
+
+            <div class="modal-footer border-0 justify-content-center pb-4">
+                <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">
+                    Cancelar
+                </button>
+                <button type="button" id="confirmarEnvioUsuario" class="btn btn-success rounded-pill px-4">
+                    <i class="fas fa-check me-2"></i>Sí, guardar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const form = document.getElementById('formUsuario');
+    const btnAbrirModal = document.getElementById('btnAbrirModalUsuario');
+    const btnConfirmar = document.getElementById('confirmarEnvioUsuario');
+    const modalEl = document.getElementById('confirmarModalUsuario');
+    const modal = new bootstrap.Modal(modalEl);
+
+    btnAbrirModal.addEventListener('click', function () {
+        if (form.checkValidity()) {
+            modal.show();
+        } else {
+            form.reportValidity();
+        }
+    });
+
+    btnConfirmar.addEventListener('click', function () {
+        form.submit();
+    });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,250 @@
+/* =========================================
+   ESTILOS BASE PARA TARJETAS (Cards)
+   ========================================= */
+.table-card {
+    background-color: #ffffff;
+    border-radius: 12px;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.table-card:hover {
+    box-shadow: 0 8px 24px rgba(149, 157, 165, 0.1) !important;
+}
+
+/* =========================================
+   CABECERAS DE TABLAS Y TARJETAS
+   ========================================= */
+.table-header {
+    padding: 1.25rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.main-header {
+    background-color: #ffffff;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    color: #2b3445;
+}
+
+.header-entrada { 
+    background: linear-gradient(135deg, #1565C0 0%, #1976D2 100%) !important; 
+    color: white !important;
+    border-bottom: none;
+    display: flex;
+    align-items: center;
+}
+
+.header-salida { 
+    background: linear-gradient(135deg, #b71c1c 0%, #d32f2f 100%) !important; 
+    color: white !important;
+    border-bottom: none;
+    display: flex;
+    align-items: center;
+}
+
+/* =========================================
+   ESTILOS DE TABLAS
+   ========================================= */
+.custom-table th {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #6c757d;
+    border-bottom: 2px solid #edf2f9;
+}
+
+.custom-table td {
+    border-bottom: 1px solid #edf2f9;
+    padding: 1rem 0.5rem;
+}
+
+/* Efectos Hover personalizados */
+.table-entrada-hover tbody tr:hover {
+    background-color: #f0f7ff;
+    transition: background-color 0.2s ease;
+}
+
+.table-salida-hover tbody tr:hover {
+    background-color: #fff5f5;
+    transition: background-color 0.2s ease;
+}
+
+/* =========================================
+   BOTONES E INPUTS
+   ========================================= */
+.btn-lg-custom {
+    padding: 0.6rem 1.2rem;
+    font-weight: 500;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.btn-lg-custom:hover {
+    transform: translateY(-2px);
+}
+
+.btn-action {
+    border-radius: 8px;
+    padding: 0.4rem 0.6rem;
+    transition: all 0.2s ease;
+}
+
+.btn-action:hover {
+    transform: scale(1.05);
+}
+
+.tracking-wide {
+    letter-spacing: 0.5px;
+}
+
+/* =========================================
+   INSIGNIAS (Badges) Y ALERTAS
+   ========================================= */
+.badge {
+    padding: 0.5em 0.85em;
+    font-weight: 600;
+}
+
+.badge-stock-bajo {
+    background-color: #fee2e2;
+    color: #dc2626;
+    border: 1px solid #fecaca;
+}
+
+.badge-stock-ok {
+    background-color: #dcfce7;
+    color: #16a34a;
+    border: 1px solid #bbf7d0;
+}
+
+.text-light-gray {
+    color: #d1d5db;
+}
+
+.alert-entrada {
+    background-color: #eff6ff;
+    border: 1px solid #bfdbfe;
+    color: #1e3a8a;
+    border-radius: 12px;
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.alert-salida {
+    background-color: #fefce8;
+    border: 1px solid #fef08a;
+    color: #713f12;
+    border-radius: 12px;
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+/* =========================================
+   CABECERAS ADICIONALES PARA FORMULARIOS
+   ========================================= */
+.header-verde {
+    background: linear-gradient(135deg, #2e7d32 0%, #4caf50 100%) !important;
+    color: white !important;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+}
+
+.text-verde-dark {
+    color: #2e7d32 !important;
+}
+
+/* =========================================
+   ESTILIZADO DE INPUTS DE DJANGO FORM
+   ========================================= */
+.custom-form-container input, 
+.custom-form-container select, 
+.custom-form-container textarea {
+    display: block;
+    width: 100%;
+    padding: 0.475rem 0.75rem;
+    font-size: 0.95rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #212529;
+    background-color: #f8f9fa; /* Fondo gris claro suave */
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border-radius: 8px; /* Bordes redondeados en los inputs */
+    transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+}
+
+.custom-form-container input:focus, 
+.custom-form-container select:focus, 
+.custom-form-container textarea:focus {
+    color: #212529;
+    background-color: #fff;
+    border-color: #86b7fe;
+    outline: 0;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, .15);
+}
+
+/* =========================================
+   MODALES PERSONALIZADOS
+   ========================================= */
+.style-modal-custom {
+    border-radius: 15px !important;
+    overflow: hidden;
+}
+
+.display-icon-box {
+    width: 90px;
+    height: 90px;
+    background-color: #fef2f2;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+}
+/* Inputs manuales estilizados */
+.form-control-custom {
+    border-radius: 8px !important;
+    background-color: #f8f9fa !important;
+    border: 1px solid #ced4da !important;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.95rem;
+}
+.form-control-custom:focus {
+    background-color: #ffffff !important;
+    border-color: #86b7fe !important;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, .15) !important;
+}
+
+/* Efecto hover suave en filas */
+.transition-row {
+    transition: background-color 0.2s ease;
+}
+.transition-row:hover {
+    background-color: rgba(248, 249, 250, 0.75);
+}
+
+/* Botones de acción compactos */
+.btn-action {
+    width: 32px;
+    height: 32px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px !important;
+}
+
+/* Limitar truncado largo de texto */
+.text-truncate-custom {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

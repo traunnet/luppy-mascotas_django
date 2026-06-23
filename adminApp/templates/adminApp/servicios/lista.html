@@ -1,0 +1,94 @@
+{% extends 'adminApp/base_admin.html' %}
+{% block titulo %}Servicios{% endblock %}
+{% block titulo_pagina %}<i class="fas fa-stethoscope me-2 text-primary"></i>Gestión de Servicios{% endblock %}
+
+{% load static %}
+{% block estilos %}
+<link rel="stylesheet" href="{% static 'css/base_admin.css' %}">
+<link rel="stylesheet" href="{% static 'css/inventario.css' %}">
+{% endblock %}
+
+{% block contenido %}
+<div class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center mb-4 gap-3">
+    <div>
+        <h4 class="mb-0 fw-bold text-dark">Catálogo Clínico de Servicios</h4>
+        <p class="text-muted small mb-0">Administración general de tarifas corporativas, cargas horarias y fichas de especialidades</p>
+    </div>
+    <a href="{% url 'admin_app:crear_servicio' %}" class="btn btn-verde shadow-sm btn-lg-custom">
+        <i class="fas fa-plus me-2"></i>Registrar Nuevo Servicio
+    </a>
+</div>
+
+<div class="table-card shadow-sm mb-5">
+    <div class="table-header header-verde d-flex justify-content-between align-items-center py-3">
+        <h6 class="mb-0"><i class="fas fa-list me-2"></i>Servicios Habilitados en el Sistema ({{ servicios|length }})</h6>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead class="bg-light text-muted small text-uppercase">
+                <tr>
+                    <th style="width: 90px;" class="ps-4">Ilustración</th>
+                    <th>Especialidad / Servicio</th>
+                    <th>Ficha Descriptiva</th>
+                    <th>Tarifa Base</th>
+                    <th>Carga Horaria</th>
+                    <th class="text-end pe-4" style="width: 130px;">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for s in servicios %}
+                <tr class="transition-row">
+                    <td class="ps-4">
+                        {% if s.imagen %}
+                            <img src="{{ s.imagen.url }}" alt="{{ s.tipo }}" class="rounded-3 shadow-sm border" style="width: 52px; height: 52px; object-fit: cover;">
+                        {% else %}
+                            <div class="rounded-3 bg-light d-flex align-items-center justify-content-center border border-dashed text-muted opacity-50" style="width: 52px; height: 52px;">
+                                <i class="fas fa-image fa-lg"></i>
+                            </div>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <div class="fw-bold text-dark fs-6">{{ s.tipo }}</div>
+                        <span class="badge rounded-pill bg-light text-secondary border small" style="font-size: 0.65rem;">ID: #{{ s.pk }}</span>
+                    </td>
+                    <td>
+                        <div class="text-muted small text-truncate-custom" style="max-width: 280px;" title="{{ s.descripcion }}">
+                            {{ s.descripcion|default:"<span class='text-muted opacity-50 italic small'>Sin descripción cargada en la ficha técnica</span>"|safe }}
+                        </div>
+                    </td>
+                    <td>
+                        <span class="fw-bold text-success fs-6">${{ s.precio }}</span>
+                    </td>
+                    <td>
+                        <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-10 px-2 py-1.5 rounded-3 fw-semibold small">
+                            <i class="far fa-clock me-1"></i>{{ s.duracion|time:"H:i" }} h
+                        </span>
+                    </td>
+                    <td class="text-end pe-4">
+                        <div class="d-inline-flex gap-1">
+                            <a href="{% url 'admin_app:editar_servicio' s.pk %}" class="btn btn-sm btn-action btn-outline-success" title="Editar Parámetros">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <a href="{% url 'admin_app:eliminar_servicio' s.pk %}" class="btn btn-sm btn-action btn-outline-danger" title="Eliminar del Sistema">
+                                <i class="fas fa-trash-alt"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" class="text-center text-muted py-5">
+                        <div class="py-4">
+                            <i class="fas fa-hand-holding-heart fa-4x mb-3 text-muted opacity-25"></i>
+                            <h5 class="fw-bold text-secondary mb-1">Catálogo de Especialidades Vacío</h5>
+                            <p class="small text-muted mb-3">No hay servicios clínicos parametrizados en el panel de Luppy actualmente.</p>
+                            <a href="{% url 'admin_app:crear_servicio' %}" class="btn btn-sm btn-verde px-3 shadow-sm">Configurar Primer Servicio</a>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

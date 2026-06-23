@@ -1,0 +1,89 @@
+/* ── Fondo de la página ── */
+.fondo-formulario-perfil {
+    background-color: #FFFBF5;
+    min-height: 100vh;
+    padding: 40px 0;
+}
+
+/* ── Tarjeta contenedora del formulario ── */
+.tarjeta-formulario-perfil {
+    background: #ffffff;
+    border-radius: 14px;
+    border: 1px solid rgba(0, 0, 0, 0.07);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+    padding: 36px 40px;
+    animation: fadeInUp 0.6s ease-out both;
+    overflow: hidden;
+}
+
+/* Franja superior naranja */
+.tarjeta-formulario-perfil .franja-top {
+    height: 5px;
+    background-color: #E07B39;
+    border-radius: 14px 14px 0 0;
+    margin: -36px -40px 28px -40px;
+}
+
+/* ── Etiquetas ── */
+.tarjeta-formulario-perfil label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #444;
+    margin-bottom: 5px;
+}
+
+/* ── Inputs, selects y textareas ── */
+.tarjeta-formulario-perfil input,
+.tarjeta-formulario-perfil select,
+.tarjeta-formulario-perfil textarea {
+    border-radius: 8px;
+    border: 1.5px solid #e0d9d0;
+    padding: 9px 13px;
+    font-size: 14px;
+    width: 100%;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    background-color: #fdfcfb;
+    color: #333;
+    margin-bottom: 4px;
+}
+
+.tarjeta-formulario-perfil input:focus,
+.tarjeta-formulario-perfil select:focus,
+.tarjeta-formulario-perfil textarea:focus {
+    border-color: #E07B39;
+    box-shadow: 0 0 0 3px rgba(224, 123, 57, 0.12);
+    outline: none;
+    background-color: #ffffff;
+}
+
+/* ── Errores de validación ── */
+.invalid-feedback {
+    font-size: 12px;
+    color: #E63946;
+    margin-bottom: 10px;
+}
+
+/* ── Sección de foto de perfil ── */
+.foto-actual {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #E07B39;
+    box-shadow: 0 3px 10px rgba(224, 123, 57, 0.2);
+    display: block;
+    margin-bottom: 8px;
+}
+
+/* Input file estilizado */
+.tarjeta-formulario-perfil input[type="file"] {
+    border: 1.5px dashed #e0d9d0;
+    background-color: #fdfcfb;
+    padding: 10px 13px;
+    cursor: pointer;
+}
+
+.tarjeta-formulario-perfil input[type="file"]:hover {
+    border-color: #E07B39;
+    background-color: #FFF5E6;
+}
